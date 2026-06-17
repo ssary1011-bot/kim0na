@@ -918,6 +918,45 @@ function showToast(msg, ms=2200){
   t._timer=setTimeout(()=>t.classList.remove('show'), ms);
 }
 
+// ════════════════════════════════════════════════════════
+// .json 파일로 내보내기 / 가져오기 공용 유틸
+// ════════════════════════════════════════════════════════
+function downloadJson(data, filename){
+  try{
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    return true;
+  }catch(e){
+    console.error('내보내기 실패', e);
+    showToast('파일을 내보내지 못했어요.');
+    return false;
+  }
+}
+
+function readJsonFile(file){
+  return new Promise((resolve, reject)=>{
+    if(!file){ reject(new Error('파일 없음')); return; }
+    const reader = new FileReader();
+    reader.onload = ()=>{
+      try{ resolve(JSON.parse(reader.result)); }
+      catch(e){ reject(e); }
+    };
+    reader.onerror = ()=>reject(reader.error);
+    reader.readAsText(file);
+  });
+}
+
+function safeFileName(name){
+  return String(name||'').replace(/[\\/:*?"<>|]/g, '').trim();
+}
+
 function fmtTime(ts){
   const d=new Date(ts);
   const h=d.getHours(), m=d.getMinutes();
@@ -2356,6 +2395,43 @@ function bindEvents(){
   $('btn-go-library').addEventListener('click', ()=>{ renderLibrary(); showScreen('library'); });
   $('btn-lib-back').addEventListener('click', ()=>showScreen('setup'));
   $('btn-lib-new').addEventListener('click', ()=>showScreen('setup'));
+  $('btn-lib-import').addEventListener('click', ()=>$('f-conv-import').click());
+  $('f-conv-import').addEventListener('change', async e=>{
+    const file = e.target.files[0];
+    e.target.value='';
+    if(!file) return;
+    try{
+      const data = await readJsonFile(file);
+      const records = Array.isArray(data) ? data : [data];
+      const lib = getLibrary();
+      let count = 0;
+      records.forEach(rec=>{
+        if(!rec || typeof rec!=='object' || !('profile' in rec)) return;
+        lib.unshift({
+          id: uid(), // 가져오기는 항상 새 항목으로 추가 (기존 항목과 충돌 방지)
+          title: rec.title || (rec.profile?.name ? `${rec.profile.name}와의 대화` : '제목 없는 대화'),
+          profile: rec.profile,
+          history: rec.history || [],
+          memorySummary: rec.memorySummary || '',
+          currentMode: rec.currentMode || 'chat',
+          createdAt: rec.createdAt || Date.now(),
+          updatedAt: Date.now(),
+          modes: rec.modes || [],
+        });
+        count++;
+      });
+      if(count===0){
+        showToast('올바른 대화 파일이 아니에요.');
+        return;
+      }
+      setLibrary(lib);
+      renderLibrary();
+      showToast(`${count}개의 대화를 가져왔어요`);
+    }catch(err){
+      console.error(err);
+      showToast('파일을 읽지 못했어요. .json 파일인지 확인해주세요.');
+    }
+  });
 
   // 캐릭터 설정 저장 / 불러오기
   $('btn-char-save').addEventListener('click', ()=>{
@@ -2375,12 +2451,46 @@ function bindEvents(){
     const title = $('char-save-title-input').value.trim();
     if(saveCharacterPreset(title)) $('modal-char-save').classList.remove('show');
   });
+  $('char-save-export').addEventListener('click', ()=>{
+    const p = collectProfile();
+    if(!p.name){
+      showToast('캐릭터 이름을 먼저 입력해주세요.');
+      return;
+    }
+    const title = $('char-save-title-input').value.trim() || p.name;
+    const record = { title, profile: p, exportedAt: Date.now() };
+    if(downloadJson(record, `${safeFileName(title)||'캐릭터'}.json`)){
+      showToast('.json 파일로 내보냈어요');
+    }
+  });
 
   $('btn-char-load').addEventListener('click', ()=>{
     renderCharPresets();
     $('modal-char-load').classList.add('show');
   });
   $('char-load-close').addEventListener('click', ()=>$('modal-char-load').classList.remove('show'));
+  $('btn-char-import').addEventListener('click', ()=>$('f-char-import').click());
+  $('f-char-import').addEventListener('change', async e=>{
+    const file = e.target.files[0];
+    e.target.value='';
+    if(!file) return;
+    try{
+      const data = await readJsonFile(file);
+      const p = data && data.profile ? data.profile : data;
+      if(!p || typeof p!=='object' || !('name' in p)){
+        showToast('올바른 캐릭터 설정 파일이 아니에요.');
+        return;
+      }
+      restoreProfile(p);
+      lsSet(STORAGE_KEY_PROFILE, p);
+      $('modal-char-load').classList.remove('show');
+      showToast(`'${data?.title || p.name || '캐릭터'}' 설정을 불러왔어요`);
+      window.scrollTo({top:0, behavior:'smooth'});
+    }catch(err){
+      console.error(err);
+      showToast('파일을 읽지 못했어요. .json 파일인지 확인해주세요.');
+    }
+  });
 
   $('btn-chat-back').addEventListener('click', ()=>{
     autoPersistIfSaved();
@@ -2441,6 +2551,14 @@ function bindEvents(){
   $('save-confirm').addEventListener('click', ()=>{
     const title = $('save-title-input').value.trim();
     if(saveConversation(title)) $('modal-save').classList.remove('show');
+  });
+  $('save-export').addEventListener('click', ()=>{
+    const title = $('save-title-input').value.trim() || (profile.name?`${profile.name}와의 대화`:'대화');
+    const record = buildConvRecord(activeConvId);
+    record.title = title;
+    if(downloadJson(record, `${safeFileName(title)||'대화'}.json`)){
+      showToast('.json 파일로 내보냈어요');
+    }
   });
 
   // 캡쳐
