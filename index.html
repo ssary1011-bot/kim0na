@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김오나의 작은 놀이터</title>
+<style>
+  :root{
+    --bg: #FFF7EC;
+    --bg-soft: #FFEFD9;
+    --ink: #4A3B2E;
+    --ink-soft: #8C7762;
+    --peach: #FFB199;
+    --peach-deep: #FF8F75;
+    --mint: #9FE3C5;
+    --mint-deep: #5BC79E;
+    --sky: #A9D6F5;
+    --sky-deep: #6FB6E8;
+    --butter: #FFE08A;
+    --butter-deep: #FFC93C;
+    --lilac: #D7C4F2;
+    --lilac-deep: #B295E0;
+    --card-shadow: 0 10px 0 rgba(74,59,46,0.10);
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 8% 12%, rgba(255,177,153,0.25) 0, transparent 38%),
+      radial-gradient(circle at 92% 18%, rgba(159,227,197,0.28) 0, transparent 40%),
+      radial-gradient(circle at 50% 95%, rgba(169,214,245,0.25) 0, transparent 45%);
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  .wrap{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  .hero{
+    text-align:center;
+    margin-bottom: 56px;
+    position: relative;
+  }
+
+  .hero .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background: white;
+    border: 2px solid var(--bg-soft);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--peach-deep);
+    margin-bottom: 18px;
+    box-shadow: 0 3px 0 rgba(74,59,46,0.06);
+  }
+
+  .hero h1{
+    font-size: clamp(32px, 6vw, 52px);
+    line-height: 1.25;
+    margin: 0 0 14px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .hero h1 .accent{
+    display:inline-block;
+    position: relative;
+    color: var(--peach-deep);
+  }
+
+  .hero p{
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .hero .dots{
+    margin-top: 22px;
+    display:flex;
+    justify-content:center;
+    gap: 10px;
+  }
+  .hero .dots span{
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    display:inline-block;
+  }
+  .dots span:nth-child(1){ background: var(--peach-deep); }
+  .dots span:nth-child(2){ background: var(--butter-deep); }
+  .dots span:nth-child(3){ background: var(--mint-deep); }
+  .dots span:nth-child(4){ background: var(--sky-deep); }
+  .dots span:nth-child(5){ background: var(--lilac-deep); }
+
+  /* ---------- Grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+
+  @media (max-width: 700px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background: white;
+    border-radius: 26px;
+    padding: 28px 26px;
+    text-decoration:none;
+    color: var(--ink);
+    display:flex;
+    flex-direction: column;
+    gap: 14px;
+    border: 3px solid var(--bg-soft);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 16px 0 rgba(74,59,46,0.12);
+  }
+
+  .card:active{
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 rgba(74,59,46,0.10);
+  }
+
+  .card .icon{
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 28px;
+    flex-shrink:0;
+  }
+
+  .card.c1 .icon{ background: var(--peach); }
+  .card.c2 .icon{ background: var(--sky); }
+  .card.c3 .icon{ background: var(--butter); }
+  .card.c4 .icon{ background: var(--mint); }
+  .card.c5 .icon{ background: var(--lilac); }
+
+  .card.c1{ border-color: #FFD9CC; }
+  .card.c2{ border-color: #D6EBFA; }
+  .card.c3{ border-color: #FFF1C2; }
+  .card.c4{ border-color: #D3F2E5; }
+  .card.c5{ border-color: #EBE0FA; }
+
+  .card h2{
+    font-size: 19px;
+    margin: 0;
+    font-weight: 800;
+  }
+
+  .card p{
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+    flex-grow:1;
+  }
+
+  .card .go{
+    align-self:flex-start;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--bg-soft);
+    padding: 7px 14px;
+    border-radius: 999px;
+    display:inline-flex;
+    align-items:center;
+    gap: 5px;
+  }
+
+  .card .go svg{ width: 13px; height: 13px; }
+
+  /* full width card for last odd item */
+  .card.wide{
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items:center;
+  }
+  .card.wide .text-block{
+    flex-grow:1;
+  }
+  @media (max-width: 700px){
+    .card.wide{ flex-direction: column; align-items:flex-start; }
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 60px;
+    color: var(--ink-soft);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  footer .heart{
+    color: var(--peach-deep);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <span class="badge">🌤️ KIM0NA PLAYGROUND</span>
+    <h1>오늘은 뭐 하고<br><span class="accent">놀까?</span></h1>
+    <p>AI랑 수다 떨고, 캐릭터 만나고, 작은 모험도 떠나는 곳</p>
+    <div class="dots"><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="grid">
+
+    <a class="card c1" href="AItwocharactertalk.html">
+      <div class="icon">💬</div>
+      <h2>AI 둘이 대화하기</h2>
+      <p>두 캐릭터가 알아서 티키타카! 가만히 앉아서 구경만 해도 재밌어요.</p>
+      <span class="go">들어가기 →</span>
+    </a>
+
+    <a class="card c2" href="soundtalkAI.html">
+      <div class="icon">🔊</div>
+      <h2>사운드 AI 토크</h2>
+      <p>목소리로 대화하는 AI 친구. 귀로 즐기는 토크 타임이에요.</p>
+      <span class="go">들어가기 →</span>
+    </a>
+
+    <a class="card c3" href="kakaotalktemaandroid.html">
+      <div class="icon">🟡</div>
+      <h2>카톡 테마 (안드로이드)</h2>
+      <p>내 폰 카카오톡을 더 귀엽게! 안드로이드용 테마 미리보기.</p>
+      <span class="go">들어가기 →</span>
+    </a>
+
+    <a class="card c4" href="rpggametalk.html">
+      <div class="icon">🗺️</div>
+      <h2>RPG 토크 게임</h2>
+      <p>대화하면서 진행하는 작은 모험. 선택에 따라 이야기가 달라져요.</p>
+      <span class="go">들어가기 →</span>
+    </a>
+
+    <a class="card c5 wide" href="rpggametal.html">
+      <div class="icon">⚔️</div>
+      <div class="text-block">
+        <h2>RPG 게임 메탈</h2>
+        <p>조금 더 단단하고 묵직한 분위기의 RPG. 보너스 스테이지 느낌으로 즐겨보세요.</p>
+      </div>
+      <span class="go">들어가기 →</span>
+    </a>
+
+  </div>
+
+  <footer>
+    만든 사람 <span class="heart">♥</span> kim0na
+  </footer>
+
+</div>
+
+</body>
+</html>
