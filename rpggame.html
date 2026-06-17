@@ -5580,7 +5580,8 @@ function gRunSeqScene(sc){
     return {name:ch?ch.name:'???',text:s.text,charId:s.charId,exprId:s.exprId};
   });
   if(!lines.length){showToast(sc.name+': 대화 없음');return;}
-  // 해당 씬의 대화창 스타일 적용
+  // 해당 씬의 배경 이미지 + 대화창 스타일 적용
+  gApplySceneBg(sc);
   gApplyDialogStyle(sc);
   gInDialog=true;gDialogLines=lines;gDialogIdx=0;gCurrentQuestNpc=null;
   document.getElementById('g-dialog').style.display='flex';
@@ -5609,11 +5610,12 @@ function gWarpToScene(targetSceneId,zoneNpc,customLabel){
   setTimeout(function(){
     // 씬 전환: 해당 씬의 맵 이미지, 카메라, BGM 적용
     gCurScene=targetScene;
-    applySceneToGame(targetScene);
+    gCamW=targetScene.camW||800;gCamH=targetScene.camH||500;
+    gApplyDialogStyle(targetScene);
+    document.getElementById('g-hud-r').textContent=targetScene.hudR||'';
     // 스테이지별 + 캐릭터별 크기 적용
     charScale=getCharSceneScale(gPlayerChar,targetId);
     gPlayerW=Math.round(48*charScale);gPlayerH=Math.round(64*charScale);
-    // 카메라 크기는 씬 설정 그대로
     // 플레이어를 해당 씬 spawn 위치로 (없으면 맵 중앙)
     var targetSpawn=npcs.find(function(n){
       return n.npctype==='spawn'&&n.sceneId==targetId&&n.mapX!==undefined;
@@ -5645,15 +5647,31 @@ function gWarpToScene(targetSceneId,zoneNpc,customLabel){
         bgmAudio.play().catch(function(){});
       }
     }
-    // 페이드 인
-    setTimeout(function(){
+    // 배경 이미지 로드 완료 후 페이드 인 (검은 화면 동안 이미지 로드 → 준비되면 보여줌)
+    function doFadeIn(){
       fade.style.opacity='0';
       setTimeout(function(){
         fade.style.display='none';
-        // 스테이지에 등록된 대화(시퀀스의 dialog)가 있으면 입장 시 자동 재생
         gPlaySceneEntryDialog(targetScene);
       },350);
-    },80);
+    }
+    if(targetScene.bgUrl){
+      var _bgImg=new Image();
+      var _bgDone=false;
+      var _bgTimeout=setTimeout(function(){
+        if(!_bgDone){_bgDone=true;gMapImg=mapImg||null;doFadeIn();}
+      },1500);
+      _bgImg.onload=function(){
+        if(!_bgDone){_bgDone=true;clearTimeout(_bgTimeout);gMapImg=_bgImg;doFadeIn();}
+      };
+      _bgImg.onerror=function(){
+        if(!_bgDone){_bgDone=true;clearTimeout(_bgTimeout);gMapImg=mapImg||null;doFadeIn();}
+      };
+      _bgImg.src=targetScene.bgUrl;
+    }else{
+      gMapImg=mapImg||null;
+      setTimeout(doFadeIn,80);
+    }
   },370);
 }
 function gPlaySceneEntryDialog(sc){
