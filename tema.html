@@ -1,0 +1,3332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>테마 갤러리 — 눌러보고 고르는 디자인 도감</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Gamja+Flower&family=Jua&family=Black+Han+Sans&family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=Noto+Serif+KR:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ 기본 리셋 ============ */
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+
+  body{
+    background: var(--t-bg, #FFF7EC);
+    color: var(--t-text, #4A3B2E);
+    font-family: var(--t-font-body, -apple-system, "Apple SD Gothic Neo", sans-serif);
+    transition: background 0.4s ease, color 0.4s ease;
+    min-height: 100vh;
+  }
+
+  /* ============ 레이아웃 ============ */
+  .app{
+    display:grid;
+    grid-template-columns: 300px 1fr;
+    min-height: 100vh;
+  }
+
+  @media (max-width: 880px){
+    .app{ grid-template-columns: 1fr; }
+  }
+
+  /* ---- 사이드바 ---- */
+  .sidebar{
+    background: rgba(0,0,0,0.04);
+    padding: 22px 16px;
+    overflow-y: auto;
+    max-height: 100vh;
+    border-right: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .sidebar h1{
+    font-size: 16px;
+    font-weight: 800;
+    margin: 4px 6px 4px;
+  }
+  .sidebar .sub{
+    font-size: 12px;
+    color: var(--t-text-soft, #8C7762);
+    margin: 0 6px 18px;
+    opacity:0.8;
+  }
+
+  .cat{
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.5;
+    margin: 18px 8px 8px;
+  }
+
+  .theme-btn{
+    width: 100%;
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 9px 10px;
+    text-align:left;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: inherit;
+    font-family: inherit;
+    margin-bottom: 3px;
+  }
+  .theme-btn:hover{ background: rgba(0,0,0,0.05); }
+  .theme-btn.active{
+    background: rgba(0,0,0,0.08);
+    border-color: rgba(0,0,0,0.1);
+  }
+  .theme-btn .swatch{
+    width: 18px; height:18px;
+    border-radius: 5px;
+    flex-shrink:0;
+    margin-top: 1px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  }
+  .theme-btn .txt{
+    display:flex;
+    flex-direction:column;
+    gap: 2px;
+  }
+  .theme-btn .txt .name{
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .theme-btn .txt .desc{
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.55;
+    line-height: 1.4;
+  }
+
+  /* ---- 커스텀 패널 ---- */
+  .custom-panel{
+    background: var(--t-card-bg, #fff);
+    border-radius: var(--t-radius, 14px);
+    padding: 20px 22px;
+    box-shadow: var(--t-shadow-soft, 0 2px 8px rgba(0,0,0,0.06));
+    border: var(--t-border-width-2, 0px) solid var(--t-border-color-2, transparent);
+    margin-bottom: 36px;
+  }
+  .custom-panel .cp-title{
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.55;
+    margin: 0 0 14px;
+  }
+  .cp-row{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items:flex-end;
+  }
+  .cp-field{
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+  }
+  .cp-field label{
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.6;
+  }
+  .cp-color-input{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    gap: 6px;
+  }
+  .cp-color-input .swatch-wrap{
+    position: relative;
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.08), 0 3px 8px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .cp-color-input .swatch-wrap:hover{
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.14), 0 5px 12px rgba(0,0,0,0.18);
+  }
+  .cp-color-input .swatch-wrap::after{
+    content: "✎";
+    position: absolute;
+    bottom: 2px; right: 4px;
+    font-size: 10px;
+    color: rgba(0,0,0,0.4);
+    background: rgba(255,255,255,0.7);
+    border-radius: 4px;
+    padding: 0 3px;
+    pointer-events: none;
+  }
+  .cp-color-input input[type="color"]{
+    position: absolute;
+    top: -10%; left: -10%;
+    width: 120%; height: 120%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    -webkit-appearance: none;
+  }
+  .cp-color-input input[type="color"]::-webkit-color-swatch-wrapper{ padding: 0; }
+  .cp-color-input input[type="color"]::-webkit-color-swatch{ border: none; }
+  .cp-color-input .hex-readout{
+    font-family: monospace;
+    font-size: 10px;
+    opacity: 0.55;
+    letter-spacing: 0.02em;
+  }
+  .cp-select{
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
+    color: #222;
+    font-size: 13px;
+    font-family: inherit;
+    cursor:pointer;
+    min-width: 190px;
+    max-width: 230px;
+  }
+
+  /* ---- 커스텀 폰트 드롭다운 ---- */
+  .font-dropdown{
+    position: relative;
+    width: 220px;
+  }
+  .font-dropdown-trigger{
+    width: 100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.14);
+    background: #fff;
+    color: #222;
+    font-size: 13px;
+    cursor:pointer;
+    text-align:left;
+  }
+  .font-dropdown-trigger:hover{ border-color: rgba(0,0,0,0.3); }
+  .font-dropdown-trigger .current-label{
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .font-dropdown-trigger .chev{
+    font-size: 10px;
+    opacity:0.5;
+    flex-shrink:0;
+  }
+  .font-dropdown-menu{
+    display:none;
+    position:absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 280px;
+    max-height: 320px;
+    overflow-y:auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.06);
+    z-index: 50;
+    padding: 6px;
+  }
+  .font-dropdown.open .font-dropdown-menu{ display:block; }
+  .font-dropdown-menu .fg-label{
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #999;
+    padding: 8px 10px 4px;
+  }
+  .font-dropdown-menu .fo-item{
+    padding: 9px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #1a1a1a;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+  .font-dropdown-menu .fo-item:hover{ background: #f1f1f1; }
+  .font-dropdown-menu .fo-item.selected{ background: #ECEEFF; }
+  .font-dropdown-menu .fo-item .fo-meta{
+    display:block;
+    font-size: 10px;
+    color: #999;
+    font-family: -apple-system, sans-serif !important;
+    margin-top: 1px;
+  }
+  .cp-reset{
+    background: rgba(0,0,0,0.06);
+    border: none;
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    color: inherit;
+    font-family: inherit;
+    height: 38px;
+  }
+  .cp-reset:hover{ background: rgba(0,0,0,0.1); }
+
+
+  /* ---- 메인 미리보기 영역 ---- */
+  .preview{
+    padding: 40px clamp(20px, 5vw, 64px) 80px;
+    overflow-y:auto;
+  }
+
+  .preview-header{
+    margin-bottom: 36px;
+  }
+  .preview-header .tag{
+    display:inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: var(--t-radius-pill, 999px);
+    background: var(--t-accent, #FFB199);
+    color: var(--t-accent-text, #fff);
+    margin-bottom: 14px;
+  }
+  .preview-header h2{
+    font-family: var(--t-font-display, inherit);
+    font-size: clamp(28px, 4.5vw, 42px);
+    margin: 0 0 8px;
+    font-weight: var(--t-display-weight, 800);
+    letter-spacing: var(--t-letter-spacing, -0.02em);
+  }
+  .preview-header p{
+    font-size: 14px;
+    color: var(--t-text-soft, #8C7762);
+    max-width: 560px;
+    margin:0;
+    line-height:1.6;
+  }
+
+  /* ---- 섹션 공통 ---- */
+  .section{
+    margin-bottom: 40px;
+  }
+  .section h3{
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.55;
+    margin: 0 0 14px;
+  }
+
+  /* ---- 컬러 스와치 ---- */
+  .swatches{
+    display:flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .swatch-item{
+    width: 92px;
+  }
+  .swatch-box{
+    width: 92px; height: 64px;
+    border-radius: var(--t-radius-sm, 10px);
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.08);
+    margin-bottom: 6px;
+  }
+  .swatch-item .label{
+    font-size: 10px;
+    font-weight: 700;
+    opacity:0.6;
+  }
+  .swatch-item .hex{
+    font-size: 10px;
+    font-family: monospace;
+    opacity:0.45;
+  }
+
+  /* ---- 버튼 샘플 ---- */
+  .btn-row{
+    display:flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items:center;
+  }
+  .btn{
+    font-family: var(--t-font-body, inherit);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 11px 22px;
+    border-radius: var(--t-radius, 14px);
+    cursor: pointer;
+    border: var(--t-border-width, 0px) solid var(--t-border-color, transparent);
+    transition: transform 0.15s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); }
+  .btn-primary{
+    background: var(--t-accent, #FFB199);
+    color: var(--t-accent-text, #fff);
+    box-shadow: var(--t-shadow, 0 6px 0 rgba(0,0,0,0.1));
+  }
+  .btn-secondary{
+    background: var(--t-card-bg, #fff);
+    color: var(--t-text, #333);
+    box-shadow: var(--t-shadow-soft, 0 2px 8px rgba(0,0,0,0.06));
+    border: var(--t-border-width-2, 1px) solid var(--t-border-color-2, rgba(0,0,0,0.1));
+  }
+  .btn-ghost{
+    background: transparent;
+    color: var(--t-accent, #FFB199);
+    border: 2px solid var(--t-accent, #FFB199);
+  }
+
+  /* ---- 카드 샘플 ---- */
+  .card-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .demo-card{
+    background: var(--t-card-bg, #fff);
+    border-radius: var(--t-radius, 14px);
+    padding: 22px;
+    box-shadow: var(--t-shadow, 0 6px 0 rgba(0,0,0,0.08));
+    border: var(--t-border-width-2, 0px) solid var(--t-border-color-2, transparent);
+    backdrop-filter: var(--t-blur, none);
+  }
+  .demo-card .icon{
+    width: 44px; height:44px;
+    border-radius: var(--t-radius-sm, 10px);
+    background: var(--t-accent-soft, #FFE0D6);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 20px;
+    margin-bottom: 14px;
+  }
+  .demo-card h4{
+    font-family: var(--t-font-display, inherit);
+    font-size: 16px;
+    margin: 0 0 6px;
+    font-weight: 800;
+  }
+  .demo-card p{
+    font-size: 12.5px;
+    color: var(--t-text-soft, #8C7762);
+    margin: 0;
+    line-height:1.5;
+  }
+
+  /* ---- 타이포 샘플 ---- */
+  .type-sample h2.display-demo{
+    font-family: var(--t-font-display, inherit);
+    font-size: 34px;
+    font-weight: var(--t-display-weight, 800);
+    margin: 0 0 6px;
+  }
+  .type-sample p.body-demo{
+    font-family: var(--t-font-body, inherit);
+    font-size: 14px;
+    line-height:1.6;
+    margin:0 0 4px;
+    max-width: 520px;
+  }
+  .font-name-tag{
+    display:inline-block;
+    font-size: 11px;
+    font-family: monospace;
+    opacity:0.5;
+    margin-top: 8px;
+  }
+
+  /* ---- 코드 박스 ---- */
+  .code-box{
+    background: rgba(0,0,0,0.85);
+    color: #d4f8e8;
+    border-radius: var(--t-radius-sm, 10px);
+    padding: 18px 20px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x:auto;
+    white-space: pre;
+    position:relative;
+  }
+  .code-box .copy-btn{
+    position:absolute;
+    top: 10px; right: 10px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    padding: 5px 10px;
+    cursor:pointer;
+    font-family: inherit;
+  }
+  .code-box .copy-btn:hover{ background: rgba(255,255,255,0.2); }
+  .code-box .k{ color: #8fd9ff; }
+  .code-box .v{ color: #ffd479; }
+
+  footer.note{
+    font-size: 12px;
+    opacity: 0.5;
+    margin-top: 30px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <h1>🎨 테마 갤러리</h1>
+    <p class="sub">눌러보면 오른쪽이 바로 바뀌어요</p>
+    <div id="theme-list"></div>
+  </aside>
+
+  <!-- ============ PREVIEW ============ -->
+  <main class="preview">
+
+    <div class="preview-header">
+      <span class="tag" id="ph-tag">테마</span>
+      <h2 id="ph-title">테마 이름</h2>
+      <p id="ph-desc">테마 설명이 여기에 표시됩니다.</p>
+    </div>
+
+    <div class="custom-panel">
+      <h3 class="cp-title">직접 바꿔보기 — 네모를 눌러 색을 골라보세요</h3>
+      <div class="cp-row">
+        <div class="cp-field">
+          <label>배경색</label>
+          <div class="cp-color-input">
+            <div class="swatch-wrap">
+              <input type="color" id="custom-bg-picker">
+            </div>
+            <span class="hex-readout" id="custom-bg-hex">#FFFFFF</span>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>카드색</label>
+          <div class="cp-color-input">
+            <div class="swatch-wrap">
+              <input type="color" id="custom-card-picker">
+            </div>
+            <span class="hex-readout" id="custom-card-hex">#FFFFFF</span>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>포인트색</label>
+          <div class="cp-color-input">
+            <div class="swatch-wrap">
+              <input type="color" id="custom-accent-picker">
+            </div>
+            <span class="hex-readout" id="custom-accent-hex">#FFFFFF</span>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>글자색</label>
+          <div class="cp-color-input">
+            <div class="swatch-wrap">
+              <input type="color" id="custom-text-picker">
+            </div>
+            <span class="hex-readout" id="custom-text-hex">#FFFFFF</span>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>제목 폰트</label>
+          <div class="font-dropdown" id="font-dropdown-display">
+            <button type="button" class="font-dropdown-trigger" id="font-trigger-display">
+              <span class="current-label">Apple SD Gothic Neo</span>
+              <span class="chev">▾</span>
+            </button>
+            <div class="font-dropdown-menu" id="font-menu-display"></div>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>본문 폰트</label>
+          <div class="font-dropdown" id="font-dropdown-body">
+            <button type="button" class="font-dropdown-trigger" id="font-trigger-body">
+              <span class="current-label">Apple SD Gothic Neo</span>
+              <span class="chev">▾</span>
+            </button>
+            <div class="font-dropdown-menu" id="font-menu-body"></div>
+          </div>
+        </div>
+        <div class="cp-field">
+          <label>&nbsp;</label>
+          <button class="cp-reset" id="custom-reset">테마 색으로 초기화</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>색상 팔레트</h3>
+      <div class="swatches" id="swatches"></div>
+    </div>
+
+    <div class="section">
+      <h3>버튼</h3>
+      <div class="btn-row">
+        <button class="btn btn-primary">기본 버튼</button>
+        <button class="btn btn-secondary">보조 버튼</button>
+        <button class="btn btn-ghost">고스트 버튼</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>타이포그래피</h3>
+      <div class="type-sample">
+        <h2 class="display-demo">제목은 이렇게 보여요</h2>
+        <p class="body-demo">본문 텍스트는 이런 느낌으로 표시됩니다. 문단의 길이나 줄 간격에 따라 분위기가 달라져요.</p>
+        <span class="font-name-tag" id="font-tag">font: system</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>카드 샘플</h3>
+      <div class="card-grid">
+        <div class="demo-card">
+          <div class="icon">💬</div>
+          <h4>카드 제목 A</h4>
+          <p>카드 안에 들어가는 짧은 설명 텍스트입니다.</p>
+        </div>
+        <div class="demo-card">
+          <div class="icon">✨</div>
+          <h4>카드 제목 B</h4>
+          <p>모서리, 그림자, 배경색이 테마마다 다르게 적용돼요.</p>
+        </div>
+        <div class="demo-card">
+          <div class="icon">🌙</div>
+          <h4>카드 제목 C</h4>
+          <p>같은 구조, 다른 옷을 입은 느낌을 비교해보세요.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>CSS 코드 (복사해서 사용)</h3>
+      <div class="code-box" id="code-box">
+        <button class="copy-btn" id="copy-btn">복사</button>
+        <span id="code-content"></span>
+      </div>
+    </div>
+
+    <footer class="note">총 <span id="theme-count">0</span>개 테마 · 버튼을 눌러서 비교해보세요</footer>
+
+  </main>
+
+</div>
+
+<script>
+// ============================================================
+// 테마 데이터: 색상 / 폰트 / 모양 / 그림자를 카테고리별로 정의
+// ============================================================
+
+window.THEMES = [
+
+  // ───────────── 파스텔 / 감성 계열 ─────────────
+  {
+    id: "cute-casual",
+    category: "파스텔 / 감성",
+    name: "귀엽고 캐주얼",
+    desc: "파스텔톤, 둥근 모서리, 친근한 느낌. 처음 만든 게임 모음 페이지가 이 스타일이었어요.",
+    vars: {
+      "--t-bg": "#FFF7EC",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#4A3B2E",
+      "--t-text-soft": "#8C7762",
+      "--t-accent": "#FF8F75",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFE0D6",
+      "--t-radius": "20px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 0 rgba(74,59,46,0.10)",
+      "--t-shadow-soft": "0 4px 12px rgba(74,59,46,0.08)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#FFE0D6",
+      "--t-font-display": "'Apple SD Gothic Neo', sans-serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "-0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF7EC"},
+      {label:"카드", hex:"#FFFFFF"},
+      {label:"포인트", hex:"#FF8F75"},
+      {label:"글자", hex:"#4A3B2E"},
+      {label:"보조글자", hex:"#8C7762"}
+    ],
+    fontTag: "Apple SD Gothic Neo / sans-serif"
+  },
+
+  {
+    id: "y2k-kitsch",
+    category: "파스텔 / 감성",
+    name: "Y2K / 키치",
+    desc: "2000년대 느낌, 반짝이는 그라데이션, 별 모양 장식. 사이버와 큐트가 섞인 느낌이에요.",
+    vars: {
+      "--t-bg": "linear-gradient(135deg,#FFD1F0,#C8E7FF 60%,#FFF0B8)",
+      "--t-card-bg": "rgba(255,255,255,0.85)",
+      "--t-text": "#5A2D6E",
+      "--t-text-soft": "#9C6FB5",
+      "--t-accent": "#FF4FCB",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFDCF4",
+      "--t-radius": "22px",
+      "--t-radius-sm": "14px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 0 2px #fff, 0 6px 20px rgba(255,79,203,0.35)",
+      "--t-shadow-soft": "0 4px 14px rgba(154,79,255,0.15)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Trebuchet MS', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"핑크", hex:"#FFD1F0"},
+      {label:"스카이", hex:"#C8E7FF"},
+      {label:"옐로우", hex:"#FFF0B8"},
+      {label:"포인트", hex:"#FF4FCB"},
+      {label:"글자", hex:"#5A2D6E"}
+    ],
+    fontTag: "Trebuchet MS"
+  },
+
+  {
+    id: "glassmorphism",
+    category: "파스텔 / 감성",
+    name: "글래스모피즘",
+    desc: "반투명 유리 느낌, 블러 처리된 카드, 부드러운 그림자가 특징이에요.",
+    vars: {
+      "--t-bg": "linear-gradient(160deg,#A8C0FF,#D9AFFF)",
+      "--t-card-bg": "rgba(255,255,255,0.22)",
+      "--t-text": "#2C2A4A",
+      "--t-text-soft": "#5C5A7A",
+      "--t-accent": "#6E5AFF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "rgba(255,255,255,0.35)",
+      "--t-radius": "20px",
+      "--t-radius-sm": "14px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 32px rgba(31,38,135,0.18)",
+      "--t-shadow-soft": "0 4px 20px rgba(31,38,135,0.12)",
+      "--t-border-width": "1px",
+      "--t-border-color": "rgba(255,255,255,0.4)",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "rgba(255,255,255,0.35)",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "blur(16px)"
+    },
+    swatches: [
+      {label:"블루", hex:"#A8C0FF"},
+      {label:"퍼플", hex:"#D9AFFF"},
+      {label:"포인트", hex:"#6E5AFF"},
+      {label:"글자", hex:"#2C2A4A"},
+      {label:"유리카드", hex:"#FFFFFF (22%)"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "dreamcore",
+    category: "파스텔 / 감성",
+    name: "드림코어",
+    desc: "몽환적인 파스텔 그라데이션, 구름과 별 모티프, 살짝 신비로운 느낌이에요.",
+    vars: {
+      "--t-bg": "linear-gradient(180deg,#E6D9FF,#FFE3F1 50%,#D9F0FF)",
+      "--t-card-bg": "rgba(255,255,255,0.7)",
+      "--t-text": "#4A3B6E",
+      "--t-text-soft": "#8A7AB0",
+      "--t-accent": "#B79CFF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#EDE2FF",
+      "--t-radius": "26px",
+      "--t-radius-sm": "16px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 10px 30px rgba(183,156,255,0.3)",
+      "--t-shadow-soft": "0 4px 16px rgba(183,156,255,0.18)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "blur(6px)"
+    },
+    swatches: [
+      {label:"라벤더", hex:"#E6D9FF"},
+      {label:"핑크미스트", hex:"#FFE3F1"},
+      {label:"스카이미스트", hex:"#D9F0FF"},
+      {label:"포인트", hex:"#B79CFF"},
+      {label:"글자", hex:"#4A3B6E"}
+    ],
+    fontTag: "Georgia (제목) / 산세리프(본문)"
+  },
+
+  // ───────────── 다크 / 강렬한 계열 ─────────────
+  {
+    id: "dark-gaming",
+    category: "다크 / 강렬한",
+    name: "다크 / 게이밍",
+    desc: "검은 배경에 네온 포인트색을 쓰는 게이밍 분위기예요.",
+    vars: {
+      "--t-bg": "#0E0F13",
+      "--t-card-bg": "#1A1C23",
+      "--t-text": "#F2F3F7",
+      "--t-text-soft": "#8C8FA0",
+      "--t-accent": "#7CFFB2",
+      "--t-accent-text": "#0E0F13",
+      "--t-accent-soft": "#1F3A2C",
+      "--t-radius": "12px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 24px rgba(124,255,178,0.25)",
+      "--t-shadow-soft": "0 4px 16px rgba(0,0,0,0.4)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#2A2D38",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Arial', sans-serif",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#0E0F13"},
+      {label:"카드", hex:"#1A1C23"},
+      {label:"네온", hex:"#7CFFB2"},
+      {label:"글자", hex:"#F2F3F7"},
+      {label:"보조글자", hex:"#8C8FA0"}
+    ],
+    fontTag: "Arial Black"
+  },
+
+  {
+    id: "cyberpunk",
+    category: "다크 / 강렬한",
+    name: "사이버펑크",
+    desc: "네온 핑크와 시안 컬러, 글리치 느낌, 미래 도시 분위기예요.",
+    vars: {
+      "--t-bg": "#0A0014",
+      "--t-card-bg": "#170027",
+      "--t-text": "#F4E8FF",
+      "--t-text-soft": "#B98FE0",
+      "--t-accent": "#FF2E9F",
+      "--t-accent-text": "#0A0014",
+      "--t-accent-soft": "#3A0030",
+      "--t-radius": "4px",
+      "--t-radius-sm": "3px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 0 1px #00F0FF, 0 0 24px rgba(255,46,159,0.5)",
+      "--t-shadow-soft": "0 0 16px rgba(0,240,255,0.2)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#00F0FF",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#00F0FF",
+      "--t-font-display": "'Courier New', monospace",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.04em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#0A0014"},
+      {label:"카드", hex:"#170027"},
+      {label:"핑크", hex:"#FF2E9F"},
+      {label:"시안", hex:"#00F0FF"},
+      {label:"글자", hex:"#F4E8FF"}
+    ],
+    fontTag: "Courier New (monospace)"
+  },
+
+  {
+    id: "horror-gothic",
+    category: "다크 / 강렬한",
+    name: "호러 / 고딕",
+    desc: "검붉은 색과 어두운 분위기, 세리프 폰트로 음산한 느낌을 내요.",
+    vars: {
+      "--t-bg": "#0D0707",
+      "--t-card-bg": "#1A0E0E",
+      "--t-text": "#E8D9D2",
+      "--t-text-soft": "#9C7A72",
+      "--t-accent": "#8A1010",
+      "--t-accent-text": "#E8D9D2",
+      "--t-accent-soft": "#2E0E0E",
+      "--t-radius": "2px",
+      "--t-radius-sm": "2px",
+      "--t-radius-pill": "4px",
+      "--t-shadow": "0 8px 24px rgba(138,16,16,0.3)",
+      "--t-shadow-soft": "0 4px 16px rgba(0,0,0,0.5)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#3A1A1A",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#3A1A1A",
+      "--t-font-display": "'Times New Roman', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#0D0707"},
+      {label:"카드", hex:"#1A0E0E"},
+      {label:"블러드레드", hex:"#8A1010"},
+      {label:"글자", hex:"#E8D9D2"},
+      {label:"테두리", hex:"#3A1A1A"}
+    ],
+    fontTag: "Times New Roman / Georgia"
+  },
+
+  {
+    id: "brutalism",
+    category: "다크 / 강렬한",
+    name: "브루탈리즘",
+    desc: "일부러 투박하게, 굵은 테두리와 강한 대비, 정형화되지 않은 배치예요.",
+    vars: {
+      "--t-bg": "#FFFFFF",
+      "--t-card-bg": "#FFFF00",
+      "--t-text": "#000000",
+      "--t-text-soft": "#000000",
+      "--t-accent": "#0000FF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFFF00",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "6px 6px 0 #000000",
+      "--t-shadow-soft": "4px 4px 0 #000000",
+      "--t-border-width": "3px",
+      "--t-border-color": "#000000",
+      "--t-border-width-2": "3px",
+      "--t-border-color-2": "#000000",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "-0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFFFF"},
+      {label:"옐로우", hex:"#FFFF00"},
+      {label:"블루", hex:"#0000FF"},
+      {label:"블랙", hex:"#000000"}
+    ],
+    fontTag: "Arial Black / Courier New"
+  },
+
+  // ───────────── 미니멀 계열 ─────────────
+  {
+    id: "minimal-modern",
+    category: "미니멀",
+    name: "미니멀 / 모던",
+    desc: "흰 배경, 넉넉한 여백, 깔끔한 폰트 중심의 정돈된 느낌이에요.",
+    vars: {
+      "--t-bg": "#FFFFFF",
+      "--t-card-bg": "#FAFAFA",
+      "--t-text": "#111111",
+      "--t-text-soft": "#777777",
+      "--t-accent": "#111111",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#EFEFEF",
+      "--t-radius": "8px",
+      "--t-radius-sm": "6px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "none",
+      "--t-shadow-soft": "0 1px 3px rgba(0,0,0,0.06)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#EAEAEA",
+      "--t-font-display": "'Helvetica Neue', Arial, sans-serif",
+      "--t-font-body": "'Helvetica Neue', Arial, sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "-0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFFFF"},
+      {label:"카드", hex:"#FAFAFA"},
+      {label:"글자", hex:"#111111"},
+      {label:"보조글자", hex:"#777777"},
+      {label:"테두리", hex:"#EAEAEA"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "swiss-style",
+    category: "미니멀",
+    name: "스위스 스타일",
+    desc: "철저한 그리드 정렬, 산세리프 폰트, 빨강/검정/흰색 위주의 정돈된 느낌이에요.",
+    vars: {
+      "--t-bg": "#FFFFFF",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#000000",
+      "--t-text-soft": "#555555",
+      "--t-accent": "#E1261C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FBE5E3",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "none",
+      "--t-shadow-soft": "none",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#000000",
+      "--t-font-display": "'Helvetica', Arial, sans-serif",
+      "--t-font-body": "'Helvetica', Arial, sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFFFF"},
+      {label:"레드", hex:"#E1261C"},
+      {label:"블랙", hex:"#000000"},
+      {label:"그레이", hex:"#555555"}
+    ],
+    fontTag: "Helvetica"
+  },
+
+  {
+    id: "monochrome",
+    category: "미니멀",
+    name: "모노크롬",
+    desc: "흑백 또는 한 가지 색의 명암만 사용하는 절제된 스타일이에요.",
+    vars: {
+      "--t-bg": "#F4F4F4",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1C1C1C",
+      "--t-text-soft": "#6B6B6B",
+      "--t-accent": "#1C1C1C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#DCDCDC",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 6px rgba(0,0,0,0.08)",
+      "--t-shadow-soft": "0 1px 4px rgba(0,0,0,0.06)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E2E2E2",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F4F4F4"},
+      {label:"카드", hex:"#FFFFFF"},
+      {label:"진그레이", hex:"#1C1C1C"},
+      {label:"중간그레이", hex:"#6B6B6B"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "japanese-minimal",
+    category: "미니멀",
+    name: "일본식 미니멀",
+    desc: "와비사비 느낌, 여백과 비대칭의 미, 차분한 무채색을 사용해요.",
+    vars: {
+      "--t-bg": "#F2EFE9",
+      "--t-card-bg": "#FBFAF7",
+      "--t-text": "#2E2B27",
+      "--t-text-soft": "#857E73",
+      "--t-accent": "#A6342B",
+      "--t-accent-text": "#FBFAF7",
+      "--t-accent-soft": "#E9E3D8",
+      "--t-radius": "2px",
+      "--t-radius-sm": "2px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 1px 0 rgba(0,0,0,0.06)",
+      "--t-shadow-soft": "0 1px 0 rgba(0,0,0,0.04)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#DDD6C8",
+      "--t-font-display": "'Yu Mincho', 'Noto Serif KR', serif",
+      "--t-font-body": "'Noto Sans KR', sans-serif",
+      "--t-display-weight": "400",
+      "--t-letter-spacing": "0.06em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F2EFE9"},
+      {label:"카드", hex:"#FBFAF7"},
+      {label:"인주색", hex:"#A6342B"},
+      {label:"글자", hex:"#2E2B27"}
+    ],
+    fontTag: "Yu Mincho / Noto Serif KR"
+  },
+
+  // ───────────── 레트로 / 노스탤지어 계열 ─────────────
+  {
+    id: "vintage-retro",
+    category: "레트로 / 노스탤지어",
+    name: "빈티지 / 레트로",
+    desc: "아날로그 느낌, 따뜻한 색감, 옛날 게임기를 떠올리게 하는 분위기예요.",
+    vars: {
+      "--t-bg": "#EFE3CC",
+      "--t-card-bg": "#F7EFDD",
+      "--t-text": "#3B2E22",
+      "--t-text-soft": "#7A6650",
+      "--t-accent": "#C9622D",
+      "--t-accent-text": "#FFF7EA",
+      "--t-accent-soft": "#EAC9A8",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 4px 0 rgba(59,46,34,0.2)",
+      "--t-shadow-soft": "0 2px 6px rgba(59,46,34,0.12)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#3B2E22",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#3B2E22",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"베이지", hex:"#EFE3CC"},
+      {label:"카드", hex:"#F7EFDD"},
+      {label:"테라코타", hex:"#C9622D"},
+      {label:"글자", hex:"#3B2E22"}
+    ],
+    fontTag: "Georgia"
+  },
+
+  {
+    id: "8bit-pixel",
+    category: "레트로 / 노스탤지어",
+    name: "8비트 / 픽셀",
+    desc: "옛날 오락실 게임기 느낌, 픽셀아트와 도트 폰트가 특징이에요.",
+    vars: {
+      "--t-bg": "#1E1A33",
+      "--t-card-bg": "#2D2750",
+      "--t-text": "#F0F0F0",
+      "--t-text-soft": "#A89FD0",
+      "--t-accent": "#FFD400",
+      "--t-accent-text": "#1E1A33",
+      "--t-accent-soft": "#4A4280",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "4px 4px 0 #000000",
+      "--t-shadow-soft": "3px 3px 0 #000000",
+      "--t-border-width": "3px",
+      "--t-border-color": "#F0F0F0",
+      "--t-border-width-2": "3px",
+      "--t-border-color-2": "#F0F0F0",
+      "--t-font-display": "'Courier New', monospace",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.05em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#1E1A33"},
+      {label:"카드", hex:"#2D2750"},
+      {label:"옐로우", hex:"#FFD400"},
+      {label:"글자", hex:"#F0F0F0"}
+    ],
+    fontTag: "Courier New (도트 느낌 대체)"
+  },
+
+  {
+    id: "70s-vintage",
+    category: "레트로 / 노스탤지어",
+    name: "70-80년대 빈티지",
+    desc: "머스타드와 브라운 톤, 둥근 폰트, 옛날 잡지 같은 느낌이에요.",
+    vars: {
+      "--t-bg": "#EDD9B5",
+      "--t-card-bg": "#F6E8CB",
+      "--t-text": "#4A2E1E",
+      "--t-text-soft": "#8A6A4A",
+      "--t-accent": "#D98F2B",
+      "--t-accent-text": "#4A2E1E",
+      "--t-accent-soft": "#F0C27B",
+      "--t-radius": "18px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 0 rgba(74,46,30,0.2)",
+      "--t-shadow-soft": "0 3px 8px rgba(74,46,30,0.15)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Futura', 'Trebuchet MS', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"베이지", hex:"#EDD9B5"},
+      {label:"머스타드", hex:"#D98F2B"},
+      {label:"브라운", hex:"#4A2E1E"},
+      {label:"크림", hex:"#F6E8CB"}
+    ],
+    fontTag: "Futura / Trebuchet MS"
+  },
+
+  {
+    id: "scrapbook",
+    category: "레트로 / 노스탤지어",
+    name: "메모피스 / 스크랩북",
+    desc: "손글씨 느낌, 폴라로이드, 테이프로 붙인 듯한 디자인이에요.",
+    vars: {
+      "--t-bg": "#FFFDF6",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#2E2E2E",
+      "--t-text-soft": "#777777",
+      "--t-accent": "#FF6B6B",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFE3E3",
+      "--t-radius": "4px",
+      "--t-radius-sm": "3px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "2px 4px 10px rgba(0,0,0,0.15)",
+      "--t-shadow-soft": "1px 3px 8px rgba(0,0,0,0.1)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#E5E0D5",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E5E0D5",
+      "--t-font-display": "'Comic Sans MS', 'Marker Felt', cursive",
+      "--t-font-body": "'Comic Sans MS', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFDF6"},
+      {label:"코랄", hex:"#FF6B6B"},
+      {label:"글자", hex:"#2E2E2E"},
+      {label:"종이테두리", hex:"#E5E0D5"}
+    ],
+    fontTag: "Comic Sans MS (손글씨 대체)"
+  },
+
+  // ───────────── 자연 / 감성 계열 ─────────────
+  {
+    id: "natural",
+    category: "자연 / 감성",
+    name: "자연 / 내추럴",
+    desc: "초록, 베이지, 우드톤 같은 차분한 색을 사용하는 편안한 분위기예요.",
+    vars: {
+      "--t-bg": "#F3F0E7",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#3A3A30",
+      "--t-text-soft": "#7C7A68",
+      "--t-accent": "#6E8B5E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#DDE6D2",
+      "--t-radius": "14px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 4px 14px rgba(58,58,48,0.08)",
+      "--t-shadow-soft": "0 2px 8px rgba(58,58,48,0.06)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E5E1D3",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F3F0E7"},
+      {label:"세이지그린", hex:"#6E8B5E"},
+      {label:"글자", hex:"#3A3A30"},
+      {label:"카드", hex:"#FFFFFF"}
+    ],
+    fontTag: "Georgia / 산세리프"
+  },
+
+  {
+    id: "botanical",
+    category: "자연 / 감성",
+    name: "보태니컬",
+    desc: "식물과 잎사귀 모티프, 초록 위주의 생기있는 색감이에요.",
+    vars: {
+      "--t-bg": "#EAF2E6",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1F3A24",
+      "--t-text-soft": "#5A7A60",
+      "--t-accent": "#2F6B3A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#C9E3CC",
+      "--t-radius": "16px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 18px rgba(47,107,58,0.15)",
+      "--t-shadow-soft": "0 3px 10px rgba(47,107,58,0.1)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Palatino', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"민트배경", hex:"#EAF2E6"},
+      {label:"포레스트그린", hex:"#2F6B3A"},
+      {label:"글자", hex:"#1F3A24"},
+      {label:"연한그린", hex:"#C9E3CC"}
+    ],
+    fontTag: "Palatino / 산세리프"
+  },
+
+  {
+    id: "cottagecore",
+    category: "자연 / 감성",
+    name: "코티지코어",
+    desc: "시골스럽고 포근한 느낌, 꽃무늬와 따뜻한 베이지 톤이에요.",
+    vars: {
+      "--t-bg": "#FBF1E6",
+      "--t-card-bg": "#FFFCF6",
+      "--t-text": "#5A3E2E",
+      "--t-text-soft": "#9C7E64",
+      "--t-accent": "#C97D8B",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F0D9DC",
+      "--t-radius": "18px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(90,62,46,0.1)",
+      "--t-shadow-soft": "0 3px 10px rgba(90,62,46,0.08)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#EFE0CC",
+      "--t-font-display": "'Garamond', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"크림", hex:"#FBF1E6"},
+      {label:"로즈", hex:"#C97D8B"},
+      {label:"브라운", hex:"#5A3E2E"},
+      {label:"연핑크", hex:"#F0D9DC"}
+    ],
+    fontTag: "Garamond / 산세리프"
+  },
+
+  {
+    id: "ocean-coastal",
+    category: "자연 / 감성",
+    name: "오션 / 코스탈",
+    desc: "바다색과 모래색을 사용한 시원하고 청량한 느낌이에요.",
+    vars: {
+      "--t-bg": "#EAF6FA",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1C3A4A",
+      "--t-text-soft": "#5C8294",
+      "--t-accent": "#1E8FA8",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#CDEDF4",
+      "--t-radius": "18px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 20px rgba(30,143,168,0.15)",
+      "--t-shadow-soft": "0 3px 10px rgba(30,143,168,0.1)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Avenir', 'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"스카이", hex:"#EAF6FA"},
+      {label:"오션블루", hex:"#1E8FA8"},
+      {label:"네이비", hex:"#1C3A4A"},
+      {label:"연블루", hex:"#CDEDF4"}
+    ],
+    fontTag: "Avenir / Helvetica Neue"
+  },
+
+  // ───────────── 고급 / 포멀 계열 ─────────────
+  {
+    id: "luxury-black-gold",
+    category: "고급 / 포멀",
+    name: "럭셔리 블랙골드",
+    desc: "블랙과 골드 조합, 세리프 폰트로 무게감 있는 느낌을 내요.",
+    vars: {
+      "--t-bg": "#0C0C0C",
+      "--t-card-bg": "#1A1A1A",
+      "--t-text": "#F1E9D8",
+      "--t-text-soft": "#A89A7C",
+      "--t-accent": "#D4AF37",
+      "--t-accent-text": "#0C0C0C",
+      "--t-accent-soft": "#3A301A",
+      "--t-radius": "2px",
+      "--t-radius-sm": "2px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 24px rgba(212,175,55,0.15)",
+      "--t-shadow-soft": "0 4px 14px rgba(0,0,0,0.4)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#D4AF37",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#3A3424",
+      "--t-font-display": "'Playfair Display', 'Georgia', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"블랙", hex:"#0C0C0C"},
+      {label:"카드", hex:"#1A1A1A"},
+      {label:"골드", hex:"#D4AF37"},
+      {label:"글자", hex:"#F1E9D8"}
+    ],
+    fontTag: "Playfair Display / Georgia"
+  },
+
+  {
+    id: "editorial",
+    category: "고급 / 포멀",
+    name: "에디토리얼",
+    desc: "패션 매거진처럼 큰 타이포와 흑백 사진 느낌을 내요.",
+    vars: {
+      "--t-bg": "#FFFFFF",
+      "--t-card-bg": "#F7F7F7",
+      "--t-text": "#0A0A0A",
+      "--t-text-soft": "#5A5A5A",
+      "--t-accent": "#0A0A0A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#EAEAEA",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "none",
+      "--t-shadow-soft": "none",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#0A0A0A",
+      "--t-font-display": "'Times New Roman', serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "400",
+      "--t-letter-spacing": "-0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFFFF"},
+      {label:"카드", hex:"#F7F7F7"},
+      {label:"블랙", hex:"#0A0A0A"},
+      {label:"그레이", hex:"#5A5A5A"}
+    ],
+    fontTag: "Times New Roman / Helvetica Neue"
+  },
+
+  {
+    id: "art-deco",
+    category: "고급 / 포멀",
+    name: "아르데코",
+    desc: "1920년대 느낌, 대칭적 패턴, 금색 라인 장식이 특징이에요.",
+    vars: {
+      "--t-bg": "#0E1F1C",
+      "--t-card-bg": "#15302B",
+      "--t-text": "#F3E9CF",
+      "--t-text-soft": "#B7A77D",
+      "--t-accent": "#C9A24B",
+      "--t-accent-text": "#0E1F1C",
+      "--t-accent-soft": "#2A4A40",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 0 1px #C9A24B",
+      "--t-shadow-soft": "0 0 0 1px rgba(201,162,75,0.4)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#C9A24B",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#C9A24B",
+      "--t-font-display": "'Trajan Pro', 'Georgia', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.08em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"딥그린", hex:"#0E1F1C"},
+      {label:"카드", hex:"#15302B"},
+      {label:"골드", hex:"#C9A24B"},
+      {label:"글자", hex:"#F3E9CF"}
+    ],
+    fontTag: "Trajan Pro / Georgia"
+  },
+
+  // ───────────── 키덜트 / 팝 계열 ─────────────
+  {
+    id: "candy-pop",
+    category: "키덜트 / 팝",
+    name: "캔디팝",
+    desc: "사탕처럼 알록달록하고 광택 있는 색, 동글동글한 도형을 사용해요.",
+    vars: {
+      "--t-bg": "#FFF0F6",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#5A2D4A",
+      "--t-text-soft": "#A05C88",
+      "--t-accent": "#FF5CA8",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFD6EA",
+      "--t-radius": "28px",
+      "--t-radius-sm": "18px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 0 rgba(255,92,168,0.25)",
+      "--t-shadow-soft": "0 4px 12px rgba(255,92,168,0.18)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Baloo 2', 'Trebuchet MS', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF0F6"},
+      {label:"핫핑크", hex:"#FF5CA8"},
+      {label:"글자", hex:"#5A2D4A"},
+      {label:"연핑크", hex:"#FFD6EA"}
+    ],
+    fontTag: "Baloo 2 / Trebuchet MS"
+  },
+
+  {
+    id: "pop-art",
+    category: "키덜트 / 팝",
+    name: "키치 팝아트",
+    desc: "앤디 워홀 느낌, 강한 원색 대비, 망점 패턴이 특징이에요.",
+    vars: {
+      "--t-bg": "#FFE600",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#000000",
+      "--t-text-soft": "#333333",
+      "--t-accent": "#FF003C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#00B0FF",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "5px 5px 0 #000000",
+      "--t-shadow-soft": "3px 3px 0 #000000",
+      "--t-border-width": "3px",
+      "--t-border-color": "#000000",
+      "--t-border-width-2": "3px",
+      "--t-border-color-2": "#000000",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Arial', sans-serif",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"옐로우", hex:"#FFE600"},
+      {label:"레드", hex:"#FF003C"},
+      {label:"블루", hex:"#00B0FF"},
+      {label:"블랙", hex:"#000000"}
+    ],
+    fontTag: "Arial Black"
+  },
+
+  {
+    id: "inflatable",
+    category: "키덜트 / 팝",
+    name: "인플레이터블 / 벌룬",
+    desc: "풍선처럼 빵빵하고 통통한 3D 입체감이 느껴지는 스타일이에요.",
+    vars: {
+      "--t-bg": "#DFF3FF",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1A3A5A",
+      "--t-text-soft": "#5A85A8",
+      "--t-accent": "#FF8AC6",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFE0F0",
+      "--t-radius": "32px",
+      "--t-radius-sm": "20px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 12px 0 rgba(255,138,198,0.3), inset 0 -6px 10px rgba(0,0,0,0.05)",
+      "--t-shadow-soft": "0 6px 14px rgba(0,0,0,0.08)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Baloo 2', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"스카이", hex:"#DFF3FF"},
+      {label:"핑크", hex:"#FF8AC6"},
+      {label:"글자", hex:"#1A3A5A"},
+      {label:"연핑크", hex:"#FFE0F0"}
+    ],
+    fontTag: "Baloo 2 / Trebuchet MS"
+  },
+
+  // ───────────── 서브컬처 / 스트릿 계열 ─────────────
+  {
+    id: "grunge",
+    category: "서브컬처 / 스트릿",
+    name: "그런지",
+    desc: "찢어진 종이, 스프레이 페인트, 거친 텍스처가 특징이에요.",
+    vars: {
+      "--t-bg": "#D8D2C4",
+      "--t-card-bg": "#EAE5D8",
+      "--t-text": "#1A1A1A",
+      "--t-text-soft": "#5A5648",
+      "--t-accent": "#A02020",
+      "--t-accent-text": "#EAE5D8",
+      "--t-accent-soft": "#C9B8A0",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "4px",
+      "--t-shadow": "3px 3px 0 rgba(0,0,0,0.3)",
+      "--t-shadow-soft": "2px 2px 0 rgba(0,0,0,0.2)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#1A1A1A",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#1A1A1A",
+      "--t-font-display": "'Impact', sans-serif",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"먹색베이지", hex:"#D8D2C4"},
+      {label:"진레드", hex:"#A02020"},
+      {label:"블랙", hex:"#1A1A1A"},
+      {label:"카드", hex:"#EAE5D8"}
+    ],
+    fontTag: "Impact / Courier New"
+  },
+
+  {
+    id: "streetwear",
+    category: "서브컬처 / 스트릿",
+    name: "스트릿웨어 / 힙합",
+    desc: "그래피티 느낌 폰트, 강렬한 타이포, 도시적인 분위기예요.",
+    vars: {
+      "--t-bg": "#111111",
+      "--t-card-bg": "#1E1E1E",
+      "--t-text": "#FFFFFF",
+      "--t-text-soft": "#9A9A9A",
+      "--t-accent": "#FFE600",
+      "--t-accent-text": "#111111",
+      "--t-accent-soft": "#3A3A20",
+      "--t-radius": "6px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 0 #FFE600",
+      "--t-shadow-soft": "0 3px 10px rgba(0,0,0,0.4)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#333333",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Arial', sans-serif",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"블랙", hex:"#111111"},
+      {label:"카드", hex:"#1E1E1E"},
+      {label:"형광옐로우", hex:"#FFE600"},
+      {label:"화이트", hex:"#FFFFFF"}
+    ],
+    fontTag: "Arial Black"
+  },
+
+  // ───────────── SF / 공상과학 계열 ─────────────
+  {
+    id: "retrofuturism",
+    category: "SF / 공상과학",
+    name: "레트로퓨처리즘",
+    desc: "50~60년대가 상상한 미래, 크롬과 둥근 우주선 같은 느낌이에요.",
+    vars: {
+      "--t-bg": "#E8E4DC",
+      "--t-card-bg": "#F5F2EA",
+      "--t-text": "#2A2A2A",
+      "--t-text-soft": "#6A6A60",
+      "--t-accent": "#E8742C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F0C9A8",
+      "--t-radius": "30px",
+      "--t-radius-sm": "20px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(0,0,0,0.12)",
+      "--t-shadow-soft": "0 3px 10px rgba(0,0,0,0.08)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Futura', 'Century Gothic', sans-serif",
+      "--t-font-body": "'Century Gothic', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#E8E4DC"},
+      {label:"오렌지", hex:"#E8742C"},
+      {label:"글자", hex:"#2A2A2A"},
+      {label:"카드", hex:"#F5F2EA"}
+    ],
+    fontTag: "Futura / Century Gothic"
+  },
+
+  {
+    id: "vaporwave",
+    category: "SF / 공상과학",
+    name: "베이퍼웨이브",
+    desc: "보라와 핑크의 그라데이션, 그리스 조각상과 야자수 모티프예요.",
+    vars: {
+      "--t-bg": "linear-gradient(160deg,#2E1A6E,#FF6FD8 70%,#FFD36F)",
+      "--t-card-bg": "rgba(20,8,50,0.55)",
+      "--t-text": "#FDF0FF",
+      "--t-text-soft": "#D9B8FF",
+      "--t-accent": "#00F0FF",
+      "--t-accent-text": "#1A0640",
+      "--t-accent-soft": "#5A2E9C",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 24px rgba(0,240,255,0.4)",
+      "--t-shadow-soft": "0 0 14px rgba(255,111,216,0.3)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#00F0FF",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#FF6FD8",
+      "--t-font-display": "'Times New Roman', serif",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.05em",
+      "--t-blur": "blur(4px)"
+    },
+    swatches: [
+      {label:"퍼플", hex:"#2E1A6E"},
+      {label:"핑크", hex:"#FF6FD8"},
+      {label:"옐로우", hex:"#FFD36F"},
+      {label:"시안", hex:"#00F0FF"}
+    ],
+    fontTag: "Times New Roman / Courier New"
+  },
+
+  {
+    id: "space",
+    category: "SF / 공상과학",
+    name: "스페이스 / 우주",
+    desc: "어두운 네이비, 별빛, 행성 모티프를 사용하는 분위기예요.",
+    vars: {
+      "--t-bg": "#05070F",
+      "--t-card-bg": "#0F1426",
+      "--t-text": "#E4E8FF",
+      "--t-text-soft": "#7A82AE",
+      "--t-accent": "#6F9CFF",
+      "--t-accent-text": "#05070F",
+      "--t-accent-soft": "#1A2350",
+      "--t-radius": "14px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 30px rgba(111,156,255,0.2)",
+      "--t-shadow-soft": "0 4px 16px rgba(0,0,0,0.5)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#1A2350",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0.03em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#05070F"},
+      {label:"카드", hex:"#0F1426"},
+      {label:"별빛블루", hex:"#6F9CFF"},
+      {label:"글자", hex:"#E4E8FF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  // ───────────── 추가: 자주 찾는 보너스 테마 ─────────────
+  {
+    id: "sweet-mint",
+    category: "보너스",
+    name: "스윗 민트",
+    desc: "민트와 화이트 위주의 깨끗하고 신뢰감 있는 서비스용 톤이에요.",
+    vars: {
+      "--t-bg": "#F2FBF7",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#16332A",
+      "--t-text-soft": "#5F8678",
+      "--t-accent": "#1FAE7E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D2F0E2",
+      "--t-radius": "14px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(31,174,126,0.15)",
+      "--t-shadow-soft": "0 3px 10px rgba(31,174,126,0.1)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Apple SD Gothic Neo', sans-serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F2FBF7"},
+      {label:"민트", hex:"#1FAE7E"},
+      {label:"글자", hex:"#16332A"},
+      {label:"연민트", hex:"#D2F0E2"}
+    ],
+    fontTag: "Apple SD Gothic Neo"
+  },
+
+  {
+    id: "midnight-violet",
+    category: "보너스",
+    name: "미드나잇 바이올렛",
+    desc: "어둡지만 차갑지 않은 보라 계열, 앱/대시보드에 잘 맞는 톤이에요.",
+    vars: {
+      "--t-bg": "#1A1330",
+      "--t-card-bg": "#241B47",
+      "--t-text": "#EDE8FF",
+      "--t-text-soft": "#A89BD9",
+      "--t-accent": "#9D7BFF",
+      "--t-accent-text": "#1A1330",
+      "--t-accent-soft": "#352761",
+      "--t-radius": "16px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 22px rgba(157,123,255,0.25)",
+      "--t-shadow-soft": "0 4px 14px rgba(0,0,0,0.3)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#352761",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#1A1330"},
+      {label:"카드", hex:"#241B47"},
+      {label:"바이올렛", hex:"#9D7BFF"},
+      {label:"글자", hex:"#EDE8FF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  // ───────────── 테크 / 미래 계열 ─────────────
+  {
+    id: "neumorphism",
+    category: "테크 / 미래",
+    name: "뉴모피즘",
+    desc: "말랑말랑한 입체감. 배경과 비슷한 색의 버튼이 살짝 솟아오르거나 들어간 느낌이에요.",
+    vars: {
+      "--t-bg": "#E6E9EF",
+      "--t-card-bg": "#E6E9EF",
+      "--t-text": "#3C4250",
+      "--t-text-soft": "#7C8294",
+      "--t-accent": "#6C7CF0",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D6DAE6",
+      "--t-radius": "20px",
+      "--t-radius-sm": "14px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "8px 8px 16px #C4C9D4, -8px -8px 16px #FFFFFF",
+      "--t-shadow-soft": "4px 4px 10px #C4C9D4, -4px -4px 10px #FFFFFF",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#E6E9EF"},
+      {label:"포인트", hex:"#6C7CF0"},
+      {label:"글자", hex:"#3C4250"},
+      {label:"그림자(밝음)", hex:"#FFFFFF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "holographic",
+    category: "테크 / 미래",
+    name: "홀로그래픽",
+    desc: "무지개빛으로 반사되는 느낌, 움직이면 색이 바뀌는 듯한 그라데이션이에요.",
+    vars: {
+      "--t-bg": "linear-gradient(120deg,#C2FFE9,#C9D6FF 25%,#FFC2EC 50%,#FFF0B3 75%,#C2FFE9)",
+      "--t-card-bg": "rgba(255,255,255,0.55)",
+      "--t-text": "#2A2A3A",
+      "--t-text-soft": "#5C5C78",
+      "--t-accent": "#7B5CFF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "rgba(255,255,255,0.6)",
+      "--t-radius": "18px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 24px rgba(123,92,255,0.2)",
+      "--t-shadow-soft": "0 4px 14px rgba(123,92,255,0.12)",
+      "--t-border-width": "1px",
+      "--t-border-color": "rgba(255,255,255,0.7)",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "rgba(255,255,255,0.6)",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "blur(10px)"
+    },
+    swatches: [
+      {label:"민트", hex:"#C2FFE9"},
+      {label:"라벤더", hex:"#C9D6FF"},
+      {label:"핑크", hex:"#FFC2EC"},
+      {label:"포인트", hex:"#7B5CFF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "ai-generative",
+    category: "테크 / 미래",
+    name: "AI / 제너레이티브",
+    desc: "그라데이션 메시, 흐릿한 빛 덩어리, \"AI스러운\" 보라-파랑 계열의 느낌이에요.",
+    vars: {
+      "--t-bg": "radial-gradient(circle at 20% 20%,#3A2FCB,transparent 50%), radial-gradient(circle at 80% 70%,#9C2FCB,transparent 50%), #0B0A1F",
+      "--t-card-bg": "rgba(255,255,255,0.06)",
+      "--t-text": "#F0EEFF",
+      "--t-text-soft": "#A6A0D9",
+      "--t-accent": "#8B6CFF",
+      "--t-accent-text": "#0B0A1F",
+      "--t-accent-soft": "rgba(139,108,255,0.2)",
+      "--t-radius": "16px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 8px 30px rgba(139,108,255,0.3)",
+      "--t-shadow-soft": "0 4px 16px rgba(0,0,0,0.4)",
+      "--t-border-width": "1px",
+      "--t-border-color": "rgba(255,255,255,0.12)",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "rgba(255,255,255,0.1)",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "-0.01em",
+      "--t-blur": "blur(20px)"
+    },
+    swatches: [
+      {label:"배경", hex:"#0B0A1F"},
+      {label:"블루퍼플", hex:"#3A2FCB"},
+      {label:"마젠타퍼플", hex:"#9C2FCB"},
+      {label:"포인트", hex:"#8B6CFF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "dashboard-data",
+    category: "테크 / 미래",
+    name: "데이터 / 대시보드",
+    desc: "모노스페이스 폰트, 격자무늬, 터미널 같은 느낌이에요.",
+    vars: {
+      "--t-bg": "#0D1117",
+      "--t-card-bg": "#161B22",
+      "--t-text": "#C9D1D9",
+      "--t-text-soft": "#6E7681",
+      "--t-accent": "#58A6FF",
+      "--t-accent-text": "#0D1117",
+      "--t-accent-soft": "#1F3A5A",
+      "--t-radius": "6px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "none",
+      "--t-shadow-soft": "0 1px 0 rgba(255,255,255,0.04)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#30363D",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#30363D",
+      "--t-font-display": "'SF Mono', 'Courier New', monospace",
+      "--t-font-body": "'SF Mono', 'Courier New', monospace",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#0D1117"},
+      {label:"카드", hex:"#161B22"},
+      {label:"포인트블루", hex:"#58A6FF"},
+      {label:"테두리", hex:"#30363D"}
+    ],
+    fontTag: "SF Mono / Courier New"
+  },
+
+  // ───────────── 놀이 / 장난감 계열 ─────────────
+  {
+    id: "claymorphism",
+    category: "놀이 / 장난감",
+    name: "클레이모피즘",
+    desc: "찰흙처럼 동글동글하고 부드러운 3D 입체 느낌이에요.",
+    vars: {
+      "--t-bg": "#FFF1E0",
+      "--t-card-bg": "#FFE3C2",
+      "--t-text": "#5A3A1E",
+      "--t-text-soft": "#9C7A52",
+      "--t-accent": "#FF9F45",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFD7A8",
+      "--t-radius": "30px",
+      "--t-radius-sm": "20px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "inset 0 -6px 10px rgba(0,0,0,0.08), 0 10px 18px rgba(255,159,69,0.3)",
+      "--t-shadow-soft": "0 6px 12px rgba(255,159,69,0.18)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Baloo 2', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF1E0"},
+      {label:"카드(클레이)", hex:"#FFE3C2"},
+      {label:"오렌지", hex:"#FF9F45"},
+      {label:"글자", hex:"#5A3A1E"}
+    ],
+    fontTag: "Baloo 2 / Trebuchet MS"
+  },
+
+  {
+    id: "comic-style",
+    category: "놀이 / 장난감",
+    name: "만화 / 코믹",
+    desc: "굵은 윤곽선, 말풍선, 도트 패턴 배경이 특징이에요.",
+    vars: {
+      "--t-bg": "#FFFCEF",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1A1A1A",
+      "--t-text-soft": "#555555",
+      "--t-accent": "#FFD400",
+      "--t-accent-text": "#1A1A1A",
+      "--t-accent-soft": "#FFF3B0",
+      "--t-radius": "16px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "4px 4px 0 #1A1A1A",
+      "--t-shadow-soft": "2px 2px 0 #1A1A1A",
+      "--t-border-width": "3px",
+      "--t-border-color": "#1A1A1A",
+      "--t-border-width-2": "3px",
+      "--t-border-color-2": "#1A1A1A",
+      "--t-font-display": "'Comic Sans MS', 'Marker Felt', cursive",
+      "--t-font-body": "'Comic Sans MS', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFCEF"},
+      {label:"옐로우", hex:"#FFD400"},
+      {label:"블랙", hex:"#1A1A1A"},
+      {label:"카드", hex:"#FFFFFF"}
+    ],
+    fontTag: "Comic Sans MS"
+  },
+
+  {
+    id: "toy-blocks",
+    category: "놀이 / 장난감",
+    name: "장난감 블록",
+    desc: "레고처럼 알록달록하고 입체적인 버튼이 특징이에요.",
+    vars: {
+      "--t-bg": "#F0F4F8",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1E2A3A",
+      "--t-text-soft": "#5C6E80",
+      "--t-accent": "#FF3B30",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFD4D0",
+      "--t-radius": "8px",
+      "--t-radius-sm": "6px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 0 #C4271E, 0 8px 10px rgba(0,0,0,0.15)",
+      "--t-shadow-soft": "0 3px 8px rgba(0,0,0,0.1)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F0F4F8"},
+      {label:"레드", hex:"#FF3B30"},
+      {label:"진레드(그림자)", hex:"#C4271E"},
+      {label:"글자", hex:"#1E2A3A"}
+    ],
+    fontTag: "Arial Rounded MT Bold"
+  },
+
+  // ───────────── 자연 / 계절 계열 ─────────────
+  {
+    id: "autumn",
+    category: "자연 / 계절",
+    name: "가을 / 단풍",
+    desc: "주황, 갈색 위주의 따뜻한 톤으로 가을 분위기를 내요.",
+    vars: {
+      "--t-bg": "#F7E9D7",
+      "--t-card-bg": "#FFF6EA",
+      "--t-text": "#4A2E1A",
+      "--t-text-soft": "#8A654A",
+      "--t-accent": "#C2541C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#EFC79A",
+      "--t-radius": "14px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(194,84,28,0.18)",
+      "--t-shadow-soft": "0 3px 10px rgba(194,84,28,0.12)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"베이지", hex:"#F7E9D7"},
+      {label:"단풍오렌지", hex:"#C2541C"},
+      {label:"브라운", hex:"#4A2E1A"},
+      {label:"카드", hex:"#FFF6EA"}
+    ],
+    fontTag: "Georgia / 산세리프"
+  },
+
+  {
+    id: "winter-snow",
+    category: "자연 / 계절",
+    name: "겨울 / 스노우",
+    desc: "하늘색과 흰색 위주의 차갑고 깨끗한 느낌이에요.",
+    vars: {
+      "--t-bg": "#F4F9FC",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1E3A4A",
+      "--t-text-soft": "#6E8FA0",
+      "--t-accent": "#3FA9D9",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D6EEF8",
+      "--t-radius": "16px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 18px rgba(63,169,217,0.15)",
+      "--t-shadow-soft": "0 3px 10px rgba(63,169,217,0.1)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#E2EEF4",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E2EEF4",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F4F9FC"},
+      {label:"스카이블루", hex:"#3FA9D9"},
+      {label:"글자", hex:"#1E3A4A"},
+      {label:"연블루", hex:"#D6EEF8"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "desert-terracotta",
+    category: "자연 / 계절",
+    name: "사막 / 테라코타",
+    desc: "황토색과 모래색 위주의 건조하지만 따뜻한 느낌이에요.",
+    vars: {
+      "--t-bg": "#E8D2B8",
+      "--t-card-bg": "#F3E4CE",
+      "--t-text": "#4A2E1E",
+      "--t-text-soft": "#8A6048",
+      "--t-accent": "#B5552E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D9A87C",
+      "--t-radius": "12px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 14px rgba(181,85,46,0.2)",
+      "--t-shadow-soft": "0 3px 8px rgba(181,85,46,0.14)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Rockwell', 'Georgia', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"모래색", hex:"#E8D2B8"},
+      {label:"테라코타", hex:"#B5552E"},
+      {label:"브라운", hex:"#4A2E1E"},
+      {label:"카드", hex:"#F3E4CE"}
+    ],
+    fontTag: "Rockwell / Georgia"
+  },
+
+  // ───────────── 문화권 기반 계열 ─────────────
+  {
+    id: "korean-traditional",
+    category: "문화권 기반",
+    name: "한국 전통",
+    desc: "한지 질감, 단청 색감, 한글 서예체 느낌을 살린 스타일이에요.",
+    vars: {
+      "--t-bg": "#F3EEE0",
+      "--t-card-bg": "#FAF6EA",
+      "--t-text": "#2A2420",
+      "--t-text-soft": "#6E6354",
+      "--t-accent": "#A33D2E",
+      "--t-accent-text": "#FAF6EA",
+      "--t-accent-soft": "#E8D4C2",
+      "--t-radius": "4px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 8px rgba(0,0,0,0.1)",
+      "--t-shadow-soft": "0 1px 4px rgba(0,0,0,0.08)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#2F6A4F",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#2F6A4F",
+      "--t-font-display": "'Noto Serif KR', serif",
+      "--t-font-body": "'Noto Sans KR', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0.04em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"한지색", hex:"#F3EEE0"},
+      {label:"단청적색", hex:"#A33D2E"},
+      {label:"단청청록", hex:"#2F6A4F"},
+      {label:"글자", hex:"#2A2420"}
+    ],
+    fontTag: "Noto Serif KR / Noto Sans KR"
+  },
+
+  {
+    id: "japanese-style",
+    category: "문화권 기반",
+    name: "일본 화풍",
+    desc: "와가시 색감, 옅은 핑크와 베이지, 동양적 여백이 특징이에요.",
+    vars: {
+      "--t-bg": "#F7EFE9",
+      "--t-card-bg": "#FFFAF5",
+      "--t-text": "#3A2E2A",
+      "--t-text-soft": "#8A726A",
+      "--t-accent": "#D88C8C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F0D6D6",
+      "--t-radius": "6px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 10px rgba(0,0,0,0.06)",
+      "--t-shadow-soft": "0 1px 6px rgba(0,0,0,0.04)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#EBDCD2",
+      "--t-font-display": "'Yu Mincho', 'Noto Serif JP', serif",
+      "--t-font-body": "'Noto Sans KR', sans-serif",
+      "--t-display-weight": "400",
+      "--t-letter-spacing": "0.06em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F7EFE9"},
+      {label:"사쿠라핑크", hex:"#D88C8C"},
+      {label:"글자", hex:"#3A2E2A"},
+      {label:"카드", hex:"#FFFAF5"}
+    ],
+    fontTag: "Yu Mincho / Noto Serif JP"
+  },
+
+  {
+    id: "scandinavian",
+    category: "문화권 기반",
+    name: "북유럽 스타일",
+    desc: "흰색과 나무색, 단순한 도형으로 차분함을 표현해요.",
+    vars: {
+      "--t-bg": "#FAF8F4",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#2E2A24",
+      "--t-text-soft": "#7A736A",
+      "--t-accent": "#C97A4A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#EAD8C4",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 10px rgba(0,0,0,0.05)",
+      "--t-shadow-soft": "0 1px 6px rgba(0,0,0,0.04)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#EDE8DE",
+      "--t-font-display": "'Helvetica Neue', sans-serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FAF8F4"},
+      {label:"우드톤", hex:"#C97A4A"},
+      {label:"글자", hex:"#2E2A24"},
+      {label:"카드", hex:"#FFFFFF"}
+    ],
+    fontTag: "Helvetica Neue"
+  },
+
+  {
+    id: "moroccan-boho",
+    category: "문화권 기반",
+    name: "모로칸 / 보헤미안",
+    desc: "강렬한 패턴, 타일 무늬, 화려한 색 조합이 특징이에요.",
+    vars: {
+      "--t-bg": "#1E3A4A",
+      "--t-card-bg": "#274A5C",
+      "--t-text": "#FBEFD8",
+      "--t-text-soft": "#B8C9D2",
+      "--t-accent": "#E0A23B",
+      "--t-accent-text": "#1E3A4A",
+      "--t-accent-soft": "#3A5A6C",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 18px rgba(224,162,59,0.25)",
+      "--t-shadow-soft": "0 3px 10px rgba(0,0,0,0.3)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#E0A23B",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#3A5A6C",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"딥틸", hex:"#1E3A4A"},
+      {label:"골드", hex:"#E0A23B"},
+      {label:"카드", hex:"#274A5C"},
+      {label:"크림", hex:"#FBEFD8"}
+    ],
+    fontTag: "Georgia"
+  },
+
+  {
+    id: "chinese-style",
+    category: "문화권 기반",
+    name: "중화풍",
+    desc: "붉은색과 금색의 조합, 전통 패턴이 특징이에요.",
+    vars: {
+      "--t-bg": "#1A0E0E",
+      "--t-card-bg": "#2A1414",
+      "--t-text": "#F5E6C8",
+      "--t-text-soft": "#B89A7A",
+      "--t-accent": "#D4AF37",
+      "--t-accent-text": "#1A0E0E",
+      "--t-accent-soft": "#4A2424",
+      "--t-radius": "4px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 18px rgba(212,175,55,0.2)",
+      "--t-shadow-soft": "0 3px 10px rgba(0,0,0,0.4)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#D4AF37",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#5A2E2E",
+      "--t-font-display": "'Noto Serif SC', serif",
+      "--t-font-body": "'Noto Sans KR', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.04em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"진레드", hex:"#1A0E0E"},
+      {label:"골드", hex:"#D4AF37"},
+      {label:"카드", hex:"#2A1414"},
+      {label:"글자", hex:"#F5E6C8"}
+    ],
+    fontTag: "Noto Serif SC"
+  },
+
+  {
+    id: "indian-paisley",
+    category: "문화권 기반",
+    name: "인도 / 페이즐리",
+    desc: "화려한 색과 곡선무늬가 어우러지는 스타일이에요.",
+    vars: {
+      "--t-bg": "#FFF4E0",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#5A1E3A",
+      "--t-text-soft": "#9C5C7A",
+      "--t-accent": "#E0457A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F8C9D8",
+      "--t-radius": "16px",
+      "--t-radius-sm": "12px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(224,69,122,0.2)",
+      "--t-shadow-soft": "0 3px 10px rgba(224,69,122,0.14)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#F0A93B",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF4E0"},
+      {label:"마젠타", hex:"#E0457A"},
+      {label:"골드오렌지", hex:"#F0A93B"},
+      {label:"글자", hex:"#5A1E3A"}
+    ],
+    fontTag: "Georgia / 산세리프"
+  },
+
+  {
+    id: "african-print",
+    category: "문화권 기반",
+    name: "아프리칸 프린트",
+    desc: "강렬한 패턴과 색채 조합이 돋보이는 스타일이에요.",
+    vars: {
+      "--t-bg": "#FFF8E8",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#2E1A0E",
+      "--t-text-soft": "#7A5C3E",
+      "--t-accent": "#E0892A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F5C98A",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 16px rgba(224,137,42,0.2)",
+      "--t-shadow-soft": "0 3px 10px rgba(224,137,42,0.14)",
+      "--t-border-width": "3px",
+      "--t-border-color": "#2E1A0E",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#2E1A0E",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Arial', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF8E8"},
+      {label:"오렌지", hex:"#E0892A"},
+      {label:"블랙", hex:"#2E1A0E"},
+      {label:"옐로우", hex:"#F5C98A"}
+    ],
+    fontTag: "Arial Black"
+  },
+
+  {
+    id: "mexican-latin",
+    category: "문화권 기반",
+    name: "멕시칸 / 라틴",
+    desc: "선명한 색과 활기찬 느낌, 파피루스 컷 장식이 특징이에요.",
+    vars: {
+      "--t-bg": "#FFEFE0",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#3A1A1A",
+      "--t-text-soft": "#8A5050",
+      "--t-accent": "#E0312B",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#FFD9B8",
+      "--t-radius": "14px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 0 #2E8B57",
+      "--t-shadow-soft": "0 3px 8px rgba(0,0,0,0.12)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Trebuchet MS', sans-serif",
+      "--t-font-body": "'Trebuchet MS', sans-serif",
+      "--t-display-weight": "800",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFEFE0"},
+      {label:"레드", hex:"#E0312B"},
+      {label:"그린", hex:"#2E8B57"},
+      {label:"글자", hex:"#3A1A1A"}
+    ],
+    fontTag: "Trebuchet MS"
+  },
+
+  // ───────────── 감정 / 무드 기반 계열 ─────────────
+  {
+    id: "calm-meditative",
+    category: "감정 / 무드 기반",
+    name: "잔잔하고 명상적인",
+    desc: "회색과 베이지 위주, 여백이 많고 느린 느낌의 차분한 분위기예요.",
+    vars: {
+      "--t-bg": "#F1EFEA",
+      "--t-card-bg": "#FAF9F6",
+      "--t-text": "#3A382E",
+      "--t-text-soft": "#8A8678",
+      "--t-accent": "#A8A398",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#E2DFD6",
+      "--t-radius": "12px",
+      "--t-radius-sm": "10px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 10px rgba(0,0,0,0.04)",
+      "--t-shadow-soft": "0 1px 6px rgba(0,0,0,0.03)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "400",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F1EFEA"},
+      {label:"카드", hex:"#FAF9F6"},
+      {label:"그레이지", hex:"#A8A398"},
+      {label:"글자", hex:"#3A382E"}
+    ],
+    fontTag: "Georgia / 산세리프"
+  },
+
+  {
+    id: "energetic-sporty",
+    category: "감정 / 무드 기반",
+    name: "에너제틱 / 스포티",
+    desc: "빨강과 검정, 굵은 사선으로 역동적인 느낌을 줘요.",
+    vars: {
+      "--t-bg": "#161616",
+      "--t-card-bg": "#222222",
+      "--t-text": "#FFFFFF",
+      "--t-text-soft": "#AAAAAA",
+      "--t-accent": "#FF1E3C",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#4A1018",
+      "--t-radius": "4px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 0 #FF1E3C",
+      "--t-shadow-soft": "0 3px 10px rgba(0,0,0,0.4)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "0px",
+      "--t-border-color-2": "transparent",
+      "--t-font-display": "'Arial Black', sans-serif",
+      "--t-font-body": "'Arial', sans-serif",
+      "--t-display-weight": "900",
+      "--t-letter-spacing": "-0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#161616"},
+      {label:"레드", hex:"#FF1E3C"},
+      {label:"카드", hex:"#222222"},
+      {label:"화이트", hex:"#FFFFFF"}
+    ],
+    fontTag: "Arial Black"
+  },
+
+  {
+    id: "romantic",
+    category: "감정 / 무드 기반",
+    name: "로맨틱",
+    desc: "핑크, 레이스 패턴, 부드러운 곡선이 어우러진 분위기예요.",
+    vars: {
+      "--t-bg": "#FFF0F4",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#5A2E3A",
+      "--t-text-soft": "#A0707E",
+      "--t-accent": "#E0708E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#F8D9E2",
+      "--t-radius": "24px",
+      "--t-radius-sm": "16px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 6px 18px rgba(224,112,142,0.2)",
+      "--t-shadow-soft": "0 3px 10px rgba(224,112,142,0.14)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#F8D9E2",
+      "--t-font-display": "'Garamond', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFF0F4"},
+      {label:"로즈핑크", hex:"#E0708E"},
+      {label:"글자", hex:"#5A2E3A"},
+      {label:"연핑크", hex:"#F8D9E2"}
+    ],
+    fontTag: "Garamond"
+  },
+
+  // ───────────── 출판 / 인쇄물 기반 계열 ─────────────
+  {
+    id: "newspaper",
+    category: "출판 / 인쇄물 기반",
+    name: "신문 / 잡지 스타일",
+    desc: "컬럼으로 나뉜 레이아웃, 세리프 폰트, 흑백 사진 느낌이에요.",
+    vars: {
+      "--t-bg": "#F4F2EC",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#1A1A1A",
+      "--t-text-soft": "#5A5A5A",
+      "--t-accent": "#1A1A1A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#E5E2D8",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "none",
+      "--t-shadow-soft": "none",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#1A1A1A",
+      "--t-font-display": "'Times New Roman', serif",
+      "--t-font-body": "'Times New Roman', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#F4F2EC"},
+      {label:"카드", hex:"#FFFFFF"},
+      {label:"블랙", hex:"#1A1A1A"},
+      {label:"그레이", hex:"#5A5A5A"}
+    ],
+    fontTag: "Times New Roman"
+  },
+
+  {
+    id: "handwritten-diary",
+    category: "출판 / 인쇄물 기반",
+    name: "손글씨 / 다이어리",
+    desc: "필기체 폰트, 종이 질감, 클립이나 포스트잇 모티프가 특징이에요.",
+    vars: {
+      "--t-bg": "#FBF8F1",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#3A332A",
+      "--t-text-soft": "#8A8070",
+      "--t-accent": "#5A8FBF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D9E6F0",
+      "--t-radius": "6px",
+      "--t-radius-sm": "4px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "2px 3px 8px rgba(0,0,0,0.1)",
+      "--t-shadow-soft": "1px 2px 6px rgba(0,0,0,0.08)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#E2DCC8",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E2DCC8",
+      "--t-font-display": "'Bradley Hand', 'Comic Sans MS', cursive",
+      "--t-font-body": "'Comic Sans MS', sans-serif",
+      "--t-display-weight": "500",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FBF8F1"},
+      {label:"블루", hex:"#5A8FBF"},
+      {label:"글자", hex:"#3A332A"},
+      {label:"종이테두리", hex:"#E2DCC8"}
+    ],
+    fontTag: "Bradley Hand / Comic Sans MS"
+  },
+
+  // ───────────── 서브컬처 추가 ─────────────
+  {
+    id: "punk-zine",
+    category: "서브컬처 / 스트릿",
+    name: "펑크 / DIY 진",
+    desc: "콜라주, 복사기로 찍은 듯한 거친 인쇄 느낌이 특징이에요.",
+    vars: {
+      "--t-bg": "#FFFFFF",
+      "--t-card-bg": "#F0F0F0",
+      "--t-text": "#000000",
+      "--t-text-soft": "#333333",
+      "--t-accent": "#FF0000",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#000000",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "0px",
+      "--t-shadow": "4px 4px 0 #000000",
+      "--t-shadow-soft": "2px 2px 0 #000000",
+      "--t-border-width": "2px",
+      "--t-border-color": "#000000",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#000000",
+      "--t-font-display": "'Impact', sans-serif",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FFFFFF"},
+      {label:"레드", hex:"#FF0000"},
+      {label:"블랙", hex:"#000000"},
+      {label:"카드", hex:"#F0F0F0"}
+    ],
+    fontTag: "Impact / Courier New"
+  },
+
+  // ───────────── 공포 / 다크 세분화 ─────────────
+  {
+    id: "occult-tarot",
+    category: "공포 / 다크 세분화",
+    name: "크립티드 / 오컬트",
+    desc: "신비주의, 타로카드, 오컬트 심볼이 떠오르는 분위기예요.",
+    vars: {
+      "--t-bg": "#0E0A14",
+      "--t-card-bg": "#1C1426",
+      "--t-text": "#E8DCF5",
+      "--t-text-soft": "#9C8AB5",
+      "--t-accent": "#7A2EBF",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#2E1A40",
+      "--t-radius": "0px",
+      "--t-radius-sm": "0px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 0 20px rgba(122,46,191,0.35)",
+      "--t-shadow-soft": "0 4px 14px rgba(0,0,0,0.4)",
+      "--t-border-width": "1px",
+      "--t-border-color": "#7A2EBF",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#3A2A50",
+      "--t-font-display": "'Times New Roman', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.03em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#0E0A14"},
+      {label:"카드", hex:"#1C1426"},
+      {label:"바이올렛", hex:"#7A2EBF"},
+      {label:"글자", hex:"#E8DCF5"}
+    ],
+    fontTag: "Times New Roman / Georgia"
+  },
+
+  {
+    id: "post-apocalypse",
+    category: "공포 / 다크 세분화",
+    name: "포스트 아포칼립스",
+    desc: "녹슨 질감, 흙빛, 폐허가 된 듯한 느낌이에요.",
+    vars: {
+      "--t-bg": "#3A3226",
+      "--t-card-bg": "#4A4030",
+      "--t-text": "#E8DFC8",
+      "--t-text-soft": "#A89C7E",
+      "--t-accent": "#B5562A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#6A4A2E",
+      "--t-radius": "2px",
+      "--t-radius-sm": "2px",
+      "--t-radius-pill": "4px",
+      "--t-shadow": "0 4px 0 rgba(0,0,0,0.4)",
+      "--t-shadow-soft": "0 2px 6px rgba(0,0,0,0.3)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#6A5A3E",
+      "--t-border-width-2": "2px",
+      "--t-border-color-2": "#6A5A3E",
+      "--t-font-display": "'Impact', sans-serif",
+      "--t-font-body": "'Courier New', monospace",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"흙갈색", hex:"#3A3226"},
+      {label:"녹주황", hex:"#B5562A"},
+      {label:"카드", hex:"#4A4030"},
+      {label:"글자", hex:"#E8DFC8"}
+    ],
+    fontTag: "Impact / Courier New"
+  },
+
+  // ───────────── 자연 세분화 ─────────────
+  {
+    id: "safari-jungle",
+    category: "자연 세분화",
+    name: "사파리 / 정글",
+    desc: "카키색과 동물무늬, 탐험가 같은 느낌이에요.",
+    vars: {
+      "--t-bg": "#E8E2C8",
+      "--t-card-bg": "#F2EED9",
+      "--t-text": "#3A3420",
+      "--t-text-soft": "#7A7050",
+      "--t-accent": "#6B5A2E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D4C89A",
+      "--t-radius": "8px",
+      "--t-radius-sm": "6px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 4px 12px rgba(58,52,32,0.2)",
+      "--t-shadow-soft": "0 2px 8px rgba(58,52,32,0.14)",
+      "--t-border-width": "2px",
+      "--t-border-color": "#6B5A2E",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#D4C89A",
+      "--t-font-display": "'Rockwell', serif",
+      "--t-font-body": "'Georgia', serif",
+      "--t-display-weight": "700",
+      "--t-letter-spacing": "0.02em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"카키", hex:"#E8E2C8"},
+      {label:"올리브브라운", hex:"#6B5A2E"},
+      {label:"카드", hex:"#F2EED9"},
+      {label:"글자", hex:"#3A3420"}
+    ],
+    fontTag: "Rockwell / Georgia"
+  },
+
+  {
+    id: "camping-woods",
+    category: "자연 세분화",
+    name: "산 / 숲 캠핑",
+    desc: "체크무늬와 우드톤, 캠핑장 같은 분위기예요.",
+    vars: {
+      "--t-bg": "#EDE6D8",
+      "--t-card-bg": "#F7F2E8",
+      "--t-text": "#3A2E22",
+      "--t-text-soft": "#7A6A54",
+      "--t-accent": "#7A3A2A",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#D9B898",
+      "--t-radius": "10px",
+      "--t-radius-sm": "8px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 4px 12px rgba(58,46,34,0.16)",
+      "--t-shadow-soft": "0 2px 8px rgba(58,46,34,0.1)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E0D6C2",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Apple SD Gothic Neo', sans-serif",
+      "--t-display-weight": "600",
+      "--t-letter-spacing": "0em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#EDE6D8"},
+      {label:"우드레드", hex:"#7A3A2A"},
+      {label:"글자", hex:"#3A2E22"},
+      {label:"카드", hex:"#F7F2E8"}
+    ],
+    fontTag: "Georgia / 산세리프"
+  },
+
+  {
+    id: "minimal-garden",
+    category: "자연 세분화",
+    name: "미니멀 가든",
+    desc: "연한 그린과 화이트, 식물 라인아트 느낌이에요.",
+    vars: {
+      "--t-bg": "#FAFCF8",
+      "--t-card-bg": "#FFFFFF",
+      "--t-text": "#2A3A2E",
+      "--t-text-soft": "#7A8A74",
+      "--t-accent": "#5A8A5E",
+      "--t-accent-text": "#FFFFFF",
+      "--t-accent-soft": "#E2EEDE",
+      "--t-radius": "8px",
+      "--t-radius-sm": "6px",
+      "--t-radius-pill": "999px",
+      "--t-shadow": "0 2px 10px rgba(0,0,0,0.05)",
+      "--t-shadow-soft": "0 1px 6px rgba(0,0,0,0.04)",
+      "--t-border-width": "0px",
+      "--t-border-width-2": "1px",
+      "--t-border-color-2": "#E2EEDE",
+      "--t-font-display": "'Georgia', serif",
+      "--t-font-body": "'Helvetica Neue', sans-serif",
+      "--t-display-weight": "400",
+      "--t-letter-spacing": "0.01em",
+      "--t-blur": "none"
+    },
+    swatches: [
+      {label:"배경", hex:"#FAFCF8"},
+      {label:"세이지", hex:"#5A8A5E"},
+      {label:"글자", hex:"#2A3A2E"},
+      {label:"연그린", hex:"#E2EEDE"}
+    ],
+    fontTag: "Georgia / Helvetica Neue"
+  }
+];
+
+(function(){
+
+  const themeListEl = document.getElementById("theme-list");
+  const phTag = document.getElementById("ph-tag");
+  const phTitle = document.getElementById("ph-title");
+  const phDesc = document.getElementById("ph-desc");
+  const swatchesEl = document.getElementById("swatches");
+  const fontTagEl = document.getElementById("font-tag");
+  const codeContentEl = document.getElementById("code-content");
+  const copyBtn = document.getElementById("copy-btn");
+  const themeCountEl = document.getElementById("theme-count");
+
+  // 커스텀 컨트롤 엘리먼트 (색상 피커 + 헥스 읽기전용 표시)
+  const bgPicker = document.getElementById("custom-bg-picker");
+  const bgHex = document.getElementById("custom-bg-hex");
+  const cardPicker = document.getElementById("custom-card-picker");
+  const cardHex = document.getElementById("custom-card-hex");
+  const accentPicker = document.getElementById("custom-accent-picker");
+  const accentHex = document.getElementById("custom-accent-hex");
+  const textPicker = document.getElementById("custom-text-picker");
+  const textHex = document.getElementById("custom-text-hex");
+  const fontDropdownDisplay = document.getElementById("font-dropdown-display");
+  const fontTriggerDisplay = document.getElementById("font-trigger-display");
+  const fontMenuDisplay = document.getElementById("font-menu-display");
+  const fontDropdownBody = document.getElementById("font-dropdown-body");
+  const fontTriggerBody = document.getElementById("font-trigger-body");
+  const fontMenuBody = document.getElementById("font-menu-body");
+  const resetBtn = document.getElementById("custom-reset");
+
+  const themes = window.THEMES || [];
+  themeCountEl.textContent = themes.length;
+
+  let currentThemeId = null;
+  let currentOverrides = {}; // 사용자가 직접 바꾼 값들
+
+  // --- 폰트 목록 (select 옵션용, 카테고리별로 묶어서 표시) ---
+  const FONT_GROUPS = [
+    {
+      group: "산세리프 (깔끔)",
+      fonts: [
+        { label: "Apple SD Gothic Neo (기본)", value: "'Apple SD Gothic Neo', sans-serif" },
+        { label: "Helvetica Neue", value: "'Helvetica Neue', Arial, sans-serif" },
+        { label: "Arial", value: "'Arial', sans-serif" },
+        { label: "Avenir", value: "'Avenir', 'Helvetica Neue', sans-serif" },
+        { label: "Century Gothic", value: "'Century Gothic', sans-serif" },
+        { label: "Futura", value: "'Futura', sans-serif" },
+        { label: "Verdana", value: "'Verdana', sans-serif" }
+      ]
+    },
+    {
+      group: "세리프 (고급/전통)",
+      fonts: [
+        { label: "Georgia", value: "'Georgia', serif" },
+        { label: "Times New Roman", value: "'Times New Roman', serif" },
+        { label: "Playfair Display", value: "'Playfair Display', 'Georgia', serif" },
+        { label: "Garamond", value: "'Garamond', serif" },
+        { label: "Palatino", value: "'Palatino', serif" },
+        { label: "Didot", value: "'Didot', 'Georgia', serif" },
+        { label: "Baskerville", value: "'Baskerville', serif" }
+      ]
+    },
+    {
+      group: "둥글고 귀여운",
+      fonts: [
+        { label: "Trebuchet MS", value: "'Trebuchet MS', sans-serif" },
+        { label: "Baloo 2", value: "'Baloo 2', 'Trebuchet MS', sans-serif" },
+        { label: "Arial Rounded MT Bold", value: "'Arial Rounded MT Bold', 'Trebuchet MS', sans-serif" },
+        { label: "Comic Sans MS", value: "'Comic Sans MS', cursive" },
+        { label: "Bradley Hand", value: "'Bradley Hand', cursive" },
+        { label: "Marker Felt", value: "'Marker Felt', cursive" }
+      ]
+    },
+    {
+      group: "굵고 강렬한",
+      fonts: [
+        { label: "Impact", value: "'Impact', sans-serif" },
+        { label: "Arial Black", value: "'Arial Black', sans-serif" },
+        { label: "Haettenschweiler", value: "'Haettenschweiler', 'Impact', sans-serif" },
+        { label: "Franklin Gothic Heavy", value: "'Franklin Gothic Heavy', sans-serif" }
+      ]
+    },
+    {
+      group: "모노스페이스 (코드체)",
+      fonts: [
+        { label: "Courier New", value: "'Courier New', monospace" },
+        { label: "SF Mono", value: "'SF Mono', Menlo, monospace" },
+        { label: "Consolas", value: "'Consolas', monospace" },
+        { label: "Roboto Mono", value: "'Roboto Mono', monospace" }
+      ]
+    },
+    {
+      group: "한글 폰트",
+      fonts: [
+        { label: "Noto Sans KR (산세리프)", value: "'Noto Sans KR', sans-serif" },
+        { label: "Noto Serif KR (세리프)", value: "'Noto Serif KR', serif" },
+        { label: "Apple SD Gothic Neo", value: "'Apple SD Gothic Neo', sans-serif" },
+        { label: "Nanum Gothic", value: "'Nanum Gothic', sans-serif" },
+        { label: "Nanum Myeongjo (명조체)", value: "'Nanum Myeongjo', serif" },
+        { label: "Nanum Pen Script (손글씨)", value: "'Nanum Pen Script', cursive" },
+        { label: "Gamja Flower (손글씨)", value: "'Gamja Flower', cursive" },
+        { label: "Jua (둥근 글씨)", value: "'Jua', sans-serif" },
+        { label: "Black Han Sans (굵은 제목용)", value: "'Black Han Sans', sans-serif" },
+        { label: "Do Hyeon (포스터용)", value: "'Do Hyeon', sans-serif" }
+      ]
+    },
+    {
+      group: "동양 / 일본·중국풍",
+      fonts: [
+        { label: "Yu Mincho", value: "'Yu Mincho', 'Noto Serif KR', serif" },
+        { label: "Noto Serif JP", value: "'Noto Serif JP', serif" },
+        { label: "Noto Serif SC (중문)", value: "'Noto Serif SC', serif" }
+      ]
+    },
+    {
+      group: "장식 / 헤드라인용",
+      fonts: [
+        { label: "Trajan Pro (로마/아르데코)", value: "'Trajan Pro', 'Georgia', serif" },
+        { label: "Rockwell (슬랩 세리프)", value: "'Rockwell', serif" },
+        { label: "Copperplate (각인체)", value: "'Copperplate', serif" },
+        { label: "Brush Script MT (필기체)", value: "'Brush Script MT', cursive" },
+        { label: "Papyrus", value: "'Papyrus', cursive" }
+      ]
+    }
+  ];
+
+  // 현재 선택된 폰트 값을 추적
+  let selectedDisplayFont = FONT_GROUPS[0].fonts[0].value;
+  let selectedBodyFont = FONT_GROUPS[0].fonts[0].value;
+
+  function buildFontMenu(menuEl, triggerEl, isDisplay){
+    menuEl.innerHTML = "";
+    FONT_GROUPS.forEach(group => {
+      const groupLabel = document.createElement("div");
+      groupLabel.className = "fg-label";
+      groupLabel.textContent = group.group;
+      menuEl.appendChild(groupLabel);
+
+      group.fonts.forEach(f => {
+        const item = document.createElement("div");
+        item.className = "fo-item";
+        item.style.fontFamily = f.value;
+        item.dataset.value = f.value;
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = f.label.replace(/\s*\([^)]*\)\s*$/, "");
+        item.appendChild(nameSpan);
+
+        // 예시 텍스트도 같이 보여줘서 폰트 모양이 더 잘 드러나게
+        const meta = document.createElement("span");
+        meta.className = "fo-meta";
+        meta.textContent = "가나다 ABC 123";
+        item.appendChild(meta);
+
+        item.addEventListener("click", () => {
+          if(isDisplay){
+            selectedDisplayFont = f.value;
+            triggerEl.querySelector(".current-label").textContent = f.label;
+            triggerEl.querySelector(".current-label").style.fontFamily = f.value;
+            applyOverride("--t-font-display", f.value);
+          } else {
+            selectedBodyFont = f.value;
+            triggerEl.querySelector(".current-label").textContent = f.label;
+            triggerEl.querySelector(".current-label").style.fontFamily = f.value;
+            applyOverride("--t-font-body", f.value);
+          }
+          markSelectedInMenu(menuEl, f.value);
+          closeAllFontDropdowns();
+        });
+
+        menuEl.appendChild(item);
+      });
+    });
+  }
+
+  function markSelectedInMenu(menuEl, value){
+    menuEl.querySelectorAll(".fo-item").forEach(el => {
+      el.classList.toggle("selected", el.dataset.value === value);
+    });
+  }
+
+  buildFontMenu(fontMenuDisplay, fontTriggerDisplay, true);
+  buildFontMenu(fontMenuBody, fontTriggerBody, false);
+
+  function closeAllFontDropdowns(){
+    fontDropdownDisplay.classList.remove("open");
+    fontDropdownBody.classList.remove("open");
+  }
+
+  fontTriggerDisplay.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const willOpen = !fontDropdownDisplay.classList.contains("open");
+    closeAllFontDropdowns();
+    if(willOpen) fontDropdownDisplay.classList.add("open");
+  });
+  fontTriggerBody.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const willOpen = !fontDropdownBody.classList.contains("open");
+    closeAllFontDropdowns();
+    if(willOpen) fontDropdownBody.classList.add("open");
+  });
+  document.addEventListener("click", closeAllFontDropdowns);
+
+
+  // --- 사이드바: 카테고리별로 묶어서 버튼 생성 ---
+  const categories = [];
+  themes.forEach(t => {
+    if(!categories.includes(t.category)) categories.push(t.category);
+  });
+
+  categories.forEach(cat => {
+    const catLabel = document.createElement("div");
+    catLabel.className = "cat";
+    catLabel.textContent = cat;
+    themeListEl.appendChild(catLabel);
+
+    themes.filter(t => t.category === cat).forEach(theme => {
+      const btn = document.createElement("button");
+      btn.className = "theme-btn";
+      btn.dataset.id = theme.id;
+
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
+      swatch.style.background = theme.vars["--t-accent"] || "#ccc";
+
+      const txt = document.createElement("span");
+      txt.className = "txt";
+
+      const nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = theme.name;
+
+      const descEl = document.createElement("span");
+      descEl.className = "desc";
+      descEl.textContent = theme.desc;
+
+      txt.appendChild(nameEl);
+      txt.appendChild(descEl);
+
+      btn.appendChild(swatch);
+      btn.appendChild(txt);
+      btn.addEventListener("click", () => applyTheme(theme.id));
+      themeListEl.appendChild(btn);
+    });
+  });
+
+  // --- 테마 적용 함수 ---
+  function applyTheme(id){
+    const theme = themes.find(t => t.id === id);
+    if(!theme) return;
+
+    currentThemeId = id;
+    currentOverrides = {}; // 새 테마를 고르면 오버라이드 초기화
+
+    renderTheme(theme);
+    syncControlsFromTheme(theme);
+  }
+
+  // --- 실제 CSS 변수 + UI 렌더링 (오버라이드 반영) ---
+  function renderTheme(theme){
+    const root = document.documentElement;
+    const mergedVars = Object.assign({}, theme.vars, currentOverrides);
+
+    Object.entries(mergedVars).forEach(([key, val]) => {
+      root.style.setProperty(key, val);
+    });
+
+    document.body.style.background = mergedVars["--t-bg"];
+
+    phTag.textContent = theme.category;
+    phTitle.textContent = theme.name;
+    phDesc.textContent = theme.desc;
+
+    const displayFont = mergedVars["--t-font-display"] || theme.vars["--t-font-display"];
+    const bodyFont = mergedVars["--t-font-body"] || theme.vars["--t-font-body"];
+    const fontOverridden = currentOverrides["--t-font-display"] || currentOverrides["--t-font-body"];
+    fontTagEl.textContent = "font: " + (fontOverridden ? `${displayFont} / ${bodyFont}` : theme.fontTag);
+
+    // 색상 팔레트 스와치
+    swatchesEl.innerHTML = "";
+    theme.swatches.forEach(sw => {
+      const item = document.createElement("div");
+      item.className = "swatch-item";
+      const box = document.createElement("div");
+      box.className = "swatch-box";
+      box.style.background = sw.hex.startsWith("#") ? sw.hex : "#ccc";
+      const label = document.createElement("div");
+      label.className = "label";
+      label.textContent = sw.label;
+      const hex = document.createElement("div");
+      hex.className = "hex";
+      hex.textContent = sw.hex;
+      item.appendChild(box);
+      item.appendChild(label);
+      item.appendChild(hex);
+      swatchesEl.appendChild(item);
+    });
+
+    updateCodeBox(mergedVars);
+
+    document.querySelectorAll(".theme-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.id === theme.id);
+    });
+  }
+
+  // --- 코드 박스만 갱신 ---
+  function updateCodeBox(mergedVars){
+    let codeStr = ":root {\n";
+    Object.entries(mergedVars).forEach(([key, val]) => {
+      codeStr += `  ${key}: ${val};\n`;
+    });
+    codeStr += "}";
+    codeContentEl.textContent = codeStr;
+    copyBtn.dataset.code = codeStr;
+  }
+
+  // --- 컨트롤 패널 값을 현재 테마 값으로 동기화 ---
+  function syncControlsFromTheme(theme){
+    setColorControl(bgPicker, bgHex, theme.vars["--t-bg"]);
+    setColorControl(cardPicker, cardHex, theme.vars["--t-card-bg"]);
+    setColorControl(accentPicker, accentHex, theme.vars["--t-accent"]);
+    setColorControl(textPicker, textHex, theme.vars["--t-text"]);
+
+    selectFontOption(fontMenuDisplay, fontTriggerDisplay, theme.vars["--t-font-display"], true);
+    selectFontOption(fontMenuBody, fontTriggerBody, theme.vars["--t-font-body"], false);
+  }
+
+  // 그라데이션 값이면 color input용으로 첫 hex만 추출해서 넣고,
+  // 읽기용 텍스트에는 실제 값을 그대로 보여준다.
+  function setColorControl(picker, hexLabel, value){
+    const hexMatch = (value || "").match(/#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})/);
+    picker.value = hexMatch ? hexMatch[0] : "#ffffff";
+    hexLabel.textContent = value || "";
+  }
+
+  // 테마가 가진 폰트값과 일치하는 옵션을 찾아 트리거 버튼 텍스트/폰트를 갱신
+  function selectFontOption(menuEl, triggerEl, value, isDisplay){
+    let matchedFont = null;
+    for(const group of FONT_GROUPS){
+      const found = group.fonts.find(f => f.value === value);
+      if(found){ matchedFont = found; break; }
+    }
+    const finalFont = matchedFont || FONT_GROUPS[0].fonts[0];
+    const label = triggerEl.querySelector(".current-label");
+    label.textContent = finalFont.label;
+    label.style.fontFamily = finalFont.value;
+
+    if(isDisplay) selectedDisplayFont = finalFont.value;
+    else selectedBodyFont = finalFont.value;
+
+    markSelectedInMenu(menuEl, finalFont.value);
+  }
+
+  // --- 오버라이드 적용 후 다시 렌더링 ---
+  function applyOverride(key, value){
+    if(!currentThemeId) return;
+    currentOverrides[key] = value;
+    const theme = themes.find(t => t.id === currentThemeId);
+    renderTheme(theme);
+  }
+
+  // --- 색상 피커 이벤트 바인딩 (네모를 클릭하면 OS 색상 선택기가 바로 뜸) ---
+  function bindColorPicker(picker, hexLabel, cssVar){
+    picker.addEventListener("input", () => {
+      const v = picker.value.toUpperCase();
+      hexLabel.textContent = v;
+      applyOverride(cssVar, v);
+    });
+  }
+
+  bindColorPicker(bgPicker, bgHex, "--t-bg");
+  bindColorPicker(cardPicker, cardHex, "--t-card-bg");
+  bindColorPicker(accentPicker, accentHex, "--t-accent");
+  bindColorPicker(textPicker, textHex, "--t-text");
+
+  resetBtn.addEventListener("click", () => {
+    if(!currentThemeId) return;
+    const theme = themes.find(t => t.id === currentThemeId);
+    currentOverrides = {};
+    renderTheme(theme);
+    syncControlsFromTheme(theme);
+  });
+
+  // --- 복사 버튼 ---
+  copyBtn.addEventListener("click", () => {
+    const code = copyBtn.dataset.code || "";
+    navigator.clipboard.writeText(code).then(() => {
+      const original = copyBtn.textContent;
+      copyBtn.textContent = "복사됨!";
+      setTimeout(() => { copyBtn.textContent = original; }, 1500);
+    }).catch(() => {
+      copyBtn.textContent = "복사 실패";
+      setTimeout(() => { copyBtn.textContent = "복사"; }, 1500);
+    });
+  });
+
+  // --- 초기 테마 적용 ---
+  if(themes.length > 0){
+    applyTheme(themes[0].id);
+  }
+
+})();
+</script>
+</body>
+</html>
