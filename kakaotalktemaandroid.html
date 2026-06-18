@@ -3,29 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LariTheme - 카카오톡 테마 메이커</title>
+<title>카카오톡 테마 메이커 (안드로이드)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f5f5;
+  --bg:#fdf6f9;
   --surface:#ffffff;
-  --surface2:#f8f8f8;
-  --surface3:#efefef;
-  --border:#e0e0e0;
-  --border2:#d0d0d0;
-  --text:#1a1a1a;
-  --text2:#555555;
-  --text3:#999999;
-  --accent:#3d8cf0;
-  --accent2:#2563eb;
-  --yellow:#FAE100;
-  --green:#4caf50;
-  --red:#f44336;
-  --radius:8px;
-  --radius-sm:5px;
-  --shadow:0 1px 4px rgba(0,0,0,.08);
+  --surface2:#fef9fb;
+  --surface3:#fce8f0;
+  --border:#f0d6e4;
+  --border2:#e8c4d8;
+  --text:#4a2f3a;
+  --text2:#7a5568;
+  --text3:#b08898;
+  --accent:#d4659a;
+  --accent2:#b84d82;
+  --pink:#f9c6d8;
+  --pink2:#f0a0c0;
+  --green:#6dbf8a;
+  --red:#e87474;
+  --radius:10px;
+  --radius-sm:7px;
+  --shadow:0 2px 8px rgba(212,101,154,.12);
 }
 html{scroll-behavior:smooth}
 body{
@@ -38,112 +39,120 @@ body{
 
 /* MENUBAR */
 .menubar{
-  height:32px;
-  background:#2c2c2c;
+  height:34px;
+  background:linear-gradient(135deg,#f7b8d4,#e8a0bf,#d4659a);
   display:flex;align-items:center;
-  padding:0 12px;gap:20px;
+  padding:0 14px;gap:4px;
   position:fixed;top:0;left:0;right:0;z-index:200;
+  box-shadow:0 2px 8px rgba(212,101,154,.25);
 }
+.menubar-logo{
+  font-size:12px;font-weight:700;color:#fff;
+  margin-right:8px;letter-spacing:.02em;
+  display:flex;align-items:center;gap:5px;
+}
+.menubar-logo .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.8)}
 .menubar-item{
-  font-size:12px;color:#ddd;cursor:pointer;padding:4px 6px;border-radius:3px;
-  transition:.1s;
-  background:none;border:none;font-family:inherit;
+  font-size:11px;color:rgba(255,255,255,.9);cursor:pointer;
+  padding:4px 8px;border-radius:5px;
+  transition:.15s;background:none;border:none;font-family:inherit;
 }
-.menubar-item:hover{background:#444;color:#fff}
+.menubar-item:hover{background:rgba(255,255,255,.2);color:#fff}
 
 /* TOOLBAR */
 .toolbar{
-  height:42px;
+  height:44px;
   background:var(--surface);
-  border-bottom:1px solid var(--border);
+  border-bottom:2px solid var(--border);
   display:flex;align-items:center;
-  padding:0 12px;gap:8px;
-  position:fixed;top:32px;left:0;right:0;z-index:190;
-  box-shadow:var(--shadow);
+  padding:0 14px;gap:6px;
+  position:fixed;top:34px;left:0;right:0;z-index:190;
+  box-shadow:0 2px 10px rgba(212,101,154,.08);
 }
 .toolbar-btn{
   display:flex;align-items:center;gap:5px;
-  padding:5px 12px;border-radius:var(--radius-sm);
-  font-size:12px;font-weight:500;cursor:pointer;
-  border:1px solid var(--border2);
+  padding:5px 12px;border-radius:20px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  border:1.5px solid var(--border2);
   background:var(--surface2);color:var(--text2);
-  transition:.12s;font-family:inherit;white-space:nowrap;
+  transition:.15s;font-family:inherit;white-space:nowrap;
 }
-.toolbar-btn:hover{background:var(--surface3);color:var(--text);border-color:#bbb}
-.toolbar-btn.primary{background:#3d8cf0;color:#fff;border-color:#3d8cf0}
-.toolbar-btn.primary:hover{background:#2563eb;border-color:#2563eb}
-.toolbar-btn .icon{font-size:13px}
-.toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.toolbar-btn:hover{background:var(--surface3);color:var(--accent);border-color:var(--accent)}
+.toolbar-btn.primary{background:linear-gradient(135deg,#f7b8d4,#d4659a);color:#fff;border-color:transparent;
+  box-shadow:0 3px 10px rgba(212,101,154,.35)}
+.toolbar-btn.primary:hover{background:linear-gradient(135deg,#f0a0c0,#b84d82);transform:translateY(-1px)}
+.toolbar-btn .icon{font-size:12px}
+.toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 2px}
 
 /* STEP BAR */
 .stepbar{
-  height:44px;
+  height:46px;
   background:var(--surface);
-  border-bottom:1px solid var(--border);
+  border-bottom:1.5px solid var(--border);
   display:flex;align-items:center;
-  padding:0 16px;gap:0;
-  position:fixed;top:74px;left:0;right:0;z-index:180;
+  padding:0 18px;gap:0;
+  position:fixed;top:78px;left:0;right:0;z-index:180;
 }
 .step{
-  display:flex;align-items:center;gap:8px;
-  padding:6px 16px;border-radius:20px;
-  font-size:12px;font-weight:500;cursor:pointer;
+  display:flex;align-items:center;gap:7px;
+  padding:6px 14px;border-radius:20px;
+  font-size:11px;font-weight:600;cursor:pointer;
   border:none;background:none;font-family:inherit;
   color:var(--text3);transition:.15s;
 }
 .step:hover{color:var(--text2)}
-.step.active{
-  background:#e8f1fd;color:#2563eb;
-}
+.step.active{background:#fce8f0;color:var(--accent)}
 .step-num{
-  width:20px;height:20px;border-radius:50%;
+  width:19px;height:19px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
   font-size:10px;font-weight:700;
-  background:var(--border);color:var(--text3);
-  flex-shrink:0;
+  background:var(--border);color:var(--text3);flex-shrink:0;
 }
-.step.active .step-num{background:#3d8cf0;color:#fff}
-.step.done .step-num{background:#4caf50;color:#fff}
+.step.active .step-num{background:var(--accent);color:#fff}
+.step.done .step-num{background:var(--green);color:#fff}
 .step.done{color:var(--text2)}
-.step-arrow{color:#ccc;font-size:14px;margin:0 2px;pointer-events:none}
+.step-arrow{color:var(--pink2);font-size:12px;margin:0 1px;pointer-events:none}
 
 /* WORKSPACE */
 .workspace{
   display:grid;
-  grid-template-columns:300px 1fr 320px;
-  min-height:calc(100vh - 118px);
-  margin-top:118px;
+  grid-template-columns:295px 1fr 315px;
+  min-height:calc(100vh - 124px);
+  margin-top:124px;
 }
 
-/* LEFT PANEL - IMAGE RESOURCES */
+/* LEFT PANEL */
 .panel-left{
   background:var(--surface);
-  border-right:1px solid var(--border);
+  border-right:1.5px solid var(--border);
   overflow-y:auto;
-  position:sticky;top:118px;height:calc(100vh - 118px);
+  position:sticky;top:124px;height:calc(100vh - 124px);
 }
 .panel-left-header{
-  padding:12px 14px 8px;
-  border-bottom:1px solid var(--border);
+  padding:12px 14px 10px;
+  border-bottom:1.5px solid var(--border);
+  background:linear-gradient(135deg,#fff5f8,#fff);
   display:flex;align-items:center;justify-content:space-between;
 }
 .panel-left-title{
   display:flex;align-items:center;gap:7px;
-  font-size:13px;font-weight:700;
+  font-size:12px;font-weight:700;color:var(--text);
 }
-.panel-left-title .dot{
-  width:10px;height:10px;border-radius:50%;
-  background:#ff5f57;box-shadow:16px 0 0 #febc2e, 32px 0 0 #28c840;
-}
+.panel-left-title .circles{display:flex;gap:4px}
+.panel-left-title .circles span{width:9px;height:9px;border-radius:50%}
+.panel-left-title .circles span:nth-child(1){background:#ff8fa3}
+.panel-left-title .circles span:nth-child(2){background:#ffc8a0}
+.panel-left-title .circles span:nth-child(3){background:#a0e0b8}
 .bulk-btn{
-  padding:5px 12px;border-radius:var(--radius-sm);
-  font-size:12px;font-weight:600;cursor:pointer;
-  background:#fff8dc;color:#7a6500;border:1px solid #e8d800;
-  font-family:inherit;transition:.12s;
+  padding:4px 10px;border-radius:20px;
+  font-size:11px;font-weight:600;cursor:pointer;
+  background:linear-gradient(135deg,#fff5e8,#ffe8d0);
+  color:#c87840;border:1.5px solid #f0c890;
+  font-family:inherit;transition:.15s;
 }
-.bulk-btn:hover{background:#fff3a0}
+.bulk-btn:hover{background:linear-gradient(135deg,#ffe8d0,#ffd0b0)}
 
-.img-section{padding:10px 12px 4px}
+.img-section{padding:10px 12px 6px}
 .img-section-label{
   font-size:10px;font-weight:700;color:var(--text3);
   text-transform:uppercase;letter-spacing:.08em;
@@ -151,38 +160,38 @@ body{
 }
 .img-section-label::before{
   content:'';width:3px;height:10px;border-radius:2px;
-  background:var(--accent);flex-shrink:0;
+  background:linear-gradient(180deg,var(--accent),var(--pink2));flex-shrink:0;
 }
 .img-grid{display:flex;flex-direction:column;gap:5px;margin-bottom:4px}
 .img-slot{
   display:flex;align-items:center;gap:8px;
   padding:7px 10px;border-radius:var(--radius-sm);
-  border:1px solid var(--border);
+  border:1.5px solid var(--border);
   background:var(--surface2);cursor:pointer;
-  transition:.12s;position:relative;overflow:hidden;
+  transition:.15s;position:relative;overflow:hidden;
 }
-.img-slot:hover{border-color:#aac4f8;background:#f0f5ff}
-.img-slot.has-file{border-color:#4caf50;background:#f0fff4}
+.img-slot:hover{border-color:var(--accent);background:#fff5f8}
+.img-slot.has-file{border-color:var(--green);background:#f0fff5}
 .img-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .img-slot-thumb{
-  width:38px;height:38px;border-radius:4px;
+  width:36px;height:36px;border-radius:6px;
   background:var(--surface3);border:1px solid var(--border);
   flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:16px;overflow:hidden;
+  font-size:14px;overflow:hidden;
 }
-.img-slot-thumb img{width:100%;height:100%;object-fit:cover;border-radius:3px;display:none}
+.img-slot-thumb img{width:100%;height:100%;object-fit:cover;border-radius:5px;display:none}
 .img-slot-info{flex:1;min-width:0}
 .img-slot-name{font-size:11px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .img-slot-size{font-size:10px;color:var(--text3);margin-top:1px}
 .img-slot-badge{
-  font-size:9px;padding:2px 5px;border-radius:3px;
-  background:#e8f4fd;color:#1976d2;flex-shrink:0;
+  font-size:9px;padding:2px 6px;border-radius:10px;
+  background:#fce8f0;color:var(--accent);flex-shrink:0;border:1px solid var(--pink);
 }
-.img-slot.has-file .img-slot-badge{background:#e8f5e9;color:#2e7d32}
+.img-slot.has-file .img-slot-badge{background:#e8f5ee;color:#3a8a5a;border-color:#b0ddc0}
 
-/* CENTER - PREVIEW */
+/* CENTER PREVIEW */
 .panel-center{
-  background:#e8e8e8;
+  background:linear-gradient(145deg,#fdeef4,#f5eefa,#eef5fd);
   display:flex;flex-direction:column;
   align-items:center;justify-content:flex-start;
   padding:16px;gap:12px;
@@ -193,89 +202,74 @@ body{
   background:var(--surface);
   border-radius:var(--radius);
   padding:6px 10px;box-shadow:var(--shadow);
-  width:100%;max-width:420px;
-  flex-shrink:0;
+  width:100%;max-width:440px;
+  flex-shrink:0;border:1.5px solid var(--border);
 }
 .preview-label{
   font-size:11px;font-weight:700;
   display:flex;align-items:center;gap:5px;
-  color:var(--text2);
+  color:var(--text2);white-space:nowrap;
 }
-.preview-label .red-dot{width:6px;height:6px;border-radius:50%;background:#ff5f57}
+.preview-label .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
 .preview-tabs-row{
   display:flex;gap:2px;background:var(--surface3);
   border-radius:20px;padding:2px;flex:1;
 }
 .ptab{
-  flex:1;text-align:center;padding:4px 0;border-radius:16px;
-  font-size:11px;cursor:pointer;border:none;background:none;
+  flex:1;text-align:center;padding:3px 0;border-radius:16px;
+  font-size:10px;cursor:pointer;border:none;background:none;
   font-family:inherit;color:var(--text3);font-weight:500;transition:.12s;
 }
-.ptab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.ptab.active{background:var(--surface);color:var(--accent);box-shadow:0 1px 4px rgba(212,101,154,.18);font-weight:700}
 .font-select{
-  font-size:11px;padding:3px 7px;border-radius:4px;
-  border:1px solid var(--border);background:var(--surface2);
+  font-size:11px;padding:3px 7px;border-radius:20px;
+  border:1.5px solid var(--border2);background:var(--surface2);
   font-family:inherit;cursor:pointer;color:var(--text2);
 }
+.size-input{
+  width:40px;font-size:11px;padding:3px 5px;
+  border:1.5px solid var(--border);border-radius:6px;
+  font-family:inherit;color:var(--text2);background:var(--surface2);
+  text-align:center;
+}
 .press-badge{
-  font-size:10px;padding:3px 8px;border-radius:4px;
-  background:#fff8dc;color:#7a6500;border:1px solid #e8d800;cursor:pointer;
-  border:none;font-family:inherit;
+  font-size:10px;padding:3px 8px;border-radius:10px;
+  background:var(--surface2);color:var(--text3);
+  border:1.5px solid var(--border);cursor:pointer;font-family:inherit;
+  transition:.15s;white-space:nowrap;
 }
+.press-badge.active{background:#fff8d0;color:#a07000;border-color:#e0c040}
 
-/* PHONE MOCKUP - Android Style */
-.phone-wrap{
-  display:flex;flex-direction:column;align-items:center;gap:0;
-  flex-shrink:0;
-}
+/* PHONE MOCKUP - Android */
+.phone-wrap{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0}
 .phone{
   width:240px;
   background:#f0f0f0;
-  border-radius:22px;
+  border-radius:24px;
   overflow:hidden;
-  box-shadow:0 0 0 6px #1a1a1a, 0 0 0 8px #2e2e2e, 0 12px 40px rgba(0,0,0,.35);
+  box-shadow:0 0 0 6px #2a2a2a, 0 0 0 8px #3a3a3a, 0 14px 40px rgba(0,0,0,.3);
   display:flex;flex-direction:column;
-  height:490px;
-  position:relative;
+  height:490px;position:relative;
 }
-/* 안드로이드 펀치홀 카메라 */
 .phone-status{
   height:28px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 14px;font-size:8px;font-weight:700;
-  position:relative;
+  padding:0 14px;font-size:8px;font-weight:700;position:relative;
 }
 .phone-status::after{
-  content:'';
-  position:absolute;
-  top:6px;left:50%;transform:translateX(-50%);
-  width:9px;height:9px;
-  border-radius:50%;
-  background:#1a1a1a;
-  box-shadow:inset 0 0 0 1.5px #333;
-}
-/* 안드로이드 하단 네비게이션 바 */
-.phone::after{
-  content:'';
-  display:block;
-  height:18px;
-  flex-shrink:0;
-  background:inherit;
-  display:flex;align-items:center;justify-content:center;
+  content:'';position:absolute;
+  top:7px;left:50%;transform:translateX(-50%);
+  width:9px;height:9px;border-radius:50%;background:#1a1a1a;
 }
 .android-navbar{
   height:18px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;gap:24px;
+  display:flex;align-items:center;justify-content:center;gap:22px;
   background:rgba(0,0,0,.06);
 }
-.android-navbar span{
-  width:20px;height:3px;border-radius:2px;
-  background:rgba(0,0,0,.25);
-}
-.android-navbar span:nth-child(1){ width:14px;border-radius:50% 50% 50% 50%/50% 50% 50% 50%;height:14px;border:2px solid rgba(0,0,0,.25);background:transparent; }
-.android-navbar span:nth-child(2){ width:20px;height:3px; }
-.android-navbar span:nth-child(3){ width:10px;height:10px;border-radius:2px;border:2px solid rgba(0,0,0,.25);background:transparent; }
-
+.android-navbar span{width:20px;height:3px;border-radius:2px;background:rgba(0,0,0,.25)}
+.android-navbar span:nth-child(1){width:14px;border-radius:50%;height:14px;border:2px solid rgba(0,0,0,.25);background:transparent}
+.android-navbar span:nth-child(2){width:20px;height:3px}
+.android-navbar span:nth-child(3){width:10px;height:10px;border-radius:2px;border:2px solid rgba(0,0,0,.25);background:transparent}
 .phone-header{
   height:44px;flex-shrink:0;
   display:flex;align-items:center;padding:0 10px;gap:8px;
@@ -285,7 +279,6 @@ body{
 .ph-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
 .ph-title{font-size:13px;font-weight:700;flex:1}
 .ph-icons{display:flex;gap:8px;font-size:14px;color:#666}
-.phone-body{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .phone-footer{
   height:44px;flex-shrink:0;
   display:flex;align-items:center;padding:0 8px;gap:6px;
@@ -298,37 +291,18 @@ body{
   font-size:10px;color:#aaa;
 }
 .pf-icon{font-size:16px;color:#888}
-
-/* CHAT MESSAGES */
-.chat-msgs{
-  flex:1;overflow:hidden;
-  padding:8px 8px 4px;
-  display:flex;flex-direction:column;gap:6px;
-}
-.msg-date{
-  text-align:center;font-size:8px;
-  background:rgba(0,0,0,.2);color:#fff;
-  border-radius:10px;padding:2px 10px;align-self:center;
-}
+.chat-msgs{flex:1;overflow:hidden;padding:8px 8px 4px;display:flex;flex-direction:column;gap:6px}
+.msg-date{text-align:center;font-size:8px;background:rgba(0,0,0,.2);color:#fff;border-radius:10px;padding:2px 10px;align-self:center}
 .msg-row{display:flex;gap:4px;align-items:flex-end}
 .msg-row.mine{flex-direction:row-reverse}
 .msg-av{width:22px;height:22px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700}
 .msg-av img{width:100%;height:100%;object-fit:cover;display:none}
 .msg-col{display:flex;flex-direction:column;gap:2px;max-width:130px}
 .msg-sender{font-size:8px;color:#777;margin-bottom:1px}
-.msg-bubble{
-  padding:5px 8px;font-size:10px;line-height:1.45;
-  word-break:break-word;
-}
+.msg-bubble{padding:5px 8px;font-size:10px;line-height:1.45;word-break:break-word}
 .msg-time{font-size:7px;color:#aaa;flex-shrink:0;align-self:flex-end;padding-bottom:2px}
 .unread-cnt{font-size:7px;color:#FAE100;text-align:right;padding:0 2px 1px}
-
-/* FRIEND LIST */
-.friend-header{
-  height:44px;display:flex;align-items:center;
-  padding:0 12px;font-size:14px;font-weight:700;flex-shrink:0;
-}
-.friend-list{flex:1;overflow:hidden;padding:4px 0}
+.friend-header{height:44px;display:flex;align-items:center;padding:0 12px;font-size:14px;font-weight:700;flex-shrink:0}
 .friend-item{display:flex;align-items:center;gap:9px;padding:7px 12px}
 .friend-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
 .friend-info{flex:1}
@@ -336,156 +310,132 @@ body{
 .friend-status{font-size:9px;color:#999;margin-top:1px}
 .fr-divider{height:1px;background:#eee;margin:4px 12px}
 .fr-section-label{font-size:9px;color:#aaa;padding:2px 12px}
-
-/* TAB BAR */
-.tabbar{
-  height:50px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:space-around;
-  border-top:1px solid rgba(0,0,0,.08);
-}
-.tab-item{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-  flex:1;font-size:8px;color:#aaa;padding:4px 0;
-}
+.tabbar{height:50px;flex-shrink:0;display:flex;align-items:center;justify-content:space-around;border-top:1px solid rgba(0,0,0,.08)}
+.tab-item{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;font-size:8px;color:#aaa;padding:4px 0}
 .tab-item.active{color:#1a1a1a}
 .tab-icon{font-size:18px;line-height:1}
-
-/* PASSCODE SCREEN */
-.passcode-screen{
-  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
-  padding:12px;
-}
+.passcode-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:12px}
 .pc-title{font-size:16px;font-weight:700;color:#333}
 .pc-dots{display:flex;gap:10px}
 .pc-dot{width:16px;height:16px;border-radius:50%;border:2px solid #ccc;background:transparent}
 .pc-dot.filled{background:#888;border-color:#888}
 .pc-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:180px}
-.pc-key{
-  aspect-ratio:1;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:400;
-  background:rgba(255,255,255,.7);
-  border:none;cursor:pointer;font-family:inherit;
-  color:#333;
-}
-.pc-key-wide{grid-column:span 1}
+.pc-key{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:400;background:rgba(255,255,255,.7);border:none;cursor:pointer;font-family:inherit;color:#333}
 
-/* RIGHT PANEL - COLOR EDITOR */
+/* RIGHT PANEL */
 .panel-right{
   background:var(--surface);
-  border-left:1px solid var(--border);
+  border-left:1.5px solid var(--border);
   overflow-y:auto;
-  position:sticky;top:118px;height:calc(100vh - 118px);
+  position:sticky;top:124px;height:calc(100vh - 124px);
 }
 .panel-right-header{
-  padding:10px 14px;
-  border-bottom:1px solid var(--border);
+  padding:12px 14px 10px;
+  border-bottom:1.5px solid var(--border);
+  background:linear-gradient(135deg,#fff5f8,#fff);
 }
-.panel-right-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.panel-right-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--text)}
 .panel-right-title .icon{font-size:14px}
-.preset-row{
-  display:flex;align-items:center;gap:6px;margin-top:8px;
-}
+.preset-row{display:flex;align-items:center;gap:5px;margin-top:8px;flex-wrap:wrap}
 .preset-select{
-  flex:1;font-size:12px;padding:5px 8px;
-  border-radius:var(--radius-sm);border:1px solid var(--border2);
+  flex:1;min-width:0;font-size:11px;padding:5px 8px;
+  border-radius:20px;border:1.5px solid var(--border2);
   background:var(--surface2);font-family:inherit;color:var(--text);cursor:pointer;
 }
 .btn-apply{
-  padding:5px 14px;border-radius:var(--radius-sm);
-  font-size:12px;font-weight:600;cursor:pointer;
-  background:#3d8cf0;color:#fff;border:none;
-  font-family:inherit;transition:.12s;
+  padding:5px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  background:linear-gradient(135deg,#f7b8d4,#d4659a);color:#fff;border:none;
+  font-family:inherit;transition:.15s;box-shadow:0 2px 8px rgba(212,101,154,.3);
 }
-.btn-apply:hover{background:#2563eb}
+.btn-apply:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,101,154,.4)}
 .btn-save{
-  padding:5px 14px;border-radius:var(--radius-sm);
-  font-size:12px;font-weight:600;cursor:pointer;
-  background:#4caf50;color:#fff;border:none;
-  font-family:inherit;transition:.12s;
+  padding:5px 12px;border-radius:20px;
+  font-size:11px;font-weight:700;cursor:pointer;
+  background:linear-gradient(135deg,#a0e0b8,#5ab884);color:#fff;border:none;
+  font-family:inherit;transition:.15s;
 }
-.btn-save:hover{background:#388e3c}
-
-/* BUBBLE LAYOUT SECTION */
-.bubble-layout-section{
-  padding:10px 14px;border-bottom:1px solid var(--border);
-}
+.btn-save:hover{transform:translateY(-1px)}
+.bubble-layout-section{padding:10px 14px;border-bottom:1.5px solid var(--border)}
 .bubble-layout-title{
   font-size:11px;font-weight:700;color:var(--text2);
-  display:flex;align-items:center;gap:5px;margin-bottom:10px;
-  cursor:pointer;
+  display:flex;align-items:center;gap:5px;margin-bottom:10px;cursor:pointer;
 }
 .bubble-layout-title .toggle-arrow{font-size:10px;transition:.2s}
 .bubble-layout-title.open .toggle-arrow{transform:rotate(90deg)}
 .margin-slider{margin-bottom:8px}
 .slider-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
 .slider-row label{font-size:11px;color:var(--text2)}
-.slider-val{font-size:11px;font-weight:600;color:var(--accent)}
+.slider-val{font-size:11px;font-weight:700;color:var(--accent)}
 input[type=range]{
-  width:100%;height:3px;-webkit-appearance:none;
-  background:#ddd;border-radius:2px;outline:none;cursor:pointer;
+  width:100%;height:4px;-webkit-appearance:none;
+  background:linear-gradient(90deg,var(--pink),var(--border));
+  border-radius:2px;outline:none;cursor:pointer;
 }
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
-  background:#3d8cf0;cursor:pointer;border:2px solid #fff;
-  box-shadow:0 1px 3px rgba(0,0,0,.2);
+  background:var(--accent);cursor:pointer;border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(212,101,154,.4);
 }
-
-/* COLOR EDITOR GROUPS */
-.color-group{
-  padding:10px 14px;border-bottom:1px solid var(--border);
-}
+.color-group{padding:10px 14px;border-bottom:1.5px solid var(--border)}
 .color-group-title{
   font-size:11px;font-weight:700;color:var(--text2);
   display:flex;align-items:center;gap:5px;margin-bottom:8px;
 }
-.color-group-title::before{content:'▸';color:var(--accent);font-size:9px}
-.color-items{display:flex;flex-direction:column;gap:5px}
+.color-group-title::before{content:'♦';color:var(--accent);font-size:8px}
+.color-items{display:flex;flex-direction:column;gap:4px}
 .color-item{
   display:flex;align-items:center;gap:8px;
-  padding:6px 8px;border-radius:var(--radius-sm);
-  background:var(--surface2);border:1px solid var(--border);cursor:pointer;
-  transition:.12s;position:relative;
+  padding:6px 9px;border-radius:var(--radius-sm);
+  background:var(--surface2);border:1.5px solid var(--border);cursor:pointer;
+  transition:.15s;position:relative;
 }
-.color-item:hover{border-color:#aac4f8;background:#f0f5ff}
-.color-swatch{
-  width:20px;height:20px;border-radius:4px;
-  border:1px solid rgba(0,0,0,.12);flex-shrink:0;
-}
+.color-item:hover{border-color:var(--accent);background:#fff5f8}
+.color-swatch{width:20px;height:20px;border-radius:5px;border:1.5px solid rgba(0,0,0,.1);flex-shrink:0}
 .color-label{flex:1;font-size:11px;color:var(--text2)}
-.color-hex{font-size:10px;font-family:monospace;color:var(--text3)}
-input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
-
-/* DETAIL SLIDER SECTION */
-.detail-section{
-  padding:10px 14px;border-bottom:1px solid var(--border);
+.color-hex{
+  font-size:10px;font-family:monospace;color:var(--text3);
+  background:var(--surface3);padding:1px 5px;border-radius:4px;
+  cursor:text;
 }
-.detail-title{font-size:11px;font-weight:700;color:var(--text2);margin-bottom:10px}
+.color-hex:focus{outline:1px solid var(--accent);background:#fff}
+input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:none}
 
 /* TOAST */
 .toast{
   position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:#333;border-radius:var(--radius);padding:9px 18px;
-  font-size:12px;font-weight:500;color:#fff;
-  box-shadow:0 6px 24px rgba(0,0,0,.2);
+  background:linear-gradient(135deg,#f7b8d4,#d4659a);
+  border-radius:20px;padding:9px 20px;
+  font-size:12px;font-weight:600;color:#fff;
+  box-shadow:0 6px 20px rgba(212,101,154,.4);
   transition:.3s cubic-bezier(.34,1.56,.64,1);
   z-index:999;white-space:nowrap;pointer-events:none;
 }
 .toast.show{transform:translateX(-50%) translateY(0)}
-.toast.success{background:#2e7d32}
-.toast.error{background:#c62828}
+.toast.success{background:linear-gradient(135deg,#a0e0b8,#5ab884)}
+.toast.error{background:linear-gradient(135deg,#f7a0a0,#e05050)}
+
+/* PHONE SIZE SLIDER */
+.phone-size-row{display:flex;align-items:center;gap:8px;width:100%;max-width:440px}
+.phone-size-row label{font-size:10px;color:var(--text3);white-space:nowrap}
+.phone-size-row input[type=range]{flex:1}
+.phone-size-row span{font-size:10px;color:var(--accent);font-weight:700;width:30px;text-align:right}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:#aaa}
+::-webkit-scrollbar-thumb{background:var(--pink);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--pink2)}
+
+/* SECTION DIVIDER LABEL */
+.sub-label{font-size:10px;font-weight:700;color:var(--text3);padding:4px 0 3px;letter-spacing:.05em}
 </style>
 </head>
 <body>
 
 <!-- MENUBAR -->
 <div class="menubar">
+  <div class="menubar-logo"><span class="dot"></span>테마 메이커</div>
   <button class="menubar-item" onclick="newProject()">파일</button>
   <button class="menubar-item" onclick="showTemplates()">템플릿</button>
   <button class="menubar-item" onclick="showThemeInfo()">테마 정보</button>
@@ -495,7 +445,7 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 <div class="toolbar">
   <button class="toolbar-btn" onclick="newProject()"><span class="icon">✨</span> 새 프로젝트</button>
   <button class="toolbar-btn" onclick="openProject()"><span class="icon">📂</span> 열기</button>
-  <button class="toolbar-btn primary" onclick="exportAPK()"><span class="icon">📦</span> APK 패키지 내보내기</button>
+  <button class="toolbar-btn primary" onclick="exportAPK()"><span class="icon">📦</span> ZIP + 빌드 가이드 내보내기</button>
   <div class="toolbar-sep"></div>
   <button class="toolbar-btn" onclick="exportBgVariation()"><span class="icon">🖼</span> 배경 바리에이션</button>
   <button class="toolbar-btn" onclick="exportPromo()"><span class="icon">📣</span> 홍보 이미지</button>
@@ -506,30 +456,15 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 
 <!-- STEP BAR -->
 <div class="stepbar">
-  <button class="step active" id="step1" onclick="goStep(1)">
-    <span class="step-num" id="sn1">1</span>
-    배경 넣기
-  </button>
+  <button class="step active" id="step1" onclick="goStep(1)"><span class="step-num" id="sn1">1</span> 배경 넣기</button>
   <span class="step-arrow">›</span>
-  <button class="step" id="step2" onclick="goStep(2)">
-    <span class="step-num" id="sn2">2</span>
-    아이콘 넣기
-  </button>
+  <button class="step" id="step2" onclick="goStep(2)"><span class="step-num" id="sn2">2</span> 아이콘 넣기</button>
   <span class="step-arrow">›</span>
-  <button class="step" id="step3" onclick="goStep(3)">
-    <span class="step-num" id="sn3">3</span>
-    말풍선 꾸미기
-  </button>
+  <button class="step" id="step3" onclick="goStep(3)"><span class="step-num" id="sn3">3</span> 말풍선 꾸미기</button>
   <span class="step-arrow">›</span>
-  <button class="step" id="step4" onclick="goStep(4)">
-    <span class="step-num" id="sn4">4</span>
-    색상 맞추기
-  </button>
+  <button class="step" id="step4" onclick="goStep(4)"><span class="step-num" id="sn4">4</span> 색상 맞추기</button>
   <span class="step-arrow">›</span>
-  <button class="step" id="step5" onclick="goStep(5)">
-    <span class="step-num" id="sn5">5</span>
-    내보내기
-  </button>
+  <button class="step" id="step5" onclick="goStep(5)"><span class="step-num" id="sn5">5</span> 내보내기</button>
 </div>
 
 <div class="workspace">
@@ -538,270 +473,172 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
   <aside class="panel-left">
     <div class="panel-left-header">
       <div class="panel-left-title">
-        <span class="dot"></span>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;이미지 리소스
+        <div class="circles"><span></span><span></span><span></span></div>
+        &nbsp;이미지 리소스
       </div>
-      <button class="bulk-btn" onclick="bulkUpload()">📁 폴더에서 일괄 교체</button>
+      <button class="bulk-btn" onclick="bulkUpload()">📁 일괄 교체</button>
     </div>
 
-    <!-- 메인 배경 -->
     <div class="img-section">
-      <div class="img-section-label">메인 배경</div>
+      <div class="img-section-label">배경 이미지</div>
       <div class="img-grid">
-        <label class="img-slot" id="slot-main-bg">
+        <label class="img-slot" id="slot-main-bg" oncontextmenu="clearSlot('main-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('main-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-main-bg"><span id="thumb-icon-main-bg">🖼</span><img id="thumb-img-main-bg"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">③ 메인 배경</div>
-            <div class="img-slot-size">1440×2880 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">메인 배경 bg_main.png</div><div class="img-slot-size">1440×2880 · PNG</div></div>
           <span class="img-slot-badge" id="badge-main-bg">비어있음</span>
         </label>
-      </div>
-    </div>
-
-    <!-- 채팅방 배경 -->
-    <div class="img-section">
-      <div class="img-section-label">채팅방 배경</div>
-      <div class="img-grid">
-        <label class="img-slot" id="slot-chat-bg">
+        <label class="img-slot" id="slot-chat-bg" oncontextmenu="clearSlot('chat-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('chat-bg',this,event)">
-          <div class="img-slot-thumb" id="thumb-chat-bg"><span id="thumb-icon-chat-bg">🖼</span><img id="thumb-img-chat-bg"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">④ 채팅방 배경</div>
-            <div class="img-slot-size">1440×2880 · PNG</div>
-          </div>
+          <div class="img-slot-thumb" id="thumb-chat-bg"><span id="thumb-icon-chat-bg">💬</span><img id="thumb-img-chat-bg"></div>
+          <div class="img-slot-info"><div class="img-slot-name">채팅방 배경 bg_chat_room.png</div><div class="img-slot-size">1440×2880 · PNG</div></div>
           <span class="img-slot-badge" id="badge-chat-bg">비어있음</span>
         </label>
-      </div>
-    </div>
-
-    <!-- 탭바 배경 -->
-    <div class="img-section">
-      <div class="img-section-label">탭바 배경</div>
-      <div class="img-grid">
-        <label class="img-slot" id="slot-tabbar-bg">
+        <label class="img-slot" id="slot-tabbar-bg" oncontextmenu="clearSlot('tabbar-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('tabbar-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-tabbar-bg"><span id="thumb-icon-tabbar-bg">🔲</span><img id="thumb-img-tabbar-bg"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑧ 탭바 배경</div>
-            <div class="img-slot-size">1442×214 · .9.PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">탭바 배경 bg_bottom_tab.9.png</div><div class="img-slot-size">1442×214 · .9.PNG</div></div>
           <span class="img-slot-badge" id="badge-tabbar-bg">비어있음</span>
         </label>
-      </div>
-    </div>
-
-    <!-- 잠금화면 배경 -->
-    <div class="img-section">
-      <div class="img-section-label">잠금화면 배경</div>
-      <div class="img-grid">
-        <label class="img-slot" id="slot-passcode-bg">
+        <label class="img-slot" id="slot-passcode-bg" oncontextmenu="clearSlot('passcode-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('passcode-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-passcode-bg"><span id="thumb-icon-passcode-bg">🔒</span><img id="thumb-img-passcode-bg"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑤ 잠금화면 배경</div>
-            <div class="img-slot-size">1440×1440 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">잠금화면 배경 bg_passcode.png</div><div class="img-slot-size">1440×1440 · PNG</div></div>
           <span class="img-slot-badge" id="badge-passcode-bg">비어있음</span>
         </label>
       </div>
     </div>
 
-    <!-- 탭 아이콘 -->
     <div class="img-section">
       <div class="img-section-label">탭 아이콘</div>
       <div class="img-grid">
-        <label class="img-slot" id="slot-ico-friends">
+        <label class="img-slot" id="slot-ico-friends" oncontextmenu="clearSlot('ico-friends',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-friends',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-friends"><span id="thumb-icon-ico-friends">👤</span><img id="thumb-img-ico-friends"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑨ 친구 (비활성)</div>
-            <div class="img-slot-size">114×114 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">tab_home_nor.png 친구 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-friends">비어있음</span>
         </label>
-        <label class="img-slot" id="slot-ico-friends-f">
+        <label class="img-slot" id="slot-ico-friends-f" oncontextmenu="clearSlot('ico-friends-f',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-friends-f',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-friends-f"><span id="thumb-icon-ico-friends-f">👤</span><img id="thumb-img-ico-friends-f"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑩ 친구 (활성)</div>
-            <div class="img-slot-size">114×114 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">tab_home_sel.png 친구 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-friends-f">비어있음</span>
         </label>
-        <label class="img-slot" id="slot-ico-chats">
+        <label class="img-slot" id="slot-ico-chats" oncontextmenu="clearSlot('ico-chats',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-chats',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-chats"><span id="thumb-icon-ico-chats">💬</span><img id="thumb-img-ico-chats"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑪ 채팅 (비활성)</div>
-            <div class="img-slot-size">114×114 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">tab_chat_nor.png 채팅 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-chats">비어있음</span>
         </label>
-        <label class="img-slot" id="slot-ico-more">
+        <label class="img-slot" id="slot-ico-more" oncontextmenu="clearSlot('ico-more',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-more',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-more"><span id="thumb-icon-ico-more">⋯</span><img id="thumb-img-ico-more"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉓ 더보기 (비활성)</div>
-            <div class="img-slot-size">114×114 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">tab_more_nor.png 더보기 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-more">비어있음</span>
         </label>
       </div>
     </div>
 
-    <!-- 말풍선 -->
     <div class="img-section">
-      <div class="img-section-label">말풍선 이미지</div>
+      <div class="img-section-label">말풍선 이미지 (9-patch)</div>
       <div class="img-grid">
-        <label class="img-slot" id="slot-bubble-me1">
+        <label class="img-slot" id="slot-bubble-me1" oncontextmenu="clearSlot('bubble-me1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me1',this,event)">
-          <div class="img-slot-thumb" id="thumb-bubble-me1"><span id="thumb-icon-bubble-me1">💬</span><img id="thumb-img-bubble-me1"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉗ 보낸 말풍선 (첫번째)</div>
-            <div class="img-slot-size">124×114 · .9.PNG</div>
-          </div>
+          <div class="img-slot-thumb" id="thumb-bubble-me1"><span id="thumb-icon-bubble-me1">💛</span><img id="thumb-img-bubble-me1"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_right_01.9.png 보낸 첫번째</div><div class="img-slot-size">자유 · .9.PNG</div></div>
           <span class="img-slot-badge" id="badge-bubble-me1">자동생성</span>
         </label>
-        <label class="img-slot" id="slot-bubble-me2">
+        <label class="img-slot" id="slot-bubble-me2" oncontextmenu="clearSlot('bubble-me2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me2',this,event)">
-          <div class="img-slot-thumb" id="thumb-bubble-me2"><span id="thumb-icon-bubble-me2">💬</span><img id="thumb-img-bubble-me2"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉘ 보낸 말풍선 (연속)</div>
-            <div class="img-slot-size">124×114 · .9.PNG</div>
-          </div>
+          <div class="img-slot-thumb" id="thumb-bubble-me2"><span id="thumb-icon-bubble-me2">💛</span><img id="thumb-img-bubble-me2"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_right_02.9.png 보낸 연속</div><div class="img-slot-size">자유 · .9.PNG</div></div>
           <span class="img-slot-badge" id="badge-bubble-me2">자동생성</span>
         </label>
-        <label class="img-slot" id="slot-bubble-you1">
+        <label class="img-slot" id="slot-bubble-you1" oncontextmenu="clearSlot('bubble-you1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you1',this,event)">
-          <div class="img-slot-thumb" id="thumb-bubble-you1"><span id="thumb-icon-bubble-you1">💬</span><img id="thumb-img-bubble-you1"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉙ 받은 말풍선 (첫번째)</div>
-            <div class="img-slot-size">124×114 · .9.PNG</div>
-          </div>
+          <div class="img-slot-thumb" id="thumb-bubble-you1"><span id="thumb-icon-bubble-you1">🤍</span><img id="thumb-img-bubble-you1"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_left_01.9.png 받은 첫번째</div><div class="img-slot-size">자유 · .9.PNG</div></div>
           <span class="img-slot-badge" id="badge-bubble-you1">자동생성</span>
         </label>
-        <label class="img-slot" id="slot-bubble-you2">
+        <label class="img-slot" id="slot-bubble-you2" oncontextmenu="clearSlot('bubble-you2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you2',this,event)">
-          <div class="img-slot-thumb" id="thumb-bubble-you2"><span id="thumb-icon-bubble-you2">💬</span><img id="thumb-img-bubble-you2"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉚ 받은 말풍선 (연속)</div>
-            <div class="img-slot-size">124×114 · .9.PNG</div>
-          </div>
+          <div class="img-slot-thumb" id="thumb-bubble-you2"><span id="thumb-icon-bubble-you2">🤍</span><img id="thumb-img-bubble-you2"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_left_02.9.png 받은 연속</div><div class="img-slot-size">자유 · .9.PNG</div></div>
           <span class="img-slot-badge" id="badge-bubble-you2">자동생성</span>
         </label>
       </div>
     </div>
 
-    <!-- 프로필 -->
     <div class="img-section">
-      <div class="img-section-label">프로필 이미지</div>
+      <div class="img-section-label">프로필 / 잠금 코드</div>
       <div class="img-grid">
-        <label class="img-slot" id="slot-profile">
+        <label class="img-slot" id="slot-profile" oncontextmenu="clearSlot('profile',event)">
           <input type="file" accept="image/*" onchange="handleSlot('profile',this,event)">
           <div class="img-slot-thumb" id="thumb-profile"><span id="thumb-icon-profile">🧑</span><img id="thumb-img-profile"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">⑦ 기본 프로필 아이콘</div>
-            <div class="img-slot-size">240×240 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">default_profile_image.png</div><div class="img-slot-size">240×240 · PNG</div></div>
           <span class="img-slot-badge" id="badge-profile">선택사항</span>
         </label>
-      </div>
-    </div>
-
-    <!-- 잠금코드 -->
-    <div class="img-section">
-      <div class="img-section-label">잠금 코드 이미지</div>
-      <div class="img-grid">
-        <label class="img-slot" id="slot-pc-dot">
+        <label class="img-slot" id="slot-pc-dot" oncontextmenu="clearSlot('pc-dot',event)">
           <input type="file" accept="image/*" onchange="handleSlot('pc-dot',this,event)">
           <div class="img-slot-thumb" id="thumb-pc-dot"><span id="thumb-icon-pc-dot">⭕</span><img id="thumb-img-pc-dot"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉛ 코드 도트 (미입력)</div>
-            <div class="img-slot-size">132×132 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">passcode_indicator_empty.png</div><div class="img-slot-size">132×132 · PNG</div></div>
           <span class="img-slot-badge" id="badge-pc-dot">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-pc-dot-checked">
+        <label class="img-slot" id="slot-pc-dot-checked" oncontextmenu="clearSlot('pc-dot-checked',event)">
           <input type="file" accept="image/*" onchange="handleSlot('pc-dot-checked',this,event)">
           <div class="img-slot-thumb" id="thumb-pc-dot-checked"><span id="thumb-icon-pc-dot-checked">🔵</span><img id="thumb-img-pc-dot-checked"></div>
-          <div class="img-slot-info">
-            <div class="img-slot-name">㉟ 코드 도트 (입력됨)</div>
-            <div class="img-slot-size">132×132 · PNG</div>
-          </div>
+          <div class="img-slot-info"><div class="img-slot-name">passcode_indicator_active.png</div><div class="img-slot-size">132×132 · PNG</div></div>
           <span class="img-slot-badge" id="badge-pc-dot-checked">선택사항</span>
         </label>
       </div>
     </div>
-
   </aside>
 
   <!-- CENTER: PREVIEW -->
   <main class="panel-center">
     <div class="preview-toolbar">
-      <span class="preview-label"><span class="red-dot"></span> 실시간 미리보기</span>
+      <span class="preview-label"><span class="dot"></span> 미리보기</span>
       <select class="font-select" id="preview-font-select" onchange="updateFont()">
         <option value="Noto Sans KR">Noto Sans</option>
         <option value="Georgia">Serif</option>
         <option value="monospace">Mono</option>
       </select>
-      <input type="number" min="8" max="16" value="11" style="width:48px;font-size:11px;padding:3px 5px;border:1px solid var(--border);border-radius:4px;font-family:inherit" id="preview-font-size" onchange="updateFont()">
+      <input class="size-input" type="number" min="8" max="16" value="11" id="preview-font-size" onchange="updateFont()">
       <span style="font-size:10px;color:var(--text3)">pt</span>
       <div class="preview-tabs-row">
         <button class="ptab active" id="pt-friends" onclick="switchTab('friends')">친구</button>
         <button class="ptab" id="pt-chat" onclick="switchTab('chat')">채팅</button>
         <button class="ptab" id="pt-chatroom" onclick="switchTab('chatroom')">채팅방</button>
-        <button class="ptab" id="pt-openchat" onclick="switchTab('openchat')">오픈채팅</button>
-        <button class="ptab" id="pt-shop" onclick="switchTab('shop')">쇼핑</button>
-        <button class="ptab" id="pt-more" onclick="switchTab('more')">더보기</button>
-        <button class="ptab" id="pt-passcode" onclick="switchTab('passcode')">잠금화면</button>
+        <button class="ptab" id="pt-openchat" onclick="switchTab('openchat')">오픈</button>
+        <button class="ptab" id="pt-passcode" onclick="switchTab('passcode')">잠금</button>
       </div>
       <button class="press-badge" id="press-toggle" onclick="togglePress()">👆 프레스</button>
     </div>
 
-    <!-- PHONE MOCKUP -->
+    <!-- 폰 크기 조절 -->
+    <div class="phone-size-row">
+      <label>미리보기 크기</label>
+      <input type="range" min="180" max="340" value="240" id="sl-phone-size" oninput="updatePhoneSize(this.value)">
+      <span id="val-phone-size">240px</span>
+    </div>
+
     <div class="phone-wrap">
-      <!-- FRIENDS TAB -->
+      <!-- FRIENDS -->
       <div id="view-friends">
         <div class="phone" id="phone-friends">
-          <div class="phone-status" id="ps-friends" style="background:#fff;color:#333">
-            <span>15:02</span><span>5G 🔋</span>
-          </div>
+          <div class="phone-status" id="ps-friends" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
           <div class="friend-header" id="ph-friends-header">친구</div>
-          <div style="flex:1;overflow:hidden;display:flex;flex-direction:column" id="friends-body" style="background:#fff">
+          <div style="flex:1;overflow:hidden;display:flex;flex-direction:column" id="friends-body">
             <div class="friend-item">
               <div class="friend-av" id="my-friend-av" style="background:#ddd;color:#888;font-size:11px">나</div>
-              <div class="friend-info">
-                <div class="friend-name" id="my-name-lbl">나</div>
-                <div class="friend-status" id="my-status-lbl">상태메시지</div>
-              </div>
+              <div class="friend-info"><div class="friend-name" id="my-name-lbl">나</div><div class="friend-status" id="my-status-lbl">상태메시지</div></div>
               <span style="font-size:14px;color:#aaa">🔍</span>
-              <span style="font-size:14px;color:#aaa;margin-left:4px">🎁</span>
             </div>
             <div class="fr-divider" id="fr-divider1"></div>
             <div class="fr-section-label">친구</div>
-            <div class="friend-item" id="fi1">
-              <div class="friend-av" style="background:#b2d4ff;font-size:14px">😊</div>
-              <div class="friend-info">
-                <div class="friend-name" id="fn1">지1</div>
-                <div class="friend-status" id="fs1">안녕하세요</div>
-              </div>
-            </div>
-            <div class="friend-item" id="fi2">
-              <div class="friend-av" style="background:#ffd6e0;font-size:14px">🌸</div>
-              <div class="friend-info">
-                <div class="friend-name" id="fn2">지2</div>
-                <div class="friend-status" id="fs2">오늘 날씨 좋다</div>
-              </div>
-            </div>
-            <div class="friend-item" id="fi3">
-              <div class="friend-av" style="background:#d4edda;font-size:14px">🎵</div>
-              <div class="friend-info">
-                <div class="friend-name" id="fn3">지3</div>
-                <div class="friend-status" id="fs3">음악 듣는 중</div>
-              </div>
-            </div>
+            <div class="friend-item"><div class="friend-av" style="background:#ffd6e8;font-size:14px">🌸</div><div class="friend-info"><div class="friend-name" id="fn1">지1</div><div class="friend-status" id="fs1">안녕하세요</div></div></div>
+            <div class="friend-item"><div class="friend-av" style="background:#d0eeff;font-size:14px">😊</div><div class="friend-info"><div class="friend-name" id="fn2">지2</div><div class="friend-status" id="fs2">오늘 날씨 좋다</div></div></div>
+            <div class="friend-item"><div class="friend-av" style="background:#d8f5e0;font-size:14px">🎵</div><div class="friend-info"><div class="friend-name" id="fn3">지3</div><div class="friend-status" id="fs3">음악 듣는 중</div></div></div>
           </div>
           <div class="tabbar" id="tabbar-friends">
             <div class="tab-item active" id="tab-f-1"><div class="tab-icon">👤</div><div>친구</div></div>
@@ -814,112 +651,14 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         </div>
       </div>
 
-      <!-- CHATROOM TAB -->
-      <div id="view-chatroom" style="display:none">
-        <div class="phone" id="phone-chatroom">
-          <div class="phone-status" id="ps-chatroom" style="background:#fff;color:#333">
-            <span>15:02</span><span>5G 🔋</span>
-          </div>
-          <div class="phone-header" id="ph-chatroom">
-            <span class="ph-back">‹</span>
-            <div class="ph-avatar" id="chat-av" style="background:#b2d4ff;font-size:11px">친</div>
-            <span class="ph-title" id="chat-title-lbl">친구</span>
-            <div class="ph-icons">🔍 ⋮</div>
-          </div>
-          <div class="chat-msgs" id="chat-msgs-area">
-            <div class="msg-date" id="msg-date-lbl">2025년 1월 1일</div>
-            <div class="msg-row">
-              <div class="msg-av" id="other-av1" style="background:#ccc">
-                <img id="other-img1">
-                <span id="other-init1">친</span>
-              </div>
-              <div class="msg-col">
-                <div class="msg-sender" id="other-sender-lbl">친구</div>
-                <div class="msg-bubble" id="bubble-other1" style="background:#fff;color:#1a1a1a;border-radius:12px 12px 12px 0">안녕! 오늘 뭐해? 😊</div>
-              </div>
-              <div class="msg-time" id="time1">오전 10:20</div>
-            </div>
-            <div class="msg-row mine">
-              <div class="msg-col">
-                <div class="msg-bubble" id="bubble-mine1" style="background:#FAE100;color:#1a1a1a;border-radius:12px">테마 만들고 있어!!</div>
-              </div>
-              <div class="unread-cnt" id="unread1">1</div>
-              <div class="msg-time">오전 10:21</div>
-            </div>
-            <div class="msg-row">
-              <div class="msg-av" style="background:#ccc">
-                <span>친</span>
-              </div>
-              <div class="msg-col">
-                <div class="msg-bubble" id="bubble-other2" style="background:#fff;color:#1a1a1a;border-radius:12px 12px 12px 0">오 멋있다~ 완성되면 보내줘 👍</div>
-              </div>
-              <div class="msg-time">오전 10:21</div>
-            </div>
-            <div class="msg-row mine">
-              <div class="msg-col">
-                <div class="msg-bubble" id="bubble-mine2" style="background:#FAE100;color:#1a1a1a;border-radius:12px">ㅋㅋ 지금 너무 잘 나와 ✨</div>
-              </div>
-              <div class="msg-time">오전 10:22</div>
-            </div>
-          </div>
-          <div class="phone-footer" id="ph-footer">
-            <span class="pf-icon">+</span>
-            <div class="pf-input-wrap" id="pf-input-wrap">메시지를 입력하세요</div>
-            <span class="pf-icon">🙂</span>
-          </div>
-          <div class="android-navbar"><span></span><span></span><span></span></div>
-        </div>
-      </div>
-
-      <!-- PASSCODE TAB -->
-      <div id="view-passcode" style="display:none">
-        <div class="phone" id="phone-passcode">
-          <div class="phone-status" id="ps-passcode" style="background:#fff8f5;color:#333">
-            <span>15:02</span><span>5G 🔋</span>
-          </div>
-          <div class="passcode-screen" id="passcode-screen">
-            <div class="pc-title" id="pc-title-lbl">잠금 해제</div>
-            <div class="pc-dots" id="pc-dots">
-              <div class="pc-dot" id="pcd1" style="border-color:#aaa"></div>
-              <div class="pc-dot" id="pcd2" style="border-color:#aaa"></div>
-              <div class="pc-dot filled" id="pcd3" style="background:#666;border-color:#666"></div>
-              <div class="pc-dot filled" id="pcd4" style="background:#666;border-color:#666"></div>
-            </div>
-            <div class="pc-keypad" id="pc-keypad">
-              <button class="pc-key" id="pc-1">1</button>
-              <button class="pc-key" id="pc-2">2</button>
-              <button class="pc-key" id="pc-3">3</button>
-              <button class="pc-key" id="pc-4">4</button>
-              <button class="pc-key" id="pc-5">5</button>
-              <button class="pc-key" id="pc-6">6</button>
-              <button class="pc-key" id="pc-7">7</button>
-              <button class="pc-key" id="pc-8">8</button>
-              <button class="pc-key" id="pc-9">9</button>
-              <div></div>
-              <button class="pc-key" id="pc-0">0</button>
-              <button class="pc-key" id="pc-del">⌫</button>
-            </div>
-          </div>
-          <div class="android-navbar"><span></span><span></span><span></span></div>
-        </div>
-      </div>
-
-      <!-- OTHER TABS (same friend layout placeholder) -->
+      <!-- CHAT LIST -->
       <div id="view-chat" style="display:none">
         <div class="phone" id="phone-chat">
           <div class="phone-status" id="ps-chat" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
           <div class="friend-header" id="ph-chat-header">채팅</div>
           <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;background:#fff" id="chat-list-body">
-            <div class="friend-item">
-              <div class="friend-av" style="background:#ddd;font-size:10px">👥</div>
-              <div class="friend-info"><div class="friend-name" id="cl-n1">가족방</div><div class="friend-status" id="cl-s1">오늘 저녁 뭐 먹을까요?</div></div>
-              <span style="font-size:9px;color:#aaa">오후 3:00</span>
-            </div>
-            <div class="friend-item">
-              <div class="friend-av" style="background:#b2d4ff;font-size:13px">😊</div>
-              <div class="friend-info"><div class="friend-name" id="cl-n2">지1</div><div class="friend-status" id="cl-s2">ㅋㅋ 지금 너무 잘 나와 ✨</div></div>
-              <span style="font-size:9px;color:#aaa">오전 10:22</span>
-            </div>
+            <div class="friend-item"><div class="friend-av" style="background:#ddd;font-size:10px">👥</div><div class="friend-info"><div class="friend-name" id="cl-n1">가족방</div><div class="friend-status" id="cl-s1">오늘 저녁 뭐 먹을까요?</div></div><span style="font-size:9px;color:#aaa">오후 3:00</span></div>
+            <div class="friend-item"><div class="friend-av" style="background:#d0eeff;font-size:13px">😊</div><div class="friend-info"><div class="friend-name" id="cl-n2">지1</div><div class="friend-status" id="cl-s2">ㅋㅋ 지금 너무 잘 나와 ✨</div></div><span style="font-size:9px;color:#aaa">오전 10:22</span></div>
           </div>
           <div class="tabbar" id="tabbar-chat">
             <div class="tab-item" id="tab-c-1"><div class="tab-icon">👤</div><div>친구</div></div>
@@ -932,6 +671,51 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         </div>
       </div>
 
+      <!-- CHATROOM -->
+      <div id="view-chatroom" style="display:none">
+        <div class="phone" id="phone-chatroom">
+          <div class="phone-status" id="ps-chatroom" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
+          <div class="phone-header" id="ph-chatroom">
+            <span class="ph-back">‹</span>
+            <div class="ph-avatar" id="chat-av" style="background:#ffd6e8;font-size:11px">친</div>
+            <span class="ph-title" id="chat-title-lbl">친구</span>
+            <div class="ph-icons">🔍 ⋮</div>
+          </div>
+          <div class="chat-msgs" id="chat-msgs-area">
+            <div class="msg-date">2025년 1월 1일</div>
+            <div class="msg-row">
+              <div class="msg-av" style="background:#ccc"><span>친</span></div>
+              <div class="msg-col">
+                <div class="msg-sender">친구</div>
+                <div class="msg-bubble" id="bubble-other1" style="background:#fff;color:#1a1a1a;border-radius:12px 12px 12px 0">안녕! 오늘 뭐해? 😊</div>
+              </div>
+              <div class="msg-time">오전 10:20</div>
+            </div>
+            <div class="msg-row mine">
+              <div class="msg-col"><div class="msg-bubble" id="bubble-mine1" style="background:#FAE100;color:#1a1a1a;border-radius:12px">테마 만들고 있어!!</div></div>
+              <div class="unread-cnt" id="unread1">1</div>
+              <div class="msg-time">오전 10:21</div>
+            </div>
+            <div class="msg-row">
+              <div class="msg-av" style="background:#ccc"><span>친</span></div>
+              <div class="msg-col"><div class="msg-bubble" id="bubble-other2" style="background:#fff;color:#1a1a1a;border-radius:12px 12px 12px 0">오 멋있다~ 완성되면 보내줘 👍</div></div>
+              <div class="msg-time">오전 10:21</div>
+            </div>
+            <div class="msg-row mine">
+              <div class="msg-col"><div class="msg-bubble" id="bubble-mine2" style="background:#FAE100;color:#1a1a1a;border-radius:12px">ㅋㅋ 지금 너무 잘 나와 ✨</div></div>
+              <div class="msg-time">오전 10:22</div>
+            </div>
+          </div>
+          <div class="phone-footer" id="ph-footer">
+            <span class="pf-icon">+</span>
+            <div class="pf-input-wrap" id="pf-input-wrap">메시지를 입력하세요</div>
+            <span class="pf-icon">🙂</span>
+          </div>
+          <div class="android-navbar"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+
+      <!-- OPENCHAT -->
       <div id="view-openchat" style="display:none">
         <div class="phone" id="phone-openchat">
           <div class="phone-status" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
@@ -948,13 +732,28 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         </div>
       </div>
 
-      <div id="view-shop" style="display:none">
-        <div class="phone"><div class="phone-status" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div><div class="friend-header">쇼핑</div><div style="flex:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa">쇼핑 화면</div></div>
+      <!-- PASSCODE -->
+      <div id="view-passcode" style="display:none">
+        <div class="phone" id="phone-passcode">
+          <div class="phone-status" id="ps-passcode" style="background:#fff8f5;color:#333"><span>15:02</span><span>5G 🔋</span></div>
+          <div class="passcode-screen" id="passcode-screen">
+            <div class="pc-title" id="pc-title-lbl">잠금 해제</div>
+            <div class="pc-dots">
+              <div class="pc-dot" id="pcd1" style="border-color:#aaa"></div>
+              <div class="pc-dot" id="pcd2" style="border-color:#aaa"></div>
+              <div class="pc-dot filled" id="pcd3" style="background:#666;border-color:#666"></div>
+              <div class="pc-dot filled" id="pcd4" style="background:#666;border-color:#666"></div>
+            </div>
+            <div class="pc-keypad">
+              <button class="pc-key" id="pc-1">1</button><button class="pc-key" id="pc-2">2</button><button class="pc-key" id="pc-3">3</button>
+              <button class="pc-key" id="pc-4">4</button><button class="pc-key" id="pc-5">5</button><button class="pc-key" id="pc-6">6</button>
+              <button class="pc-key" id="pc-7">7</button><button class="pc-key" id="pc-8">8</button><button class="pc-key" id="pc-9">9</button>
+              <div></div><button class="pc-key" id="pc-0">0</button><button class="pc-key" id="pc-del">⌫</button>
+            </div>
+          </div>
+          <div class="android-navbar"><span></span><span></span><span></span></div>
+        </div>
       </div>
-      <div id="view-more" style="display:none">
-        <div class="phone"><div class="phone-status" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div><div class="friend-header">더보기</div><div style="flex:1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:11px;color:#aaa">더보기 화면</div></div>
-      </div>
-
     </div>
   </main>
 
@@ -972,9 +771,14 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <option value="pink">🩷 핑크 러블리</option>
           <option value="mint">🩵 민트 쿨</option>
           <option value="sunset">🌇 선셋</option>
+          <option value="lavender">💜 라벤더</option>
+          <option value="ocean">🌊 오션 블루</option>
+          <option value="forest">🌿 포레스트</option>
+          <option value="peach">🍑 피치</option>
+          <option value="galaxy">🌌 갤럭시</option>
         </select>
         <button class="btn-apply" onclick="applyPreset()">적용</button>
-        <button class="btn-save" onclick="saveColorSet()">현재 색상 저장</button>
+        <button class="btn-save" onclick="saveColorSet()">저장</button>
       </div>
     </div>
 
@@ -985,18 +789,10 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
       </div>
       <div id="bubble-layout-content">
         <div class="margin-slider">
-          <div class="slider-row">
-            <label>화면 가장자리 여백</label>
-            <span class="slider-val" id="val-margin">6pt</span>
-          </div>
+          <div class="slider-row"><label>가장자리 여백</label><span class="slider-val" id="val-margin">6pt</span></div>
           <input type="range" min="0" max="20" value="6" id="sl-margin" oninput="updateSlider('margin','pt')">
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:#bbb;margin-top:3px">
-            <span>0 = 가장자리에 딱 붙음</span>
-            <span>6 = 기본 카톡</span>
-            <span>12 = 넉넉한 여백</span>
-          </div>
         </div>
-        <div style="font-size:10px;color:#aaa;cursor:pointer" onclick="toggleInsetDetail()">▸ 인셋 세부 조절</div>
+        <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-top:4px" onclick="toggleInsetDetail()">▸ 인셋 세부 조절</div>
         <div id="inset-detail" style="display:none;margin-top:8px">
           <div class="margin-slider">
             <div class="slider-row"><label>라운딩 반경</label><span class="slider-val" id="val-radius">12px</span></div>
@@ -1014,191 +810,187 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
     <div class="color-group">
       <div class="color-group-title">주요 색상</div>
       <div class="color-items">
-        <div style="font-size:10px;font-weight:700;color:#aaa;padding:2px 0 4px;letter-spacing:.05em">헤더</div>
+        <div class="sub-label">헤더</div>
         <div class="color-item" onclick="pickColor('header-text')">
           <div class="color-swatch" id="sw-header-text"></div>
           <span class="color-label">텍스트 색상</span>
-          <span class="color-hex" id="hex-header-text">#1a1a1a</span>
+          <span class="color-hex" id="hex-header-text" contenteditable="true" onblur="hexInput('header-text',this)">#1a1a1a</span>
           <input type="color" id="header-text" value="#1a1a1a" oninput="updateColor('header-text')">
         </div>
         <div class="color-item" onclick="pickColor('tab-inactive')">
           <div class="color-swatch" id="sw-tab-inactive"></div>
           <span class="color-label">탭 텍스트 (비활성)</span>
-          <span class="color-hex" id="hex-tab-inactive">#aaaaaa</span>
+          <span class="color-hex" id="hex-tab-inactive" contenteditable="true" onblur="hexInput('tab-inactive',this)">#aaaaaa</span>
           <input type="color" id="tab-inactive" value="#aaaaaa" oninput="updateColor('tab-inactive')">
         </div>
         <div class="color-item" onclick="pickColor('tab-active')">
           <div class="color-swatch" id="sw-tab-active"></div>
           <span class="color-label">탭 텍스트 (활성)</span>
-          <span class="color-hex" id="hex-tab-active">#1a1a1a</span>
+          <span class="color-hex" id="hex-tab-active" contenteditable="true" onblur="hexInput('tab-active',this)">#1a1a1a</span>
           <input type="color" id="tab-active" value="#1a1a1a" oninput="updateColor('tab-active')">
         </div>
-        <div style="font-size:10px;font-weight:700;color:#aaa;padding:6px 0 4px;letter-spacing:.05em">메인뷰 (기본)</div>
+        <div class="sub-label" style="margin-top:4px">메인뷰</div>
         <div class="color-item" onclick="pickColor('main-bg-color')">
           <div class="color-swatch" id="sw-main-bg-color"></div>
           <span class="color-label">배경색</span>
-          <span class="color-hex" id="hex-main-bg-color">#ffffff</span>
+          <span class="color-hex" id="hex-main-bg-color" contenteditable="true" onblur="hexInput('main-bg-color',this)">#ffffff</span>
           <input type="color" id="main-bg-color" value="#ffffff" oninput="updateColor('main-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('main-text-color')">
           <div class="color-swatch" id="sw-main-text-color"></div>
           <span class="color-label">텍스트 색상</span>
-          <span class="color-hex" id="hex-main-text-color">#1a1a1a</span>
+          <span class="color-hex" id="hex-main-text-color" contenteditable="true" onblur="hexInput('main-text-color',this)">#1a1a1a</span>
           <input type="color" id="main-text-color" value="#1a1a1a" oninput="updateColor('main-text-color')">
         </div>
         <div class="color-item" onclick="pickColor('status-msg-color')">
           <div class="color-swatch" id="sw-status-msg-color"></div>
           <span class="color-label">상태메시지 색상</span>
-          <span class="color-hex" id="hex-status-msg-color">#999999</span>
+          <span class="color-hex" id="hex-status-msg-color" contenteditable="true" onblur="hexInput('status-msg-color',this)">#999999</span>
           <input type="color" id="status-msg-color" value="#999999" oninput="updateColor('status-msg-color')">
         </div>
         <div class="color-item" onclick="pickColor('last-msg-color')">
           <div class="color-swatch" id="sw-last-msg-color"></div>
-          <span class="color-label">마지막메시지 색상</span>
-          <span class="color-hex" id="hex-last-msg-color">#999999</span>
+          <span class="color-label">마지막 메시지 색상</span>
+          <span class="color-hex" id="hex-last-msg-color" contenteditable="true" onblur="hexInput('last-msg-color',this)">#999999</span>
           <input type="color" id="last-msg-color" value="#999999" oninput="updateColor('last-msg-color')">
         </div>
       </div>
     </div>
 
-    <!-- TAB BAR COLORS -->
     <div class="color-group">
       <div class="color-group-title">탭바</div>
       <div class="color-items">
         <div class="color-item" onclick="pickColor('tabbar-bg-color')">
           <div class="color-swatch" id="sw-tabbar-bg-color"></div>
-          <span class="color-label">메인탭 배경</span>
-          <span class="color-hex" id="hex-tabbar-bg-color">#ffffff</span>
+          <span class="color-label">탭바 배경</span>
+          <span class="color-hex" id="hex-tabbar-bg-color" contenteditable="true" onblur="hexInput('tabbar-bg-color',this)">#ffffff</span>
           <input type="color" id="tabbar-bg-color" value="#ffffff" oninput="updateColor('tabbar-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('tabbar-border-color')">
           <div class="color-swatch" id="sw-tabbar-border-color"></div>
           <span class="color-label">탭바 구분선</span>
-          <span class="color-hex" id="hex-tabbar-border-color">#e5e5e5</span>
+          <span class="color-hex" id="hex-tabbar-border-color" contenteditable="true" onblur="hexInput('tabbar-border-color',this)">#e5e5e5</span>
           <input type="color" id="tabbar-border-color" value="#e5e5e5" oninput="updateColor('tabbar-border-color')">
         </div>
         <div class="color-item" onclick="pickColor('badge-bg-color')">
           <div class="color-swatch" id="sw-badge-bg-color"></div>
-          <span class="color-label">탭 배너 배경</span>
-          <span class="color-hex" id="hex-badge-bg-color">#ff3b30</span>
+          <span class="color-label">배지 배경</span>
+          <span class="color-hex" id="hex-badge-bg-color" contenteditable="true" onblur="hexInput('badge-bg-color',this)">#ff3b30</span>
           <input type="color" id="badge-bg-color" value="#ff3b30" oninput="updateColor('badge-bg-color')">
         </div>
       </div>
     </div>
 
-    <!-- CHATROOM COLORS -->
     <div class="color-group">
       <div class="color-group-title">채팅방</div>
       <div class="color-items">
         <div class="color-item" onclick="pickColor('chat-bg-color')">
           <div class="color-swatch" id="sw-chat-bg-color"></div>
           <span class="color-label">채팅방 배경색</span>
-          <span class="color-hex" id="hex-chat-bg-color">#b2c4de</span>
+          <span class="color-hex" id="hex-chat-bg-color" contenteditable="true" onblur="hexInput('chat-bg-color',this)">#b2c4de</span>
           <input type="color" id="chat-bg-color" value="#b2c4de" oninput="updateColor('chat-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('my-bubble-bg')">
           <div class="color-swatch" id="sw-my-bubble-bg"></div>
-          <span class="color-label">보낸 말풍선 배경 🔧</span>
-          <span class="color-hex" id="hex-my-bubble-bg">#FAE100</span>
+          <span class="color-label">보낸 말풍선 배경</span>
+          <span class="color-hex" id="hex-my-bubble-bg" contenteditable="true" onblur="hexInput('my-bubble-bg',this)">#FAE100</span>
           <input type="color" id="my-bubble-bg" value="#FAE100" oninput="updateColor('my-bubble-bg')">
         </div>
         <div class="color-item" onclick="pickColor('other-bubble-bg')">
           <div class="color-swatch" id="sw-other-bubble-bg"></div>
-          <span class="color-label">받은 말풍선 배경 🔧</span>
-          <span class="color-hex" id="hex-other-bubble-bg">#ffffff</span>
+          <span class="color-label">받은 말풍선 배경</span>
+          <span class="color-hex" id="hex-other-bubble-bg" contenteditable="true" onblur="hexInput('other-bubble-bg',this)">#ffffff</span>
           <input type="color" id="other-bubble-bg" value="#ffffff" oninput="updateColor('other-bubble-bg')">
         </div>
         <div class="color-item" onclick="pickColor('my-bubble-text')">
           <div class="color-swatch" id="sw-my-bubble-text"></div>
           <span class="color-label">보낸 말풍선 텍스트</span>
-          <span class="color-hex" id="hex-my-bubble-text">#1a1a1a</span>
+          <span class="color-hex" id="hex-my-bubble-text" contenteditable="true" onblur="hexInput('my-bubble-text',this)">#1a1a1a</span>
           <input type="color" id="my-bubble-text" value="#1a1a1a" oninput="updateColor('my-bubble-text')">
         </div>
         <div class="color-item" onclick="pickColor('other-bubble-text')">
           <div class="color-swatch" id="sw-other-bubble-text"></div>
           <span class="color-label">받은 말풍선 텍스트</span>
-          <span class="color-hex" id="hex-other-bubble-text">#1a1a1a</span>
+          <span class="color-hex" id="hex-other-bubble-text" contenteditable="true" onblur="hexInput('other-bubble-text',this)">#1a1a1a</span>
           <input type="color" id="other-bubble-text" value="#1a1a1a" oninput="updateColor('other-bubble-text')">
         </div>
         <div class="color-item" onclick="pickColor('unread-count-color')">
           <div class="color-swatch" id="sw-unread-count-color"></div>
           <span class="color-label">안읽은 숫자</span>
-          <span class="color-hex" id="hex-unread-count-color">#FAE100</span>
+          <span class="color-hex" id="hex-unread-count-color" contenteditable="true" onblur="hexInput('unread-count-color',this)">#FAE100</span>
           <input type="color" id="unread-count-color" value="#FAE100" oninput="updateColor('unread-count-color')">
         </div>
         <div class="color-item" onclick="pickColor('inputbar-bg')">
           <div class="color-swatch" id="sw-inputbar-bg"></div>
-          <span class="color-label">인풋바 배경</span>
-          <span class="color-hex" id="hex-inputbar-bg">#ffffff</span>
+          <span class="color-label">입력창 배경</span>
+          <span class="color-hex" id="hex-inputbar-bg" contenteditable="true" onblur="hexInput('inputbar-bg',this)">#ffffff</span>
           <input type="color" id="inputbar-bg" value="#ffffff" oninput="updateColor('inputbar-bg')">
         </div>
       </div>
     </div>
 
-    <!-- PASSCODE COLORS -->
     <div class="color-group">
       <div class="color-group-title">잠금화면</div>
       <div class="color-items">
         <div class="color-item" onclick="pickColor('passcode-bg-color')">
           <div class="color-swatch" id="sw-passcode-bg-color"></div>
           <span class="color-label">잠금화면 배경색</span>
-          <span class="color-hex" id="hex-passcode-bg-color">#fff8f5</span>
+          <span class="color-hex" id="hex-passcode-bg-color" contenteditable="true" onblur="hexInput('passcode-bg-color',this)">#fff8f5</span>
           <input type="color" id="passcode-bg-color" value="#fff8f5" oninput="updateColor('passcode-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('passcode-title-color')">
           <div class="color-swatch" id="sw-passcode-title-color"></div>
           <span class="color-label">잠금화면 타이틀</span>
-          <span class="color-hex" id="hex-passcode-title-color">#333333</span>
+          <span class="color-hex" id="hex-passcode-title-color" contenteditable="true" onblur="hexInput('passcode-title-color',this)">#333333</span>
           <input type="color" id="passcode-title-color" value="#333333" oninput="updateColor('passcode-title-color')">
         </div>
         <div class="color-item" onclick="pickColor('keypad-bg')">
           <div class="color-swatch" id="sw-keypad-bg"></div>
           <span class="color-label">키패드 배경</span>
-          <span class="color-hex" id="hex-keypad-bg">#ffffffb3</span>
+          <span class="color-hex" id="hex-keypad-bg" contenteditable="true" onblur="hexInput('keypad-bg',this)">#ffffff</span>
           <input type="color" id="keypad-bg" value="#ffffff" oninput="updateColor('keypad-bg')">
         </div>
         <div class="color-item" onclick="pickColor('keypad-text')">
           <div class="color-swatch" id="sw-keypad-text"></div>
           <span class="color-label">키패드 텍스트</span>
-          <span class="color-hex" id="hex-keypad-text">#333333</span>
+          <span class="color-hex" id="hex-keypad-text" contenteditable="true" onblur="hexInput('keypad-text',this)">#333333</span>
           <input type="color" id="keypad-text" value="#333333" oninput="updateColor('keypad-text')">
         </div>
         <div class="color-item" onclick="pickColor('dot-color')">
           <div class="color-swatch" id="sw-dot-color"></div>
-          <span class="color-label">패턴 도트 색상</span>
-          <span class="color-hex" id="hex-dot-color">#666666</span>
+          <span class="color-label">도트 색상</span>
+          <span class="color-hex" id="hex-dot-color" contenteditable="true" onblur="hexInput('dot-color',this)">#666666</span>
           <input type="color" id="dot-color" value="#666666" oninput="updateColor('dot-color')">
         </div>
       </div>
     </div>
 
-    <!-- DETAIL COLOR SECTION -->
     <div class="color-group">
-      <div style="font-size:10px;color:#aaa;cursor:pointer;margin-bottom:6px" onclick="toggleDetailColors()">▸ 세부 색상 조절</div>
+      <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-bottom:4px" onclick="toggleDetailColors()">▸ 세부 색상 조절</div>
       <div id="detail-colors" style="display:none">
         <div class="color-items">
           <div class="color-item" onclick="pickColor('header-bg-color')">
             <div class="color-swatch" id="sw-header-bg-color"></div>
             <span class="color-label">헤더 배경색</span>
-            <span class="color-hex" id="hex-header-bg-color">#ffffff</span>
+            <span class="color-hex" id="hex-header-bg-color" contenteditable="true" onblur="hexInput('header-bg-color',this)">#ffffff</span>
             <input type="color" id="header-bg-color" value="#ffffff" oninput="updateColor('header-bg-color')">
           </div>
           <div class="color-item" onclick="pickColor('list-bg-color')">
             <div class="color-swatch" id="sw-list-bg-color"></div>
             <span class="color-label">리스트 배경</span>
-            <span class="color-hex" id="hex-list-bg-color">#ffffff</span>
+            <span class="color-hex" id="hex-list-bg-color" contenteditable="true" onblur="hexInput('list-bg-color',this)">#ffffff</span>
             <input type="color" id="list-bg-color" value="#ffffff" oninput="updateColor('list-bg-color')">
           </div>
           <div class="color-item" onclick="pickColor('divider-color')">
             <div class="color-swatch" id="sw-divider-color"></div>
             <span class="color-label">구분선 색상</span>
-            <span class="color-hex" id="hex-divider-color">#e5e5e5</span>
+            <span class="color-hex" id="hex-divider-color" contenteditable="true" onblur="hexInput('divider-color',this)">#e5e5e5</span>
             <input type="color" id="divider-color" value="#e5e5e5" oninput="updateColor('divider-color')">
           </div>
           <div class="color-item" onclick="pickColor('noti-bg-color')">
             <div class="color-swatch" id="sw-noti-bg-color"></div>
             <span class="color-label">알림 배경</span>
-            <span class="color-hex" id="hex-noti-bg-color">#ffffff</span>
+            <span class="color-hex" id="hex-noti-bg-color" contenteditable="true" onblur="hexInput('noti-bg-color',this)">#ffffff</span>
             <input type="color" id="noti-bg-color" value="#ffffff" oninput="updateColor('noti-bg-color')">
           </div>
         </div>
@@ -1215,7 +1007,7 @@ let currentTab = 'friends';
 let currentStep = 1;
 let pressMode = false;
 
-// ─── SLOT UPLOAD ─────────────────────────────────────────
+// ── SLOT UPLOAD ──
 function handleSlot(key, input, event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1229,19 +1021,28 @@ function handleSlot(key, input, event) {
     if (thumbImg) { thumbImg.src = e.target.result; thumbImg.style.display = 'block'; }
     if (thumbIcon) thumbIcon.style.display = 'none';
     if (slot) slot.classList.add('has-file');
-    if (badge) badge.textContent = '✓ 완료';
-    // Apply to preview
-    if (key === 'chat-bg') renderPreview();
-    if (key === 'profile') renderPreview();
+    if (badge) { badge.textContent = '✓ 완료'; }
+    if (key === 'chat-bg' || key === 'profile') renderPreview();
     showToast('이미지 업로드 완료 ✓', 'success');
   };
   reader.readAsDataURL(file);
 }
-
-// ─── COLOR PICKING ────────────────────────────────────────
-function pickColor(id) {
-  document.getElementById(id).click();
+function clearSlot(key, e) {
+  e.preventDefault();
+  uploads[key] = null;
+  const thumbImg = document.getElementById('thumb-img-' + key);
+  const thumbIcon = document.getElementById('thumb-icon-' + key);
+  const slot = document.getElementById('slot-' + key);
+  const badge = document.getElementById('badge-' + key);
+  if (thumbImg) { thumbImg.src = ''; thumbImg.style.display = 'none'; }
+  if (thumbIcon) thumbIcon.style.display = '';
+  if (slot) slot.classList.remove('has-file');
+  if (badge) badge.textContent = '비어있음';
+  showToast('이미지 제거됨');
 }
+
+// ── COLOR PICKING ──
+function pickColor(id) { document.getElementById(id).click(); }
 function updateColor(id) {
   const inp = document.getElementById(id);
   if (!inp) return;
@@ -1261,17 +1062,32 @@ function initColors() {
   });
 }
 
-// ─── SLIDER ──────────────────────────────────────────────
+// ── HEX DIRECT INPUT ──
+function hexInput(id, el) {
+  let val = el.textContent.trim();
+  if (!val.startsWith('#')) val = '#' + val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    const inp = document.getElementById(id);
+    if (inp) { inp.value = val; updateColor(id); }
+  } else {
+    el.textContent = document.getElementById(id)?.value || '';
+  }
+}
+
+// ── SLIDER ──
 function updateSlider(id, unit) {
   const el = document.getElementById('sl-' + id);
   const val = document.getElementById('val-' + id);
   if (val) val.textContent = el.value + unit;
   renderPreview();
 }
+function updatePhoneSize(v) {
+  document.getElementById('val-phone-size').textContent = v + 'px';
+  document.querySelectorAll('.phone').forEach(p => { p.style.width = v + 'px'; });
+}
 
-// ─── PREVIEW RENDERING ───────────────────────────────────
+// ── PREVIEW RENDERING ──
 function g(id) { return document.getElementById(id)?.value || ''; }
-
 function renderPreview() {
   const mainBg = g('main-bg-color');
   const mainText = g('main-text-color');
@@ -1300,15 +1116,13 @@ function renderPreview() {
   const radius = g('sl-radius') || '12';
 
   // friends
-  const pf = document.getElementById('phone-friends');
-  if (pf) pf.style.background = mainBg;
+  setStyle('phone-friends', {background: mainBg});
   setStyle('ps-friends', {background: headerBg, color: headerText});
   setStyle('ph-friends-header', {background: headerBg, color: headerText});
   setStyle('friends-body', {background: listBg});
   ['fn1','fn2','fn3','my-name-lbl'].forEach(id => setStyle(id, {color: mainText}));
   ['fs1','fs2','fs3','my-status-lbl'].forEach(id => setStyle(id, {color: statusMsg}));
   setStyle('fr-divider1', {background: dividerColor});
-  // tabbar friends
   applyTabbar('tabbar-friends', tabbarBg, tabbarBorder);
   applyTabItems(['tab-f-1','tab-f-2','tab-f-3','tab-f-4','tab-f-5'], 0, tabActiveColor, tabInactive);
 
@@ -1329,10 +1143,16 @@ function renderPreview() {
   setStyle('ps-chatroom', {background: headerBg, color: headerText});
   setStyle('ph-chatroom', {background: headerBg, color: headerText, borderBottomColor: dividerColor});
   setStyle('chat-title-lbl', {color: headerText});
-  setStyle('chat-msgs-area', {background: uploads['chat-bg'] ? '' : chatBg});
-  if (uploads['chat-bg']) {
-    const el = document.getElementById('chat-msgs-area');
-    if (el) { el.style.backgroundImage = `url(${uploads['chat-bg']})`; el.style.backgroundSize = 'cover'; el.style.backgroundPosition = 'center'; }
+  const chatArea = document.getElementById('chat-msgs-area');
+  if (chatArea) {
+    if (uploads['chat-bg']) {
+      chatArea.style.backgroundImage = `url(${uploads['chat-bg']})`;
+      chatArea.style.backgroundSize = 'cover';
+      chatArea.style.backgroundPosition = 'center';
+    } else {
+      chatArea.style.backgroundImage = '';
+      chatArea.style.background = chatBg;
+    }
   }
   const r = radius + 'px';
   ['bubble-other1','bubble-other2'].forEach(id => setStyle(id, {background: otherBubbleBg, color: otherBubbleText, borderRadius: `${r} ${r} ${r} 0`}));
@@ -1341,13 +1161,12 @@ function renderPreview() {
   setStyle('ph-footer', {background: inputbarBg, borderTopColor: dividerColor});
 
   // passcode
-  setStyle('ps-passcode', {background: passcodeBg, color: passcodeTitle});
+  setStyle('phone-passcode', {background: passcodeBg});
   setStyle('passcode-screen', {background: passcodeBg});
   setStyle('pc-title-lbl', {color: passcodeTitle});
   document.querySelectorAll('.pc-key').forEach(k => { k.style.background = keypadBg; k.style.color = keypadText; });
   ['pcd3','pcd4'].forEach(id => { const el = document.getElementById(id); if(el) { el.style.background = dotColor; el.style.borderColor = dotColor; } });
   ['pcd1','pcd2'].forEach(id => { const el = document.getElementById(id); if(el) { el.style.background = 'transparent'; el.style.borderColor = dotColor; } });
-  setStyle('phone-passcode', {background: passcodeBg});
 }
 
 function setStyle(id, styles) {
@@ -1366,8 +1185,8 @@ function applyTabItems(ids, activeIdx, activeColor, inactiveColor) {
   });
 }
 
-// ─── TAB SWITCHING ───────────────────────────────────────
-const ALL_TABS = ['friends','chat','chatroom','openchat','shop','more','passcode'];
+// ── TAB / STEP ──
+const ALL_TABS = ['friends','chat','chatroom','openchat','passcode'];
 function switchTab(tab) {
   currentTab = tab;
   ALL_TABS.forEach(t => {
@@ -1377,8 +1196,6 @@ function switchTab(tab) {
     if (btn) btn.classList.toggle('active', t === tab);
   });
 }
-
-// ─── STEP ─────────────────────────────────────────────────
 function goStep(n) {
   currentStep = n;
   for (let i = 1; i <= 5; i++) {
@@ -1388,7 +1205,6 @@ function goStep(n) {
     else if (i === n) btn.classList.add('active');
     document.getElementById('sn' + i).textContent = i < n ? '✓' : i;
   }
-  // Tab suggestion per step
   if (n === 1) switchTab('friends');
   else if (n === 2) switchTab('friends');
   else if (n === 3) switchTab('chatroom');
@@ -1396,15 +1212,15 @@ function goStep(n) {
   else if (n === 5) switchTab('friends');
 }
 
-// ─── PRESS TOGGLE ─────────────────────────────────────────
+// ── PRESS TOGGLE ──
 function togglePress() {
   pressMode = !pressMode;
   const btn = document.getElementById('press-toggle');
-  btn.style.background = pressMode ? '#ffd700' : '';
-  showToast(pressMode ? '프레스 모드 활성화' : '프레스 모드 해제');
+  btn.classList.toggle('active', pressMode);
+  showToast(pressMode ? '👆 프레스 모드 활성화' : '프레스 모드 해제');
 }
 
-// ─── BUBBLE LAYOUT TOGGLE ─────────────────────────────────
+// ── TOGGLES ──
 function toggleBubbleLayout() {
   const content = document.getElementById('bubble-layout-content');
   const title = document.getElementById('bubble-layout-toggle');
@@ -1421,78 +1237,20 @@ function toggleDetailColors() {
   el.style.display = el.style.display === 'none' ? '' : 'none';
 }
 
-// ─── PRESETS ──────────────────────────────────────────────
+// ── PRESETS (12종) ──
 const PRESETS = {
-  kakao: {
-    'header-text':'#1a1a1a','tab-inactive':'#aaaaaa','tab-active':'#1a1a1a',
-    'main-bg-color':'#ffffff','main-text-color':'#1a1a1a','status-msg-color':'#999999','last-msg-color':'#999999',
-    'tabbar-bg-color':'#ffffff','tabbar-border-color':'#e5e5e5','badge-bg-color':'#ff3b30',
-    'chat-bg-color':'#b2c4de','my-bubble-bg':'#FAE100','my-bubble-text':'#1a1a1a',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#1a1a1a','unread-count-color':'#FAE100',
-    'inputbar-bg':'#ffffff','passcode-bg-color':'#f5f5f5','passcode-title-color':'#333333',
-    'keypad-bg':'#ffffff','keypad-text':'#333333','dot-color':'#666666',
-    'header-bg-color':'#ffffff','list-bg-color':'#ffffff','divider-color':'#e5e5e5','noti-bg-color':'#ffffff',
-  },
-  'rose-gold': {
-    'header-text':'#8A5060','tab-inactive':'#C8A098','tab-active':'#8A5060',
-    'main-bg-color':'#FFF8F5','main-text-color':'#6A3040','status-msg-color':'#C8A098','last-msg-color':'#C8A098',
-    'tabbar-bg-color':'#FFF0EC','tabbar-border-color':'#e8c0b0','badge-bg-color':'#e86080',
-    'chat-bg-color':'#fce8e8','my-bubble-bg':'#e87090','my-bubble-text':'#ffffff',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#6A3040','unread-count-color':'#e87090',
-    'inputbar-bg':'#fff8f5','passcode-bg-color':'#fff0ec','passcode-title-color':'#8A5060',
-    'keypad-bg':'#fff0ec','keypad-text':'#8A5060','dot-color':'#e87090',
-    'header-bg-color':'#fff8f5','list-bg-color':'#fff8f5','divider-color':'#f0d0c0','noti-bg-color':'#fff0ec',
-  },
-  vanilla: {
-    'header-text':'#7A6A50','tab-inactive':'#C0B098','tab-active':'#7A6A50',
-    'main-bg-color':'#FFFCF5','main-text-color':'#5A4A30','status-msg-color':'#C0B098','last-msg-color':'#C0B098',
-    'tabbar-bg-color':'#FFF8EC','tabbar-border-color':'#e8d8b0','badge-bg-color':'#d49830',
-    'chat-bg-color':'#f5ecd8','my-bubble-bg':'#d4a840','my-bubble-text':'#ffffff',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#5A4A30','unread-count-color':'#d4a840',
-    'inputbar-bg':'#fffcf5','passcode-bg-color':'#fff8ec','passcode-title-color':'#7A6A50',
-    'keypad-bg':'#fff8ec','keypad-text':'#7A6A50','dot-color':'#d4a840',
-    'header-bg-color':'#fffcf5','list-bg-color':'#fffcf5','divider-color':'#e8d8b0','noti-bg-color':'#fff8ec',
-  },
-  dark: {
-    'header-text':'#f0f0f0','tab-inactive':'#666666','tab-active':'#f0f0f0',
-    'main-bg-color':'#0f0f0f','main-text-color':'#e0e0e0','status-msg-color':'#666666','last-msg-color':'#666666',
-    'tabbar-bg-color':'#1a1a1a','tabbar-border-color':'#333333','badge-bg-color':'#ff453a',
-    'chat-bg-color':'#0f0f0f','my-bubble-bg':'#2d2d2d','my-bubble-text':'#f0f0f0',
-    'other-bubble-bg':'#1e1e1e','other-bubble-text':'#e0e0e0','unread-count-color':'#5ba4f5',
-    'inputbar-bg':'#1a1a1a','passcode-bg-color':'#0f0f0f','passcode-title-color':'#f0f0f0',
-    'keypad-bg':'#1a1a1a','keypad-text':'#f0f0f0','dot-color':'#5ba4f5',
-    'header-bg-color':'#1a1a1a','list-bg-color':'#0f0f0f','divider-color':'#2a2a2a','noti-bg-color':'#1a1a1a',
-  },
-  pink: {
-    'header-text':'#5a1a3a','tab-inactive':'#d48fac','tab-active':'#e91e8c',
-    'main-bg-color':'#fff0f5','main-text-color':'#5a1a3a','status-msg-color':'#c2185b','last-msg-color':'#c2185b',
-    'tabbar-bg-color':'#fff0f5','tabbar-border-color':'#ffd6e8','badge-bg-color':'#e91e8c',
-    'chat-bg-color':'#fce4ec','my-bubble-bg':'#f06292','my-bubble-text':'#ffffff',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#5a1a3a','unread-count-color':'#e91e8c',
-    'inputbar-bg':'#fff0f5','passcode-bg-color':'#fff0f5','passcode-title-color':'#5a1a3a',
-    'keypad-bg':'#ffffff','keypad-text':'#5a1a3a','dot-color':'#f06292',
-    'header-bg-color':'#fff0f5','list-bg-color':'#fff0f5','divider-color':'#ffd6e8','noti-bg-color':'#fff0f5',
-  },
-  mint: {
-    'header-text':'#1a4a40','tab-inactive':'#80ccc2','tab-active':'#00bfa5',
-    'main-bg-color':'#e8f8f5','main-text-color':'#1a4a40','status-msg-color':'#00897b','last-msg-color':'#00897b',
-    'tabbar-bg-color':'#e8f8f5','tabbar-border-color':'#b2ebe0','badge-bg-color':'#00bfa5',
-    'chat-bg-color':'#d0f0ea','my-bubble-bg':'#00bfa5','my-bubble-text':'#ffffff',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#1a4a40','unread-count-color':'#00897b',
-    'inputbar-bg':'#e8f8f5','passcode-bg-color':'#e8f8f5','passcode-title-color':'#1a4a40',
-    'keypad-bg':'#ffffff','keypad-text':'#1a4a40','dot-color':'#00bfa5',
-    'header-bg-color':'#e8f8f5','list-bg-color':'#e8f8f5','divider-color':'#b2ebe0','noti-bg-color':'#e8f8f5',
-  },
-  sunset: {
-    'header-text':'#4a1a00','tab-inactive':'#e0a060','tab-active':'#ff7043',
-    'main-bg-color':'#fff3e0','main-text-color':'#4a1a00','status-msg-color':'#e65100','last-msg-color':'#e65100',
-    'tabbar-bg-color':'#fff3e0','tabbar-border-color':'#ffcc80','badge-bg-color':'#ff7043',
-    'chat-bg-color':'#fbe9e7','my-bubble-bg':'#ff7043','my-bubble-text':'#ffffff',
-    'other-bubble-bg':'#ffffff','other-bubble-text':'#4a1a00','unread-count-color':'#ff7043',
-    'inputbar-bg':'#fff3e0','passcode-bg-color':'#fff3e0','passcode-title-color':'#4a1a00',
-    'keypad-bg':'#ffffff','keypad-text':'#4a1a00','dot-color':'#ff7043',
-    'header-bg-color':'#fff3e0','list-bg-color':'#fff3e0','divider-color':'#ffcc80','noti-bg-color':'#fff3e0',
-  }
+  kakao: {'header-text':'#1a1a1a','tab-inactive':'#aaaaaa','tab-active':'#1a1a1a','main-bg-color':'#ffffff','main-text-color':'#1a1a1a','status-msg-color':'#999999','last-msg-color':'#999999','tabbar-bg-color':'#ffffff','tabbar-border-color':'#e5e5e5','badge-bg-color':'#ff3b30','chat-bg-color':'#b2c4de','my-bubble-bg':'#FAE100','my-bubble-text':'#1a1a1a','other-bubble-bg':'#ffffff','other-bubble-text':'#1a1a1a','unread-count-color':'#FAE100','inputbar-bg':'#ffffff','passcode-bg-color':'#f5f5f5','passcode-title-color':'#333333','keypad-bg':'#ffffff','keypad-text':'#333333','dot-color':'#666666','header-bg-color':'#ffffff','list-bg-color':'#ffffff','divider-color':'#e5e5e5','noti-bg-color':'#ffffff'},
+  'rose-gold': {'header-text':'#8A5060','tab-inactive':'#C8A098','tab-active':'#8A5060','main-bg-color':'#FFF8F5','main-text-color':'#6A3040','status-msg-color':'#C8A098','last-msg-color':'#C8A098','tabbar-bg-color':'#FFF0EC','tabbar-border-color':'#e8c0b0','badge-bg-color':'#e86080','chat-bg-color':'#fce8e8','my-bubble-bg':'#e87090','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#6A3040','unread-count-color':'#e87090','inputbar-bg':'#fff8f5','passcode-bg-color':'#fff0ec','passcode-title-color':'#8A5060','keypad-bg':'#fff0ec','keypad-text':'#8A5060','dot-color':'#e87090','header-bg-color':'#fff8f5','list-bg-color':'#fff8f5','divider-color':'#f0d0c0','noti-bg-color':'#fff0ec'},
+  vanilla: {'header-text':'#7A6A50','tab-inactive':'#C0B098','tab-active':'#7A6A50','main-bg-color':'#FFFCF5','main-text-color':'#5A4A30','status-msg-color':'#C0B098','last-msg-color':'#C0B098','tabbar-bg-color':'#FFF8EC','tabbar-border-color':'#e8d8b0','badge-bg-color':'#d49830','chat-bg-color':'#f5ecd8','my-bubble-bg':'#d4a840','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#5A4A30','unread-count-color':'#d4a840','inputbar-bg':'#fffcf5','passcode-bg-color':'#fff8ec','passcode-title-color':'#7A6A50','keypad-bg':'#fff8ec','keypad-text':'#7A6A50','dot-color':'#d4a840','header-bg-color':'#fffcf5','list-bg-color':'#fffcf5','divider-color':'#e8d8b0','noti-bg-color':'#fff8ec'},
+  dark: {'header-text':'#f0f0f0','tab-inactive':'#666666','tab-active':'#f0f0f0','main-bg-color':'#0f0f0f','main-text-color':'#e0e0e0','status-msg-color':'#666666','last-msg-color':'#666666','tabbar-bg-color':'#1a1a1a','tabbar-border-color':'#333333','badge-bg-color':'#ff453a','chat-bg-color':'#0f0f0f','my-bubble-bg':'#2d2d2d','my-bubble-text':'#f0f0f0','other-bubble-bg':'#1e1e1e','other-bubble-text':'#e0e0e0','unread-count-color':'#5ba4f5','inputbar-bg':'#1a1a1a','passcode-bg-color':'#0f0f0f','passcode-title-color':'#f0f0f0','keypad-bg':'#1a1a1a','keypad-text':'#f0f0f0','dot-color':'#5ba4f5','header-bg-color':'#1a1a1a','list-bg-color':'#0f0f0f','divider-color':'#2a2a2a','noti-bg-color':'#1a1a1a'},
+  pink: {'header-text':'#5a1a3a','tab-inactive':'#d48fac','tab-active':'#e91e8c','main-bg-color':'#fff0f5','main-text-color':'#5a1a3a','status-msg-color':'#c2185b','last-msg-color':'#c2185b','tabbar-bg-color':'#fff0f5','tabbar-border-color':'#ffd6e8','badge-bg-color':'#e91e8c','chat-bg-color':'#fce4ec','my-bubble-bg':'#f06292','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#5a1a3a','unread-count-color':'#e91e8c','inputbar-bg':'#fff0f5','passcode-bg-color':'#fff0f5','passcode-title-color':'#5a1a3a','keypad-bg':'#ffffff','keypad-text':'#5a1a3a','dot-color':'#f06292','header-bg-color':'#fff0f5','list-bg-color':'#fff0f5','divider-color':'#ffd6e8','noti-bg-color':'#fff0f5'},
+  mint: {'header-text':'#1a4a40','tab-inactive':'#80ccc2','tab-active':'#00bfa5','main-bg-color':'#e8f8f5','main-text-color':'#1a4a40','status-msg-color':'#00897b','last-msg-color':'#00897b','tabbar-bg-color':'#e8f8f5','tabbar-border-color':'#b2ebe0','badge-bg-color':'#00bfa5','chat-bg-color':'#d0f0ea','my-bubble-bg':'#00bfa5','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#1a4a40','unread-count-color':'#00897b','inputbar-bg':'#e8f8f5','passcode-bg-color':'#e8f8f5','passcode-title-color':'#1a4a40','keypad-bg':'#ffffff','keypad-text':'#1a4a40','dot-color':'#00bfa5','header-bg-color':'#e8f8f5','list-bg-color':'#e8f8f5','divider-color':'#b2ebe0','noti-bg-color':'#e8f8f5'},
+  sunset: {'header-text':'#4a1a00','tab-inactive':'#e0a060','tab-active':'#ff7043','main-bg-color':'#fff3e0','main-text-color':'#4a1a00','status-msg-color':'#e65100','last-msg-color':'#e65100','tabbar-bg-color':'#fff3e0','tabbar-border-color':'#ffcc80','badge-bg-color':'#ff7043','chat-bg-color':'#fbe9e7','my-bubble-bg':'#ff7043','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#4a1a00','unread-count-color':'#ff7043','inputbar-bg':'#fff3e0','passcode-bg-color':'#fff3e0','passcode-title-color':'#4a1a00','keypad-bg':'#ffffff','keypad-text':'#4a1a00','dot-color':'#ff7043','header-bg-color':'#fff3e0','list-bg-color':'#fff3e0','divider-color':'#ffcc80','noti-bg-color':'#fff3e0'},
+  lavender: {'header-text':'#3a2a5a','tab-inactive':'#b8a0d0','tab-active':'#7c4daf','main-bg-color':'#f5f0ff','main-text-color':'#3a2a5a','status-msg-color':'#9070b0','last-msg-color':'#9070b0','tabbar-bg-color':'#f0eaff','tabbar-border-color':'#d8c8f0','badge-bg-color':'#7c4daf','chat-bg-color':'#ede0ff','my-bubble-bg':'#9b59b6','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#3a2a5a','unread-count-color':'#7c4daf','inputbar-bg':'#f5f0ff','passcode-bg-color':'#f5f0ff','passcode-title-color':'#3a2a5a','keypad-bg':'#f0eaff','keypad-text':'#3a2a5a','dot-color':'#9b59b6','header-bg-color':'#f5f0ff','list-bg-color':'#f5f0ff','divider-color':'#d8c8f0','noti-bg-color':'#f0eaff'},
+  ocean: {'header-text':'#003060','tab-inactive':'#7090b8','tab-active':'#0060c0','main-bg-color':'#f0f6ff','main-text-color':'#003060','status-msg-color':'#4070a0','last-msg-color':'#4070a0','tabbar-bg-color':'#e8f2ff','tabbar-border-color':'#b0d0f0','badge-bg-color':'#0060c0','chat-bg-color':'#d0e8ff','my-bubble-bg':'#1976d2','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#003060','unread-count-color':'#1976d2','inputbar-bg':'#f0f6ff','passcode-bg-color':'#f0f6ff','passcode-title-color':'#003060','keypad-bg':'#e8f2ff','keypad-text':'#003060','dot-color':'#1976d2','header-bg-color':'#f0f6ff','list-bg-color':'#f0f6ff','divider-color':'#b0d0f0','noti-bg-color':'#e8f2ff'},
+  forest: {'header-text':'#1a3820','tab-inactive':'#70a060','tab-active':'#2e7d32','main-bg-color':'#f0f8f0','main-text-color':'#1a3820','status-msg-color':'#4a8050','last-msg-color':'#4a8050','tabbar-bg-color':'#e8f5e8','tabbar-border-color':'#a8d0a8','badge-bg-color':'#2e7d32','chat-bg-color':'#d8f0d8','my-bubble-bg':'#388e3c','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#1a3820','unread-count-color':'#2e7d32','inputbar-bg':'#f0f8f0','passcode-bg-color':'#f0f8f0','passcode-title-color':'#1a3820','keypad-bg':'#e8f5e8','keypad-text':'#1a3820','dot-color':'#388e3c','header-bg-color':'#f0f8f0','list-bg-color':'#f0f8f0','divider-color':'#a8d0a8','noti-bg-color':'#e8f5e8'},
+  peach: {'header-text':'#6a3010','tab-inactive':'#e0a888','tab-active':'#e05a20','main-bg-color':'#fff6f0','main-text-color':'#6a3010','status-msg-color':'#c07040','last-msg-color':'#c07040','tabbar-bg-color':'#fff0e8','tabbar-border-color':'#f0c8a0','badge-bg-color':'#e05a20','chat-bg-color':'#ffe8d8','my-bubble-bg':'#f07040','my-bubble-text':'#ffffff','other-bubble-bg':'#ffffff','other-bubble-text':'#6a3010','unread-count-color':'#e05a20','inputbar-bg':'#fff6f0','passcode-bg-color':'#fff6f0','passcode-title-color':'#6a3010','keypad-bg':'#fff0e8','keypad-text':'#6a3010','dot-color':'#f07040','header-bg-color':'#fff6f0','list-bg-color':'#fff6f0','divider-color':'#f0c8a0','noti-bg-color':'#fff0e8'},
+  galaxy: {'header-text':'#e0d0ff','tab-inactive':'#6050a0','tab-active':'#c0a0ff','main-bg-color':'#0a0820','main-text-color':'#e0d8ff','status-msg-color':'#8070b0','last-msg-color':'#8070b0','tabbar-bg-color':'#100c28','tabbar-border-color':'#2a2050','badge-bg-color':'#b060ff','chat-bg-color':'#0a0820','my-bubble-bg':'#5030a0','my-bubble-text':'#e8d8ff','other-bubble-bg':'#1a1438','other-bubble-text':'#e0d8ff','unread-count-color':'#c090ff','inputbar-bg':'#100c28','passcode-bg-color':'#0a0820','passcode-title-color':'#e0d0ff','keypad-bg':'#1a1438','keypad-text':'#e0d0ff','dot-color':'#c090ff','header-bg-color':'#100c28','list-bg-color':'#0a0820','divider-color':'#2a2050','noti-bg-color':'#100c28'},
 };
 
 function applyPreset() {
@@ -1510,72 +1268,36 @@ function applyPreset() {
   renderPreview();
   showToast(`✨ 프리셋 적용됨`, 'success');
 }
+function saveColorSet() { showToast('색상 세트 저장됨 ✓', 'success'); }
 
-function saveColorSet() {
-  showToast('색상 세트 저장됨 ✓', 'success');
-}
-
-// ─── EXPORT ───────────────────────────────────────────────
-// 카카오 공식 colors.xml 컬러 키 매핑
+// ── EXPORT ──
 const KAKAO_COLOR_MAP = {
-  'header-text':          'myprofile_name_text_color',
-  'tab-inactive':         'bottom_tab_normal_icon_color',
-  'tab-active':           'bottom_tab_selected_icon_color',
-  'main-bg-color':        'friends_bg_color',
-  'main-text-color':      'friends_name_text_color',
-  'status-msg-color':     'friends_status_message_text_color',
-  'last-msg-color':       'chat_list_last_message_text_color',
-  'tabbar-bg-color':      'bottom_tab_bg_color',
-  'tabbar-border-color':  'bottom_tab_separator_color',
-  'badge-bg-color':       'badge_bg_color',
-  'chat-bg-color':        'chat_bg_color',
-  'my-bubble-bg':         'chat_msg_right_bg_color',
-  'my-bubble-text':       'chat_msg_right_text_color',
-  'other-bubble-bg':      'chat_msg_left_bg_color',
-  'other-bubble-text':    'chat_msg_left_text_color',
-  'unread-count-color':   'chat_msg_right_unread_count_text_color',
-  'inputbar-bg':          'chat_input_bg_color',
-  'passcode-bg-color':    'passcode_bg_color',
-  'passcode-title-color': 'passcode_title_text_color',
-  'keypad-bg':            'passcode_key_bg_color',
-  'keypad-text':          'passcode_key_text_color',
-  'dot-color':            'passcode_indicator_active_color',
-  'header-bg-color':      'actionbar_bg_color',
-  'list-bg-color':        'chat_list_bg_color',
-  'divider-color':        'list_divider_color',
-  'noti-bg-color':        'notification_bg_color',
+  'header-text':'myprofile_name_text_color','tab-inactive':'bottom_tab_normal_icon_color','tab-active':'bottom_tab_selected_icon_color',
+  'main-bg-color':'friends_bg_color','main-text-color':'friends_name_text_color','status-msg-color':'friends_status_message_text_color',
+  'last-msg-color':'chat_list_last_message_text_color','tabbar-bg-color':'bottom_tab_bg_color','tabbar-border-color':'bottom_tab_separator_color',
+  'badge-bg-color':'badge_bg_color','chat-bg-color':'chat_bg_color','my-bubble-bg':'chat_msg_right_bg_color',
+  'my-bubble-text':'chat_msg_right_text_color','other-bubble-bg':'chat_msg_left_bg_color','other-bubble-text':'chat_msg_left_text_color',
+  'unread-count-color':'chat_msg_right_unread_count_text_color','inputbar-bg':'chat_input_bg_color','passcode-bg-color':'passcode_bg_color',
+  'passcode-title-color':'passcode_title_text_color','keypad-bg':'passcode_key_bg_color','keypad-text':'passcode_key_text_color',
+  'dot-color':'passcode_indicator_active_color','header-bg-color':'actionbar_bg_color','list-bg-color':'chat_list_bg_color',
+  'divider-color':'list_divider_color','noti-bg-color':'notification_bg_color',
 };
-
-// 카카오 공식 이미지 파일명 매핑 (drawable-xxhdpi 기준)
 const KAKAO_IMAGE_MAP = {
-  'main-bg':       'bg_main.png',
-  'chat-bg':       'bg_chat_room.png',
-  'tabbar-bg':     'bg_bottom_tab.9.png',
-  'passcode-bg':   'bg_passcode.png',
-  'profile':       'default_profile_image.png',
-  'ico-friends':   'tab_home_nor.png',
-  'ico-friends-f': 'tab_home_sel.png',
-  'ico-chats':     'tab_chat_nor.png',
-  'ico-more':      'tab_more_nor.png',
-  'bubble-me1':    'chat_bubble_right_01.9.png',
-  'bubble-me2':    'chat_bubble_right_02.9.png',
-  'bubble-you1':   'chat_bubble_left_01.9.png',
-  'bubble-you2':   'chat_bubble_left_02.9.png',
-  'pc-dot':        'passcode_indicator_empty.png',
-  'pc-dot-checked':'passcode_indicator_active.png',
+  'main-bg':'bg_main.png','chat-bg':'bg_chat_room.png','tabbar-bg':'bg_bottom_tab.9.png',
+  'passcode-bg':'bg_passcode.png','profile':'default_profile_image.png',
+  'ico-friends':'tab_home_nor.png','ico-friends-f':'tab_home_sel.png','ico-chats':'tab_chat_nor.png','ico-more':'tab_more_nor.png',
+  'bubble-me1':'chat_bubble_right_01.9.png','bubble-me2':'chat_bubble_right_02.9.png',
+  'bubble-you1':'chat_bubble_left_01.9.png','bubble-you2':'chat_bubble_left_02.9.png',
+  'pc-dot':'passcode_indicator_empty.png','pc-dot-checked':'passcode_indicator_active.png',
 };
-
-// hex → ARGB (카카오 colors.xml 형식 #AARRGGBB)
 function hexToArgb(hex) {
   const h = hex.replace('#','');
   if (h.length === 6) return '#ff' + h;
   if (h.length === 8) return '#' + h;
   return '#ff000000';
 }
-
-// colors.xml 생성
 function buildColorsXml(colors) {
-  const lines = ['<?xml version="1.0" encoding="utf-8"?>', '<resources>'];
+  const lines = ['<?xml version="1.0" encoding="utf-8"?>','<resources>'];
   Object.entries(KAKAO_COLOR_MAP).forEach(([uiKey, xmlKey]) => {
     const val = colors[uiKey] || '#ff000000';
     lines.push(`    <color name="${xmlKey}">${hexToArgb(val)}</color>`);
@@ -1583,8 +1305,6 @@ function buildColorsXml(colors) {
   lines.push('</resources>');
   return lines.join('\n');
 }
-
-// AndroidManifest.xml 생성
 function buildManifest(pkgName, themeName) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1607,8 +1327,6 @@ function buildManifest(pkgName, themeName) {
     </application>
 </manifest>`;
 }
-
-// strings.xml 생성
 function buildStringsXml(themeName, author) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -1618,11 +1336,9 @@ function buildStringsXml(themeName, author) {
     <string name="kakao_theme_version">1.0</string>
 </resources>`;
 }
-
-// 빌드 가이드 텍스트 생성
 function buildGuide(pkgName, themeName) {
   return `===================================================
-  LariTheme 메이커 - APK 빌드 가이드
+  카카오톡 테마 메이커 - APK 빌드 가이드
 ===================================================
 
 테마명: ${themeName}
@@ -1630,91 +1346,87 @@ function buildGuide(pkgName, themeName) {
 생성일: ${new Date().toLocaleDateString('ko-KR')}
 
 ---------------------------------------------------
-[ 이 ZIP 파일의 구조 ]
+[ ZIP 파일 구조 ]
 ---------------------------------------------------
 theme-source/
-  AndroidManifest.xml        ← APK 핵심 설정
+  AndroidManifest.xml
   res/
     values/
-      colors.xml             ← 내가 설정한 색상값
-      strings.xml            ← 테마 이름/제작자
+      colors.xml       ← 색상값
+      strings.xml      ← 테마 이름/제작자
     drawable-xxhdpi/
-      (업로드한 이미지들)    ← 이미지 리소스
-  BUILD_GUIDE.txt            ← 이 파일
+      (업로드한 이미지들)
+  BUILD_GUIDE.txt
 
 ---------------------------------------------------
-[ APK 만드는 방법 (처음이어도 OK!) ]
+[ APK 만드는 방법 ]
 ---------------------------------------------------
 
 ★ 준비물 (무료)
-  1. Android Studio 다운로드:
-     https://developer.android.com/studio
-  2. 카카오 샘플 테마 APK 다운로드:
-     https://kakao.com > 서비스 > 카카오톡 > 사용자테마
+  1. apktool 다운로드: https://apktool.org
+  2. JDK 11+: https://adoptium.net
+  3. 카카오 샘플 테마 APK:
+     카카오톡 앱 > 더보기 > 설정 > 테마 > 테마 만들기
 
 ★ 순서
-  1. Android Studio 설치 후 실행
-  2. 카카오 샘플 테마 APK를 apktool로 디컴파일:
+  1. 샘플 APK 디컴파일:
      > java -jar apktool.jar d 샘플테마.apk -o my-theme
-  3. my-theme/res/values/colors.xml 을
-     → 이 ZIP의 res/values/colors.xml 로 교체
-  4. my-theme/res/values/strings.xml 을
-     → 이 ZIP의 res/values/strings.xml 로 교체
-  5. my-theme/AndroidManifest.xml 의 package= 를
-     → "${pkgName}" 로 변경
-  6. my-theme/res/drawable-xxhdpi/ 안에
-     → 이 ZIP의 drawable-xxhdpi/ 이미지들로 교체
-     (파일명 동일하게 유지할 것!)
-  7. 리컴파일:
+
+  2. 파일 교체:
+     my-theme/res/values/colors.xml
+       → 이 ZIP의 res/values/colors.xml 로 교체
+     my-theme/res/values/strings.xml
+       → 이 ZIP의 res/values/strings.xml 로 교체
+     my-theme/res/drawable-xxhdpi/ 이미지들
+       → 이 ZIP의 drawable-xxhdpi/ 이미지들로 교체
+
+  3. 패키지명 변경:
+     my-theme/AndroidManifest.xml 의 package=
+       → "${pkgName}" 로 변경
+
+  4. 리컴파일:
      > java -jar apktool.jar b my-theme -o ${pkgName}.apk
-  8. APK 서명 (Android Studio 메뉴: Build > Generate Signed APK)
-  9. 완성된 .apk 파일을 갤럭시에 설치!
+
+  5. APK 서명 (필수):
+     > keytool -genkey -v -keystore my.keystore -alias mykey -keyalg RSA -keysize 2048 -validity 10000
+     > jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore my.keystore ${pkgName}.apk mykey
+     > zipalign -v 4 ${pkgName}.apk ${pkgName}-signed.apk
 
 ---------------------------------------------------
 [ 설치 방법 ]
 ---------------------------------------------------
-  1. 갤럭시 설정 > 보안 > "출처를 알 수 없는 앱 설치" 허용
+  1. 갤럭시 설정 > 생체인식/보안 > 출처를 알 수 없는 앱 설치 허용
   2. .apk 파일 탭 > 설치
   3. 카카오톡 > 더보기 > 설정 > 테마 > 내 테마 선택
 
 ---------------------------------------------------
 [ 주의사항 ]
 ---------------------------------------------------
-  - 카카오톡 테마는 아무 권한도 요청하지 않음
-    (권한 요청 뜨면 비정상 APK임)
-  - 패키지명(${pkgName})은 고유해야 함
+  - 카카오톡 테마는 권한을 요청하지 않음
+    (권한 요청이 뜨면 비정상 APK)
+  - 패키지명(${pkgName})은 기기 내에서 고유해야 함
   - 이미지 파일명은 반드시 원본과 동일하게 유지
+  - APK 서명 없이는 설치 불가 (Android 보안 정책)
 
 ===================================================
-  LariTheme Maker by Lari | lari-theme.kr
+  카카오톡 테마 메이커
 ===================================================`;
 }
 
 async function exportAPK() {
   if (typeof JSZip === 'undefined') { showToast('JSZip 로딩 중...', 'error'); return; }
-
-  // 테마 정보 입력 받기
   const themeName = prompt('테마 이름을 입력하세요:', '나만의 카카오 테마') || '나만의 카카오 테마';
   const author = prompt('제작자 이름:', '작자미상') || '작자미상';
   const pkgId = themeName.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0,12) || 'mytheme';
-  const pkgName = `com.laritheme.${pkgId}`;
-
-  // 색상 수집
+  const pkgName = `com.kakao.theme.${pkgId}`;
   const colors = {};
   document.querySelectorAll('input[type=color]').forEach(inp => { colors[inp.id] = inp.value; });
-
   const zip = new JSZip();
   const root = zip.folder('theme-source');
-
-  // AndroidManifest.xml
   root.file('AndroidManifest.xml', buildManifest(pkgName, themeName));
-
-  // res/values/
   const valuesFolder = root.folder('res/values');
   valuesFolder.file('colors.xml', buildColorsXml(colors));
   valuesFolder.file('strings.xml', buildStringsXml(themeName, author));
-
-  // res/drawable-xxhdpi/ (업로드 이미지)
   const drawableFolder = root.folder('res/drawable-xxhdpi');
   let imgCount = 0;
   Object.entries(uploads).forEach(([key, data]) => {
@@ -1724,25 +1436,18 @@ async function exportAPK() {
       imgCount++;
     }
   });
-
-  // 빌드 가이드
   root.file('BUILD_GUIDE.txt', buildGuide(pkgName, themeName));
-
-  // colors.xml 별도 최상위에도 복사 (빠른 참조용)
   zip.file('colors.xml', buildColorsXml(colors));
-
   const blob = await zip.generateAsync({type:'blob'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `${pkgId}-kakao-theme.zip`;
+  a.href = url; a.download = `${pkgId}-kakao-theme.zip`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-
-  showToast(`✅ 테마 패키지 다운로드 완료! (이미지 ${imgCount}개 포함)`, 'success');
+  showToast(`✅ ZIP 다운로드 완료! (이미지 ${imgCount}개 포함)`, 'success');
 }
 
-// ─── TOOLBAR STUBS ────────────────────────────────────────
+// ── STUBS ──
 function newProject() { showToast('새 프로젝트를 시작합니다'); }
 function openProject() { showToast('프로젝트 열기'); }
 function exportBgVariation() { showToast('배경 바리에이션 내보내기'); }
@@ -1758,7 +1463,7 @@ function updateFont() {
   document.querySelectorAll('.phone').forEach(p => { p.style.fontFamily = font; p.style.fontSize = size + 'px'; });
 }
 
-// ─── TOAST ────────────────────────────────────────────────
+// ── TOAST ──
 function showToast(msg, type = '') {
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -1769,10 +1474,9 @@ function showToast(msg, type = '') {
   t._timer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// ─── INIT ─────────────────────────────────────────────────
+// ── INIT ──
 initColors();
 renderPreview();
-// Show friends view by default, hide others
 ALL_TABS.filter(t => t !== 'friends').forEach(t => {
   const el = document.getElementById('view-' + t);
   if (el) el.style.display = 'none';
