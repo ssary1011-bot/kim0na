@@ -7,13 +7,17 @@
 <meta name="description" content="캐릭터와 상황만 적으면 연출까지 더한 목소리로 대사를 빚어드려요. 내레이션과 대화 모두 지원.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Jua&family=Hahmlet:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Jua&family=Hahmlet:wght@400;500;600;700&family=Black+Han+Sans&family=Orbitron:wght@500;700;900&family=Do+Hyeon&family=Cute+Font&family=Poor+Story&family=Baloo+2:wght@500;700;800&family=Gugi&family=Major+Mono+Display&family=Stardos+Stencil:wght@400;700&display=swap" rel="stylesheet">
 <style>
   /* ══════════════════════════════════════════════════════════
      새 디자인 시스템 — "종이 위의 목소리" (Paper & Ink)
      라이트 뉴트럴 베이스, 손글씨 느낌 포인트, 각진 카드 + 또렷한 보더
      ══════════════════════════════════════════════════════════ */
-  :root {
+  /* ══════════════════════════════════════════════════════════
+     SKIN 1 — "종이 위의 목소리" (Paper & Ink)  ※ 기본값
+     라이트 뉴트럴 베이스, 손글씨 느낌 포인트, 각진 카드 + 또렷한 보더
+     ══════════════════════════════════════════════════════════ */
+  :root, [data-skin="paper"] {
     --bg: #f3efe7; --bg-2: #ffffff; --surface: #fdfbf7; --surface-2: #ffffff;
     --border: #d8cfc0; --border-strong: #2e2a24;
     --text: #2a2620; --text-dim: #6b6358; --text-faint: #a39884;
@@ -24,28 +28,28 @@
     --card-shadow-sm: 3px 3px 0 var(--border-strong);
     --radius: 4px;
   }
-  [data-theme="amber"] {
+  [data-skin="paper"][data-theme="amber"] {
     --bg: #f6efe2; --bg-2: #fffaf0; --surface: #fffaf0; --surface-2: #fff;
     --border: #e0caa0; --border-strong: #5a3d12;
     --text: #3a2c12; --text-dim: #7a6440; --text-faint: #b09b6e;
     --accent: #b5790f; --accent-2: #80540a; --accent-soft: rgba(181,121,15,0.09);
     --danger: #b3261e; --success: #4d7a2a; --warn: #9a6b00;
   }
-  [data-theme="mint"] {
+  [data-skin="paper"][data-theme="mint"] {
     --bg: #eaf3ee; --bg-2: #f8fffb; --surface: #f8fffb; --surface-2: #fff;
     --border: #b9dccb; --border-strong: #15402d;
     --text: #142e22; --text-dim: #4d7766; --text-faint: #8fb3a3;
     --accent: #1f7a5c; --accent-2: #145940; --accent-soft: rgba(31,122,92,0.09);
     --danger: #b3261e; --success: #1f7a5c; --warn: #9a6b00;
   }
-  [data-theme="rose"] {
+  [data-skin="paper"][data-theme="rose"] {
     --bg: #f7eaee; --bg-2: #fff8fa; --surface: #fff8fa; --surface-2: #fff;
     --border: #e7bfcc; --border-strong: #531528;
     --text: #38101b; --text-dim: #7a4456; --text-faint: #b58a98;
     --accent: #a8285a; --accent-2: #7a1b40; --accent-soft: rgba(168,40,90,0.09);
     --danger: #b3261e; --success: #2f6b3f; --warn: #9a6b00;
   }
-  [data-theme="slate"] {
+  [data-skin="paper"][data-theme="slate"] {
     --bg: #eaeef2; --bg-2: #f8fafc; --surface: #f8fafc; --surface-2: #fff;
     --border: #c2cdd8; --border-strong: #1b2a38;
     --text: #16222c; --text-dim: #4d6273; --text-faint: #8a9aa8;
@@ -53,12 +57,140 @@
     --danger: #b3261e; --success: #2f6b3f; --warn: #9a6b00;
   }
 
-  /* ── 폰트 정의 ── */
+  /* ══════════════════════════════════════════════════════════
+     SKIN 2 — "네온 시그널" (Neon / Dark Tech)
+     검정 베이스, 네온 글로우, 모노스페이스 포인트, 얇고 날카로운 라인
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="neon"] {
+    --bg: #0a0a0f; --bg-2: #12121a; --surface: #15151f; --surface-2: #1a1a26;
+    --border: rgba(0,255,200,0.18); --border-strong: rgba(0,255,200,0.55);
+    --text: #e8feff; --text-dim: #8fa3a8; --text-faint: #56666b;
+    --accent: #00ffc8; --accent-2: #00b894; --accent-soft: rgba(0,255,200,0.1);
+    --danger: #ff3366; --success: #00ffc8; --warn: #ffe44d;
+    --h1-grad: none;
+    --card-shadow: 0 0 0 1px var(--border), 0 0 20px rgba(0,255,200,0.08);
+    --card-shadow-sm: 0 0 0 1px var(--border), 0 0 10px rgba(0,255,200,0.1);
+    --radius: 2px;
+  }
+  [data-skin="neon"][data-theme="amber"] {
+    --border: rgba(255,170,0,0.2); --border-strong: rgba(255,170,0,0.6);
+    --accent: #ffaa00; --accent-2: #cc8800; --accent-soft: rgba(255,170,0,0.1);
+    --success: #ffaa00; --card-shadow: 0 0 0 1px var(--border), 0 0 20px rgba(255,170,0,0.08);
+  }
+  [data-skin="neon"][data-theme="mint"] {
+    --border: rgba(57,255,20,0.2); --border-strong: rgba(57,255,20,0.6);
+    --accent: #39ff14; --accent-2: #2bcc0f; --accent-soft: rgba(57,255,20,0.1);
+    --success: #39ff14; --card-shadow: 0 0 0 1px var(--border), 0 0 20px rgba(57,255,20,0.08);
+  }
+  [data-skin="neon"][data-theme="rose"] {
+    --border: rgba(255,45,149,0.2); --border-strong: rgba(255,45,149,0.6);
+    --accent: #ff2d95; --accent-2: #cc2477; --accent-soft: rgba(255,45,149,0.1);
+    --success: #ff2d95; --card-shadow: 0 0 0 1px var(--border), 0 0 20px rgba(255,45,149,0.08);
+  }
+  [data-skin="neon"][data-theme="slate"] {
+    --border: rgba(80,160,255,0.2); --border-strong: rgba(80,160,255,0.6);
+    --accent: #50a0ff; --accent-2: #3a7fd6; --accent-soft: rgba(80,160,255,0.1);
+    --success: #50a0ff; --card-shadow: 0 0 0 1px var(--border), 0 0 20px rgba(80,160,255,0.08);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN 3 — "포실포실" (Cute / Pastel)
+     크림 파스텔, 풍성한 라운드, 부드러운 그림자, 동글동글 폰트
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="pastel"] {
+    --bg: #fff0f5; --bg-2: #ffffff; --surface: #ffffff; --surface-2: #fffafc;
+    --border: #ffd6e7; --border-strong: #ffb3d1;
+    --text: #5c3a4a; --text-dim: #9b6f82; --text-faint: #c9a3b5;
+    --accent: #ff8fb3; --accent-2: #ff6699; --accent-soft: rgba(255,143,179,0.12);
+    --danger: #ff6b6b; --success: #6bcf9e; --warn: #ffc266;
+    --h1-grad: linear-gradient(135deg,#ff9ec4,#ffc371);
+    --card-shadow: 0 8px 20px rgba(255,143,179,0.18);
+    --card-shadow-sm: 0 4px 12px rgba(255,143,179,0.18);
+    --radius: 22px;
+  }
+  [data-skin="pastel"][data-theme="amber"] {
+    --bg: #fff8ea; --border: #ffe2ad; --border-strong: #ffcd70;
+    --text: #5c4a2a; --text-dim: #9b8459; --text-faint: #cbb98c;
+    --accent: #ffb648; --accent-2: #ff9d1f; --accent-soft: rgba(255,182,72,0.14);
+    --h1-grad: linear-gradient(135deg,#ffcf7a,#ff9d4d);
+  }
+  [data-skin="pastel"][data-theme="mint"] {
+    --bg: #effaf3; --border: #c2efd4; --border-strong: #93e2b4;
+    --text: #2f5c44; --text-dim: #5f9b77; --text-faint: #9fcdb1;
+    --accent: #5fd991; --accent-2: #38c172; --accent-soft: rgba(95,217,145,0.14);
+    --h1-grad: linear-gradient(135deg,#8be8b0,#4fd189);
+  }
+  [data-skin="pastel"][data-theme="rose"] {
+    --bg: #fdf0fa; --border: #f5cdee; --border-strong: #ec9fe1;
+    --text: #5c2a54; --text-dim: #9b5e91; --text-faint: #cb9ac4;
+    --accent: #e07fdb; --accent-2: #cf5cc9; --accent-soft: rgba(224,127,219,0.14);
+    --h1-grad: linear-gradient(135deg,#f0a8eb,#cf6fd4);
+  }
+  [data-skin="pastel"][data-theme="slate"] {
+    --bg: #eef3fb; --border: #c9dcf5; --border-strong: #9ec0ec;
+    --text: #2a3e5c; --text-dim: #5f7a9b; --text-faint: #9fb3cd;
+    --accent: #6fa8ed; --accent-2: #4a8adb; --accent-soft: rgba(111,168,237,0.14);
+    --h1-grad: linear-gradient(135deg,#a3c8f5,#6fa8ed);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN 4 — "묵직한 필글래스" (Heavy Glass)
+     깊은 남색, 두꺼운 프로스트 글래스, 큰 블러, 묵직한 그림자
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="glass"] {
+    --bg: #1a1f2e; --bg-2: rgba(255,255,255,0.06); --surface: rgba(255,255,255,0.07); --surface-2: rgba(255,255,255,0.1);
+    --border: rgba(255,255,255,0.14); --border-strong: rgba(255,255,255,0.28);
+    --text: #f0f2f8; --text-dim: #aab0c4; --text-faint: #6f7690;
+    --accent: #7c9eff; --accent-2: #5c7ce0; --accent-soft: rgba(124,158,255,0.16);
+    --danger: #ff7a8a; --success: #6ee7b7; --warn: #ffd166;
+    --h1-grad: linear-gradient(135deg,#d6e2ff,#7c9eff);
+    --card-shadow: 0 20px 50px rgba(0,0,0,0.35);
+    --card-shadow-sm: 0 10px 25px rgba(0,0,0,0.3);
+    --radius: 18px;
+  }
+  [data-skin="glass"][data-theme="amber"] {
+    --accent: #ffb86b; --accent-2: #e2954a; --accent-soft: rgba(255,184,107,0.16);
+    --success: #ffb86b; --h1-grad: linear-gradient(135deg,#ffe2c2,#ffb86b);
+  }
+  [data-skin="glass"][data-theme="mint"] {
+    --accent: #6ee7b7; --accent-2: #45c891; --accent-soft: rgba(110,231,183,0.16);
+    --success: #6ee7b7; --h1-grad: linear-gradient(135deg,#c2f5e0,#6ee7b7);
+  }
+  [data-skin="glass"][data-theme="rose"] {
+    --accent: #ff9ec7; --accent-2: #e26fa3; --accent-soft: rgba(255,158,199,0.16);
+    --success: #6ee7b7; --h1-grad: linear-gradient(135deg,#ffd6e8,#ff9ec7);
+  }
+  [data-skin="glass"][data-theme="slate"] {
+    --accent: #9ab4ff; --accent-2: #6f8fe0; --accent-soft: rgba(154,180,255,0.16);
+    --success: #6ee7b7; --h1-grad: linear-gradient(135deg,#dbe5ff,#9ab4ff);
+  }
+
+  /* ── 폰트 정의 (사용자 선택 오버라이드) ── */
   [data-font="system"] { font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; }
   [data-font="noto"] { font-family: 'Nanum Gothic', sans-serif; }
   [data-font="serif"] { font-family: 'Gowun Batang', serif; }
   [data-font="ibm"] { font-family: 'Hahmlet', serif; }
   [data-font="gothic"] { font-family: 'Jua', sans-serif; }
+
+  /* ── 스킨별 기본 폰트 (폰트 미선택 시) ── */
+  [data-skin="paper"] body { font-family: 'Nanum Gothic', sans-serif; }
+  [data-skin="neon"] body { font-family: 'Do Hyeon', sans-serif; }
+  [data-skin="pastel"] body { font-family: 'Baloo 2', sans-serif; }
+  [data-skin="glass"] body { font-family: 'Hahmlet', serif; }
+
+  /* ── 스킨별 배경 텍스처 ── */
+  [data-skin="paper"] body {
+    background-image: radial-gradient(rgba(46,42,36,0.03) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+  [data-skin="neon"] body {
+    background-image: linear-gradient(rgba(0,255,200,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,200,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  [data-skin="glass"] body {
+    background: radial-gradient(circle at 20% 0%, #2a3354 0%, #1a1f2e 55%), radial-gradient(circle at 90% 80%, #233047 0%, transparent 50%);
+    background-attachment: fixed;
+  }
 
   /* ── 테마 패널 ── */
   .theme-fab {
@@ -516,6 +648,179 @@
   .voices-loading { text-align: center; padding: 30px; color: var(--text-dim); font-size: 13px; }
   @keyframes va-spin { to { transform: rotate(360deg); } }
   .va-spinner { width: 22px; height: 22px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: va-spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN SWITCHER — 스킨 선택 UI 자체 스타일 (스킨 무관 고정)
+     ══════════════════════════════════════════════════════════ */
+  .skin-fab {
+    position: fixed; bottom: 186px; right: 16px; z-index: 150;
+    width: 46px; height: 46px; border-radius: var(--radius);
+    background: var(--surface); border: 2px solid var(--border-strong); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; box-shadow: var(--card-shadow-sm); transition: transform 0.15s;
+  }
+  .skin-fab:hover { transform: translate(-2px,-2px); }
+  .skin-swatch-row { display: flex; flex-direction: column; gap: 8px; }
+  .skin-swatch {
+    border: 2px solid var(--border); border-radius: 10px; padding: 12px; cursor: pointer;
+    display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; background: var(--bg);
+  }
+  .skin-swatch.active { border-color: var(--accent); background: var(--accent-soft); }
+  .skin-swatch-preview {
+    width: 48px; height: 36px; border-radius: 6px; flex-shrink: 0; position: relative; overflow: hidden;
+    display: inline-block;
+  }
+  .skin-swatch-info { flex: 1; }
+  .skin-swatch-title { font-size: 13px; font-weight: 800; color: var(--text); }
+  .skin-swatch-desc { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN 2 오버라이드 — 네온 시그널 (각진, 얇은 보더, 글로우, 대문자 라벨)
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="neon"] header h1 {
+    font-family: 'Orbitron', sans-serif; letter-spacing: 0.04em; color: var(--accent);
+    text-shadow: 0 0 12px var(--accent-soft), 0 0 24px rgba(0,255,200,0.25);
+  }
+  [data-skin="neon"] header { border-bottom: 1px solid var(--border-strong); }
+  [data-skin="neon"] .card, [data-skin="neon"] .result-card, [data-skin="neon"] .speaker-card {
+    border-radius: 2px; border-width: 1px; background: var(--surface);
+    position: relative;
+  }
+  [data-skin="neon"] .card::before {
+    content: ''; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px;
+    border-top: 2px solid var(--accent); border-left: 2px solid var(--accent);
+  }
+  [data-skin="neon"] .card-title, [data-skin="neon"] label, [data-skin="neon"] .preset-group-label,
+  [data-skin="neon"] .settings-section-label, [data-skin="neon"] .theme-section-label {
+    text-transform: uppercase; letter-spacing: 0.06em; font-family: 'Orbitron', sans-serif; font-weight: 700;
+  }
+  [data-skin="neon"] .card-title .num { border-radius: 0; box-shadow: 0 0 8px var(--accent-soft); }
+  [data-skin="neon"] input[type="text"], [data-skin="neon"] input[type="password"],
+  [data-skin="neon"] textarea, [data-skin="neon"] select {
+    border-radius: 2px; border-width: 1px; background: #000; font-family: 'Hahmlet', monospace;
+  }
+  [data-skin="neon"] input:focus, [data-skin="neon"] textarea:focus, [data-skin="neon"] select:focus {
+    box-shadow: 0 0 0 1px var(--accent), 0 0 12px var(--accent-soft);
+  }
+  [data-skin="neon"] .submit-btn, [data-skin="neon"] .voices-select-bar button {
+    background: transparent; border: 1px solid var(--accent); color: var(--accent);
+    border-radius: 2px; box-shadow: 0 0 16px var(--accent-soft); text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  [data-skin="neon"] .submit-btn:active { box-shadow: 0 0 4px var(--accent-soft); }
+  [data-skin="neon"] .secondary-btn, [data-skin="neon"] .action-btn {
+    border-radius: 2px; border-width: 1px; background: transparent;
+  }
+  [data-skin="neon"] .action-btn.primary { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+  [data-skin="neon"] .top-mode-toggle, [data-skin="neon"] .toggle-mode, [data-skin="neon"] .engine-toggle,
+  [data-skin="neon"] #screen-voices .voices-engine-toggle {
+    border-radius: 2px; border-width: 1px; background: #000;
+  }
+  [data-skin="neon"] .top-mode-toggle button.active, [data-skin="neon"] .toggle-mode button.active,
+  [data-skin="neon"] .engine-toggle button.active, [data-skin="neon"] #screen-voices .voices-engine-toggle button.active {
+    background: var(--accent-soft); color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent);
+  }
+  [data-skin="neon"] .bottom-tabbar { border-top: 1px solid var(--border-strong); background: #000; }
+  [data-skin="neon"] .bottom-tabbar button.active { text-shadow: 0 0 10px var(--accent-soft); }
+  [data-skin="neon"] .settings-fab, [data-skin="neon"] .theme-fab, [data-skin="neon"] .skin-fab {
+    border-radius: 2px; background: #000;
+  }
+  [data-skin="neon"] .tag-chip { border-radius: 2px; background: transparent; border: 1px solid var(--accent); color: var(--accent); }
+  [data-skin="neon"] .voice-item, [data-skin="neon"] .va-card, [data-skin="neon"] .el-voice-row {
+    border-radius: 2px; border-width: 1px; background: #000;
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN 3 오버라이드 — 포실포실 (풍성한 라운드, 동글 폰트, 부드러운 그림자)
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="pastel"] header h1 {
+    font-family: 'Cute Font', cursive; font-size: 30px; background: var(--h1-grad);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--accent);
+  }
+  [data-skin="pastel"] header { border-bottom: none; }
+  [data-skin="pastel"] .card, [data-skin="pastel"] .result-card, [data-skin="pastel"] .speaker-card {
+    border-radius: 22px; border-width: 2px;
+  }
+  [data-skin="pastel"] .card-title .num { border-radius: 50%; }
+  [data-skin="pastel"] input[type="text"], [data-skin="pastel"] input[type="password"],
+  [data-skin="pastel"] textarea, [data-skin="pastel"] select {
+    border-radius: 16px; border-width: 2px;
+  }
+  [data-skin="pastel"] .submit-btn, [data-skin="pastel"] .voices-select-bar button {
+    border-radius: 999px; box-shadow: var(--card-shadow); border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  [data-skin="pastel"] .submit-btn:active { transform: scale(0.97); box-shadow: none; }
+  [data-skin="pastel"] .secondary-btn, [data-skin="pastel"] .action-btn { border-radius: 999px; border-width: 2px; }
+  [data-skin="pastel"] .action-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; }
+  [data-skin="pastel"] .top-mode-toggle, [data-skin="pastel"] .toggle-mode, [data-skin="pastel"] .engine-toggle,
+  [data-skin="pastel"] #screen-voices .voices-engine-toggle {
+    border-radius: 999px; border-width: 2px; padding: 5px;
+  }
+  [data-skin="pastel"] .top-mode-toggle button, [data-skin="pastel"] .toggle-mode button,
+  [data-skin="pastel"] .engine-toggle button, [data-skin="pastel"] #screen-voices .voices-engine-toggle button { border-radius: 999px; }
+  [data-skin="pastel"] .top-mode-toggle button.active, [data-skin="pastel"] .toggle-mode button.active,
+  [data-skin="pastel"] .engine-toggle button.active, [data-skin="pastel"] #screen-voices .voices-engine-toggle button.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  [data-skin="pastel"] .bottom-tabbar { border-top: none; border-radius: 22px 22px 0 0; box-shadow: 0 -4px 18px rgba(255,143,179,0.18); }
+  [data-skin="pastel"] .settings-fab, [data-skin="pastel"] .theme-fab, [data-skin="pastel"] .skin-fab {
+    border-radius: 50%; border-width: 2px;
+  }
+  [data-skin="pastel"] .tag-chip { border-radius: 999px; }
+  [data-skin="pastel"] .voice-item, [data-skin="pastel"] .va-card, [data-skin="pastel"] .el-voice-row {
+    border-radius: 18px; border-width: 2px;
+  }
+  [data-skin="pastel"] .line-count-row button, [data-skin="pastel"] .preset-tag, [data-skin="pastel"] .voices-filter-row button,
+  [data-skin="pastel"] .font-btn, [data-skin="pastel"] .theme-swatch, [data-skin="pastel"] .settings-action-btn,
+  [data-skin="pastel"] .skin-swatch { border-radius: 999px; }
+  [data-skin="pastel"] .preset-toggle { border-radius: 999px; }
+  [data-skin="pastel"] .add-speaker-btn { border-radius: 18px; }
+
+  /* ══════════════════════════════════════════════════════════
+     SKIN 4 오버라이드 — 묵직한 필글래스 (블러, 큰 라운드, 깊은 그림자)
+     ══════════════════════════════════════════════════════════ */
+  [data-skin="glass"] header h1 {
+    font-family: 'Hahmlet', serif; font-weight: 700; background: var(--h1-grad);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--accent);
+  }
+  [data-skin="glass"] header { border-bottom: 1px solid var(--border); }
+  [data-skin="glass"] .card, [data-skin="glass"] .result-card, [data-skin="glass"] .speaker-card,
+  [data-skin="glass"] .theme-panel, [data-skin="glass"] .settings-panel, [data-skin="glass"] .skin-panel,
+  [data-skin="glass"] .tag-popup, [data-skin="glass"] .confirm-box {
+    border-radius: 18px; border-width: 1px;
+    backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+  }
+  [data-skin="glass"] .card-title .num { border-radius: 8px; }
+  [data-skin="glass"] input[type="text"], [data-skin="glass"] input[type="password"],
+  [data-skin="glass"] textarea, [data-skin="glass"] select {
+    border-radius: 12px; border-width: 1px; background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(8px);
+  }
+  [data-skin="glass"] .submit-btn, [data-skin="glass"] .voices-select-bar button {
+    border-radius: 14px; border: 1px solid var(--border-strong);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--card-shadow);
+  }
+  [data-skin="glass"] .secondary-btn, [data-skin="glass"] .action-btn { border-radius: 12px; border-width: 1px; background: rgba(255,255,255,0.06); }
+  [data-skin="glass"] .action-btn.primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); border: none; }
+  [data-skin="glass"] .top-mode-toggle, [data-skin="glass"] .toggle-mode, [data-skin="glass"] .engine-toggle,
+  [data-skin="glass"] #screen-voices .voices-engine-toggle {
+    border-radius: 14px; border-width: 1px; background: rgba(255,255,255,0.04);
+  }
+  [data-skin="glass"] .top-mode-toggle button.active, [data-skin="glass"] .toggle-mode button.active,
+  [data-skin="glass"] .engine-toggle button.active, [data-skin="glass"] #screen-voices .voices-engine-toggle button.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-radius: 10px;
+  }
+  [data-skin="glass"] .bottom-tabbar {
+    border-top: 1px solid var(--border); background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+  [data-skin="glass"] .settings-fab, [data-skin="glass"] .theme-fab, [data-skin="glass"] .skin-fab {
+    border-radius: 14px; backdrop-filter: blur(12px);
+  }
+  [data-skin="glass"] .tag-chip { border-radius: 8px; backdrop-filter: blur(6px); }
+  [data-skin="glass"] .voice-item, [data-skin="glass"] .va-card, [data-skin="glass"] .el-voice-row {
+    border-radius: 14px; border-width: 1px; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+  }
 </style>
 </head>
 <body>
@@ -843,6 +1148,58 @@
     </div>
   </div>
 
+</div>
+
+<!-- 스킨(UI 스타일) 전환 FAB -->
+<button class="skin-fab" id="skin-fab" title="UI 스타일 변경" type="button">🧩</button>
+
+<!-- 스킨 전환 패널 -->
+<div class="theme-panel-overlay" id="skin-panel-overlay">
+  <div class="theme-panel">
+    <div class="theme-panel-title">
+      <span>🧩 UI 스타일</span>
+      <button class="theme-panel-close" id="skin-panel-close" type="button">✕</button>
+    </div>
+
+    <div class="skin-swatch-row">
+      <div class="skin-swatch active" data-skin="paper">
+        <span class="skin-swatch-preview" style="background:#f3efe7;border:2px solid #2e2a24;">
+          <span style="position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#c1432c;border-radius:2px;"></span>
+        </span>
+        <div class="skin-swatch-info">
+          <div class="skin-swatch-title">종이 · 잉크</div>
+          <div class="skin-swatch-desc">손글씨 톤, 각진 카드, 또렷한 보더</div>
+        </div>
+      </div>
+      <div class="skin-swatch" data-skin="neon">
+        <span class="skin-swatch-preview" style="background:#0a0a0f;border:1px solid rgba(0,255,200,0.5);">
+          <span style="position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#00ffc8;border-radius:1px;box-shadow:0 0 8px #00ffc8;"></span>
+        </span>
+        <div class="skin-swatch-info">
+          <div class="skin-swatch-title">네온 시그널</div>
+          <div class="skin-swatch-desc">다크 테크, 글로우, 얇은 라인</div>
+        </div>
+      </div>
+      <div class="skin-swatch" data-skin="pastel">
+        <span class="skin-swatch-preview" style="background:#fff0f5;border:2px solid #ffb3d1;border-radius:12px;">
+          <span style="position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#ff8fb3;border-radius:50%;"></span>
+        </span>
+        <div class="skin-swatch-info">
+          <div class="skin-swatch-title">포실포실</div>
+          <div class="skin-swatch-desc">파스텔, 풍성한 라운드, 동글 폰트</div>
+        </div>
+      </div>
+      <div class="skin-swatch" data-skin="glass">
+        <span class="skin-swatch-preview" style="background:linear-gradient(135deg,#2a3354,#1a1f2e);border:1px solid rgba(255,255,255,0.3);border-radius:10px;">
+          <span style="position:absolute;bottom:4px;right:4px;width:14px;height:14px;background:#7c9eff;border-radius:5px;"></span>
+        </span>
+        <div class="skin-swatch-info">
+          <div class="skin-swatch-title">묵직한 필글래스</div>
+          <div class="skin-swatch-desc">깊은 남색, 프로스트 글래스, 블러</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 테마/폰트 전환 FAB -->
@@ -2725,6 +3082,37 @@ document.getElementById('settings-import-file').addEventListener('change', e => 
     themeClose.addEventListener('click', () => themeOverlay.classList.remove('open'));
     themeOverlay.addEventListener('click', e => {
       if (e.target === themeOverlay) themeOverlay.classList.remove('open');
+    });
+  }
+
+  /* ── UI 스타일(스킨) 전환 ── */
+  const SKIN_KEY = 'vstudio_skin';
+  function applySkin(skin) {
+    document.documentElement.setAttribute('data-skin', skin);
+    document.querySelectorAll('.skin-swatch').forEach(el => {
+      el.classList.toggle('active', el.dataset.skin === skin);
+    });
+  }
+  let savedSkin = 'paper';
+  try { savedSkin = localStorage.getItem(SKIN_KEY) || 'paper'; } catch {}
+  applySkin(savedSkin);
+
+  document.querySelectorAll('.skin-swatch').forEach(el => {
+    el.addEventListener('click', () => {
+      const s = el.dataset.skin;
+      applySkin(s);
+      try { localStorage.setItem(SKIN_KEY, s); } catch {}
+    });
+  });
+
+  const skinFab = document.getElementById('skin-fab');
+  const skinOverlay = document.getElementById('skin-panel-overlay');
+  const skinClose = document.getElementById('skin-panel-close');
+  if (skinFab && skinOverlay) {
+    skinFab.addEventListener('click', () => skinOverlay.classList.add('open'));
+    skinClose.addEventListener('click', () => skinOverlay.classList.remove('open'));
+    skinOverlay.addEventListener('click', e => {
+      if (e.target === skinOverlay) skinOverlay.classList.remove('open');
     });
   }
 })();
