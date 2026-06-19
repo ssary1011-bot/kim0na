@@ -485,7 +485,7 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         <label class="img-slot" id="slot-main-bg" oncontextmenu="clearSlot('main-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('main-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-main-bg"><span id="thumb-icon-main-bg">🖼</span><img id="thumb-img-main-bg"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_background_image.png</div><div class="img-slot-size">1080×1920 (xxhdpi) · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_background_image.png</div><div class="img-slot-size">1440×2880 · PNG</div></div>
           <span class="img-slot-badge" id="badge-main-bg">비어있음</span>
         </label>
         <label class="img-slot" id="slot-chat-bg" oncontextmenu="clearSlot('chat-bg',event)">
@@ -506,11 +506,17 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <div class="img-slot-info"><div class="img-slot-name">theme_passcode_background_image.png</div><div class="img-slot-size">1440×1440 · PNG</div></div>
           <span class="img-slot-badge" id="badge-passcode-bg">비어있음</span>
         </label>
+        <label class="img-slot" id="slot-splash" oncontextmenu="clearSlot('splash',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('splash',this,event)">
+          <div class="img-slot-thumb" id="thumb-splash"><span id="thumb-icon-splash">✨</span><img id="thumb-img-splash"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_splash_image.png</div><div class="img-slot-size">1440×2560 (xxhdpi) · PNG</div></div>
+          <span class="img-slot-badge" id="badge-splash">선택사항</span>
+        </label>
       </div>
     </div>
 
     <div class="img-section">
-      <div class="img-section-label">탭 아이콘</div>
+      <div class="img-section-label">탭 아이콘 (xxhdpi 114×114)</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-ico-friends" oncontextmenu="clearSlot('ico-friends',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-friends',this,event)">
@@ -530,47 +536,95 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_chats_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-chats">비어있음</span>
         </label>
+        <label class="img-slot" id="slot-ico-chats-f" oncontextmenu="clearSlot('ico-chats-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-chats-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-chats-f"><span id="thumb-icon-ico-chats-f">💬</span><img id="thumb-img-ico-chats-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_chats_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-chats-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-now" oncontextmenu="clearSlot('ico-now',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-now',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-now"><span id="thumb-icon-ico-now">#️⃣</span><img id="thumb-img-ico-now"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_now_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-now">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-now-f" oncontextmenu="clearSlot('ico-now-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-now-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-now-f"><span id="thumb-icon-ico-now-f">#️⃣</span><img id="thumb-img-ico-now-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_now_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-now-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-shopping" oncontextmenu="clearSlot('ico-shopping',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-shopping',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-shopping"><span id="thumb-icon-ico-shopping">🛒</span><img id="thumb-img-ico-shopping"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_shopping_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-shopping">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-shopping-f" oncontextmenu="clearSlot('ico-shopping-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-shopping-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-shopping-f"><span id="thumb-icon-ico-shopping-f">🛒</span><img id="thumb-img-ico-shopping-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_shopping_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-shopping-f">비어있음</span>
+        </label>
         <label class="img-slot" id="slot-ico-more" oncontextmenu="clearSlot('ico-more',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-more',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-more"><span id="thumb-icon-ico-more">⋯</span><img id="thumb-img-ico-more"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_more_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-more">비어있음</span>
         </label>
+        <label class="img-slot" id="slot-ico-more-f" oncontextmenu="clearSlot('ico-more-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-more-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-more-f"><span id="thumb-icon-ico-more-f">⋯</span><img id="thumb-img-ico-more-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_more_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-more-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-call" oncontextmenu="clearSlot('ico-call',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-call',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-call"><span id="thumb-icon-ico-call">📞</span><img id="thumb-img-ico-call"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_call_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-call">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-call-f" oncontextmenu="clearSlot('ico-call-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-call-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-call-f"><span id="thumb-icon-ico-call-f">📞</span><img id="thumb-img-ico-call-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_call_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-call-f">선택사항</span>
+        </label>
       </div>
     </div>
 
     <div class="img-section">
-      <div class="img-section-label">말풍선 이미지 (9-patch)</div>
+      <div class="img-section-label">말풍선 이미지 (9-patch · xxhdpi 124×114)</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-bubble-me1" oncontextmenu="clearSlot('bubble-me1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me1',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-me1"><span id="thumb-icon-bubble-me1">💛</span><img id="thumb-img-bubble-me1"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_me_01_image.png</div><div class="img-slot-size">자유 · .9.PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-me1">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_me_01_image.9.png</div><div class="img-slot-size">124×114 · .9.PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me1">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-me2" oncontextmenu="clearSlot('bubble-me2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me2',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-me2"><span id="thumb-icon-bubble-me2">💛</span><img id="thumb-img-bubble-me2"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_me_02_image.png</div><div class="img-slot-size">자유 · .9.PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-me2">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_me_02_image.9.png</div><div class="img-slot-size">124×114 · .9.PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me2">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-you1" oncontextmenu="clearSlot('bubble-you1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you1',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-you1"><span id="thumb-icon-bubble-you1">🤍</span><img id="thumb-img-bubble-you1"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_you_01_image.png</div><div class="img-slot-size">자유 · .9.PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-you1">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_you_01_image.9.png</div><div class="img-slot-size">124×114 · .9.PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you1">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-you2" oncontextmenu="clearSlot('bubble-you2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you2',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-you2"><span id="thumb-icon-bubble-you2">🤍</span><img id="thumb-img-bubble-you2"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_you_02_image.png</div><div class="img-slot-size">자유 · .9.PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-you2">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">theme_chatroom_bubble_you_02_image.9.png</div><div class="img-slot-size">124×114 · .9.PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you2">선택사항</span>
         </label>
       </div>
     </div>
 
     <div class="img-section">
-      <div class="img-section-label">프로필 / 잠금 코드</div>
+      <div class="img-section-label">프로필 / 친구 추가 버튼</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-profile" oncontextmenu="clearSlot('profile',event)">
           <input type="file" accept="image/*" onchange="handleSlot('profile',this,event)">
@@ -578,17 +632,71 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <div class="img-slot-info"><div class="img-slot-name">theme_profile_01_image.png</div><div class="img-slot-size">240×240 · PNG</div></div>
           <span class="img-slot-badge" id="badge-profile">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-pc-dot" oncontextmenu="clearSlot('pc-dot',event)">
-          <input type="file" accept="image/*" onchange="handleSlot('pc-dot',this,event)">
-          <div class="img-slot-thumb" id="thumb-pc-dot"><span id="thumb-icon-pc-dot">⭕</span><img id="thumb-img-pc-dot"></div>
-          <div class="img-slot-info"><div class="img-slot-name">passcode_indicator_empty.png</div><div class="img-slot-size">132×132 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-pc-dot">선택사항</span>
+        <label class="img-slot" id="slot-find-friend-btn" oncontextmenu="clearSlot('find-friend-btn',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('find-friend-btn',this,event)">
+          <div class="img-slot-thumb" id="thumb-find-friend-btn"><span id="thumb-icon-find-friend-btn">➕</span><img id="thumb-img-find-friend-btn"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_find_add_friend_button_image.png</div><div class="img-slot-size">126×102 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-find-friend-btn">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-pc-dot-checked" oncontextmenu="clearSlot('pc-dot-checked',event)">
-          <input type="file" accept="image/*" onchange="handleSlot('pc-dot-checked',this,event)">
-          <div class="img-slot-thumb" id="thumb-pc-dot-checked"><span id="thumb-icon-pc-dot-checked">🔵</span><img id="thumb-img-pc-dot-checked"></div>
-          <div class="img-slot-info"><div class="img-slot-name">passcode_indicator_active.png</div><div class="img-slot-size">132×132 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-pc-dot-checked">선택사항</span>
+        <label class="img-slot" id="slot-find-friend-btn-p" oncontextmenu="clearSlot('find-friend-btn-p',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('find-friend-btn-p',this,event)">
+          <div class="img-slot-thumb" id="thumb-find-friend-btn-p"><span id="thumb-icon-find-friend-btn-p">➕</span><img id="thumb-img-find-friend-btn-p"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_find_add_friend_button_pressed_image.png</div><div class="img-slot-size">126×102 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-find-friend-btn-p">선택사항</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="img-section">
+      <div class="img-section-label">잠금 비밀번호 도트 이미지 (132×132)</div>
+      <div class="img-grid">
+        <label class="img-slot" id="slot-pc-01" oncontextmenu="clearSlot('pc-01',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-01',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-01"><span id="thumb-icon-pc-01">⭕</span><img id="thumb-img-pc-01"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_01_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-01">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-01-c" oncontextmenu="clearSlot('pc-01-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-01-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-01-c"><span id="thumb-icon-pc-01-c">🔵</span><img id="thumb-img-pc-01-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_01_checked_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-01-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-02" oncontextmenu="clearSlot('pc-02',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-02',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-02"><span id="thumb-icon-pc-02">⭕</span><img id="thumb-img-pc-02"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_02_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-02">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-02-c" oncontextmenu="clearSlot('pc-02-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-02-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-02-c"><span id="thumb-icon-pc-02-c">🔵</span><img id="thumb-img-pc-02-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_02_checked_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-02-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-03" oncontextmenu="clearSlot('pc-03',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-03',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-03"><span id="thumb-icon-pc-03">⭕</span><img id="thumb-img-pc-03"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_03_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-03">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-03-c" oncontextmenu="clearSlot('pc-03-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-03-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-03-c"><span id="thumb-icon-pc-03-c">🔵</span><img id="thumb-img-pc-03-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_03_checked_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-03-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-04" oncontextmenu="clearSlot('pc-04',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-04',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-04"><span id="thumb-icon-pc-04">⭕</span><img id="thumb-img-pc-04"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_04_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-04">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-04-c" oncontextmenu="clearSlot('pc-04-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-04-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-04-c"><span id="thumb-icon-pc-04-c">🔵</span><img id="thumb-img-pc-04-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_passcode_04_checked_image.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-04-c">선택사항</span>
         </label>
       </div>
     </div>
@@ -808,51 +916,129 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 
     <!-- PRIMARY COLORS -->
     <div class="color-group">
-      <div class="color-group-title">주요 색상</div>
+      <div class="color-group-title">메인 텍스트 (theme_*)</div>
       <div class="color-items">
-        <div class="sub-label">헤더</div>
+        <div class="sub-label">헤더 / 섹션</div>
         <div class="color-item" onclick="pickColor('header-text')">
           <div class="color-swatch" id="sw-header-text"></div>
-          <span class="color-label">텍스트 색상</span>
-          <span class="color-hex" id="hex-header-text" contenteditable="true" onblur="hexInput('header-text',this)">#1a1a1a</span>
-          <input type="color" id="header-text" value="#1a1a1a" oninput="updateColor('header-text')">
+          <span class="color-label">헤더 타이틀</span>
+          <span class="color-hex" id="hex-header-text" contenteditable="true" onblur="hexInput('header-text',this)">#664242</span>
+          <input type="color" id="header-text" value="#664242" oninput="updateColor('header-text')">
         </div>
-        <div class="color-item" onclick="pickColor('tab-inactive')">
-          <div class="color-swatch" id="sw-tab-inactive"></div>
-          <span class="color-label">탭 텍스트 (비활성)</span>
-          <span class="color-hex" id="hex-tab-inactive" contenteditable="true" onblur="hexInput('tab-inactive',this)">#aaaaaa</span>
-          <input type="color" id="tab-inactive" value="#aaaaaa" oninput="updateColor('tab-inactive')">
+        <div class="color-item" onclick="pickColor('section-title-color')">
+          <div class="color-swatch" id="sw-section-title-color"></div>
+          <span class="color-label">섹션 타이틀</span>
+          <span class="color-hex" id="hex-section-title-color" contenteditable="true" onblur="hexInput('section-title-color',this)">#F66C6C</span>
+          <input type="color" id="section-title-color" value="#F66C6C" oninput="updateColor('section-title-color')">
         </div>
-        <div class="color-item" onclick="pickColor('tab-active')">
-          <div class="color-swatch" id="sw-tab-active"></div>
-          <span class="color-label">탭 텍스트 (활성)</span>
-          <span class="color-hex" id="hex-tab-active" contenteditable="true" onblur="hexInput('tab-active',this)">#1a1a1a</span>
-          <input type="color" id="tab-active" value="#1a1a1a" oninput="updateColor('tab-active')">
-        </div>
-        <div class="sub-label" style="margin-top:4px">메인뷰</div>
-        <div class="color-item" onclick="pickColor('main-bg-color')">
-          <div class="color-swatch" id="sw-main-bg-color"></div>
-          <span class="color-label">배경색</span>
-          <span class="color-hex" id="hex-main-bg-color" contenteditable="true" onblur="hexInput('main-bg-color',this)">#ffffff</span>
-          <input type="color" id="main-bg-color" value="#ffffff" oninput="updateColor('main-bg-color')">
-        </div>
+        <div class="sub-label" style="margin-top:4px">리스트 (이름 / 메시지 / 상태)</div>
         <div class="color-item" onclick="pickColor('main-text-color')">
           <div class="color-swatch" id="sw-main-text-color"></div>
-          <span class="color-label">텍스트 색상</span>
-          <span class="color-hex" id="hex-main-text-color" contenteditable="true" onblur="hexInput('main-text-color',this)">#1a1a1a</span>
-          <input type="color" id="main-text-color" value="#1a1a1a" oninput="updateColor('main-text-color')">
+          <span class="color-label">이름(타이틀) 색상</span>
+          <span class="color-hex" id="hex-main-text-color" contenteditable="true" onblur="hexInput('main-text-color',this)">#664242</span>
+          <input type="color" id="main-text-color" value="#664242" oninput="updateColor('main-text-color')">
         </div>
-        <div class="color-item" onclick="pickColor('status-msg-color')">
-          <div class="color-swatch" id="sw-status-msg-color"></div>
-          <span class="color-label">상태메시지 색상</span>
-          <span class="color-hex" id="hex-status-msg-color" contenteditable="true" onblur="hexInput('status-msg-color',this)">#999999</span>
-          <input type="color" id="status-msg-color" value="#999999" oninput="updateColor('status-msg-color')">
+        <div class="color-item" onclick="pickColor('main-text-pressed-color')">
+          <div class="color-swatch" id="sw-main-text-pressed-color"></div>
+          <span class="color-label">이름(타이틀) 프레스</span>
+          <span class="color-hex" id="hex-main-text-pressed-color" contenteditable="true" onblur="hexInput('main-text-pressed-color',this)">#B06B6B</span>
+          <input type="color" id="main-text-pressed-color" value="#B06B6B" oninput="updateColor('main-text-pressed-color')">
         </div>
         <div class="color-item" onclick="pickColor('last-msg-color')">
           <div class="color-swatch" id="sw-last-msg-color"></div>
-          <span class="color-label">마지막 메시지 색상</span>
-          <span class="color-hex" id="hex-last-msg-color" contenteditable="true" onblur="hexInput('last-msg-color',this)">#999999</span>
-          <input type="color" id="last-msg-color" value="#999999" oninput="updateColor('last-msg-color')">
+          <span class="color-label">마지막 메시지(라스트메세지)</span>
+          <span class="color-hex" id="hex-last-msg-color" contenteditable="true" onblur="hexInput('last-msg-color',this)">#805959</span>
+          <input type="color" id="last-msg-color" value="#805959" oninput="updateColor('last-msg-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('last-msg-pressed-color')">
+          <div class="color-swatch" id="sw-last-msg-pressed-color"></div>
+          <span class="color-label">마지막 메시지 프레스</span>
+          <span class="color-hex" id="hex-last-msg-pressed-color" contenteditable="true" onblur="hexInput('last-msg-pressed-color',this)">#B06B6B</span>
+          <input type="color" id="last-msg-pressed-color" value="#B06B6B" oninput="updateColor('last-msg-pressed-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('status-msg-color')">
+          <div class="color-swatch" id="sw-status-msg-color"></div>
+          <span class="color-label">상태메시지</span>
+          <span class="color-hex" id="hex-status-msg-color" contenteditable="true" onblur="hexInput('status-msg-color',this)">#805959</span>
+          <input type="color" id="status-msg-color" value="#805959" oninput="updateColor('status-msg-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('status-msg-pressed-color')">
+          <div class="color-swatch" id="sw-status-msg-pressed-color"></div>
+          <span class="color-label">상태메시지 프레스</span>
+          <span class="color-hex" id="hex-status-msg-pressed-color" contenteditable="true" onblur="hexInput('status-msg-pressed-color',this)">#B06B6B</span>
+          <input type="color" id="status-msg-pressed-color" value="#B06B6B" oninput="updateColor('status-msg-pressed-color')">
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <div class="color-group-title">배경 / 셀 (theme_*)</div>
+      <div class="color-items">
+        <div class="color-item" onclick="pickColor('main-bg-color')">
+          <div class="color-swatch" id="sw-main-bg-color"></div>
+          <span class="color-label">기본 배경색</span>
+          <span class="color-hex" id="hex-main-bg-color" contenteditable="true" onblur="hexInput('main-bg-color',this)">#FFDEDE</span>
+          <input type="color" id="main-bg-color" value="#FFDEDE" oninput="updateColor('main-bg-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('header-cell-color')">
+          <div class="color-swatch" id="sw-header-cell-color"></div>
+          <span class="color-label">헤더 셀 배경</span>
+          <span class="color-hex" id="hex-header-cell-color" contenteditable="true" onblur="hexInput('header-cell-color',this)">#FFDEDE</span>
+          <input type="color" id="header-cell-color" value="#FFDEDE" oninput="updateColor('header-cell-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('body-cell-color')">
+          <div class="color-swatch" id="sw-body-cell-color"></div>
+          <span class="color-label">리스트 셀 배경</span>
+          <span class="color-hex" id="hex-body-cell-color" contenteditable="true" onblur="hexInput('body-cell-color',this)">#00FFDEDE</span>
+          <input type="color" id="body-cell-color" value="#00FFDEDE" oninput="updateColor('body-cell-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('body-cell-pressed-color')">
+          <div class="color-swatch" id="sw-body-cell-pressed-color"></div>
+          <span class="color-label">리스트 셀 프레스</span>
+          <span class="color-hex" id="hex-body-cell-pressed-color" contenteditable="true" onblur="hexInput('body-cell-pressed-color',this)">#FFB3B3</span>
+          <input type="color" id="body-cell-pressed-color" value="#FFB3B3" oninput="updateColor('body-cell-pressed-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('body-cell-border-color')">
+          <div class="color-swatch" id="sw-body-cell-border-color"></div>
+          <span class="color-label">리스트 셀 보더</span>
+          <span class="color-hex" id="hex-body-cell-border-color" contenteditable="true" onblur="hexInput('body-cell-border-color',this)">#26664242</span>
+          <input type="color" id="body-cell-border-color" value="#26664242" oninput="updateColor('body-cell-border-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('body-secondary-cell-color')">
+          <div class="color-swatch" id="sw-body-secondary-cell-color"></div>
+          <span class="color-label">발견/더보기 셀 배경</span>
+          <span class="color-hex" id="hex-body-secondary-cell-color" contenteditable="true" onblur="hexInput('body-secondary-cell-color',this)">#FFDEDE</span>
+          <input type="color" id="body-secondary-cell-color" value="#FFDEDE" oninput="updateColor('body-secondary-cell-color')">
+        </div>
+      </div>
+    </div>
+
+    <div class="color-group">
+      <div class="color-group-title">서비스/피처 (theme_feature_*)</div>
+      <div class="color-items">
+        <div class="color-item" onclick="pickColor('feature-primary-color')">
+          <div class="color-swatch" id="sw-feature-primary-color"></div>
+          <span class="color-label">버튼 텍스트(선물하기 등)</span>
+          <span class="color-hex" id="hex-feature-primary-color" contenteditable="true" onblur="hexInput('feature-primary-color',this)">#805959</span>
+          <input type="color" id="feature-primary-color" value="#805959" oninput="updateColor('feature-primary-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('feature-primary-pressed-color')">
+          <div class="color-swatch" id="sw-feature-primary-pressed-color"></div>
+          <span class="color-label">버튼 텍스트 프레스</span>
+          <span class="color-hex" id="hex-feature-primary-pressed-color" contenteditable="true" onblur="hexInput('feature-primary-pressed-color',this)">#B06B6B</span>
+          <input type="color" id="feature-primary-pressed-color" value="#B06B6B" oninput="updateColor('feature-primary-pressed-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('feature-browse-tab-color')">
+          <div class="color-swatch" id="sw-feature-browse-tab-color"></div>
+          <span class="color-label">Browse 3탭 기본</span>
+          <span class="color-hex" id="hex-feature-browse-tab-color" contenteditable="true" onblur="hexInput('feature-browse-tab-color',this)">#D49B9B</span>
+          <input type="color" id="feature-browse-tab-color" value="#D49B9B" oninput="updateColor('feature-browse-tab-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('feature-browse-tab-focused-color')">
+          <div class="color-swatch" id="sw-feature-browse-tab-focused-color"></div>
+          <span class="color-label">Browse 3탭 선택</span>
+          <span class="color-hex" id="hex-feature-browse-tab-focused-color" contenteditable="true" onblur="hexInput('feature-browse-tab-focused-color',this)">#664242</span>
+          <input type="color" id="feature-browse-tab-focused-color" value="#664242" oninput="updateColor('feature-browse-tab-focused-color')">
         </div>
       </div>
     </div>
@@ -862,21 +1048,21 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
       <div class="color-items">
         <div class="color-item" onclick="pickColor('tabbar-bg-color')">
           <div class="color-swatch" id="sw-tabbar-bg-color"></div>
-          <span class="color-label">탭바 배경</span>
-          <span class="color-hex" id="hex-tabbar-bg-color" contenteditable="true" onblur="hexInput('tabbar-bg-color',this)">#ffffff</span>
-          <input type="color" id="tabbar-bg-color" value="#ffffff" oninput="updateColor('tabbar-bg-color')">
+          <span class="color-label">탭바(3,4탭) 배경</span>
+          <span class="color-hex" id="hex-tabbar-bg-color" contenteditable="true" onblur="hexInput('tabbar-bg-color',this)">#00FFFFFF</span>
+          <input type="color" id="tabbar-bg-color" value="#00FFFFFF" oninput="updateColor('tabbar-bg-color')">
         </div>
-        <div class="color-item" onclick="pickColor('tabbar-border-color')">
-          <div class="color-swatch" id="sw-tabbar-border-color"></div>
-          <span class="color-label">탭바 구분선</span>
-          <span class="color-hex" id="hex-tabbar-border-color" contenteditable="true" onblur="hexInput('tabbar-border-color',this)">#e5e5e5</span>
-          <input type="color" id="tabbar-border-color" value="#e5e5e5" oninput="updateColor('tabbar-border-color')">
+        <div class="color-item" onclick="pickColor('tab-light-badge-color')">
+          <div class="color-swatch" id="sw-tab-light-badge-color"></div>
+          <span class="color-label">탭 배지(밝은 배경용)</span>
+          <span class="color-hex" id="hex-tab-light-badge-color" contenteditable="true" onblur="hexInput('tab-light-badge-color',this)">#664242</span>
+          <input type="color" id="tab-light-badge-color" value="#664242" oninput="updateColor('tab-light-badge-color')">
         </div>
         <div class="color-item" onclick="pickColor('badge-bg-color')">
           <div class="color-swatch" id="sw-badge-bg-color"></div>
-          <span class="color-label">배지 배경</span>
-          <span class="color-hex" id="hex-badge-bg-color" contenteditable="true" onblur="hexInput('badge-bg-color',this)">#ff3b30</span>
-          <input type="color" id="badge-bg-color" value="#ff3b30" oninput="updateColor('badge-bg-color')">
+          <span class="color-label">탭 배너 배지 배경</span>
+          <span class="color-hex" id="hex-badge-bg-color" contenteditable="true" onblur="hexInput('badge-bg-color',this)">#664142</span>
+          <input type="color" id="badge-bg-color" value="#664142" oninput="updateColor('badge-bg-color')">
         </div>
       </div>
     </div>
@@ -887,44 +1073,63 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         <div class="color-item" onclick="pickColor('chat-bg-color')">
           <div class="color-swatch" id="sw-chat-bg-color"></div>
           <span class="color-label">채팅방 배경색</span>
-          <span class="color-hex" id="hex-chat-bg-color" contenteditable="true" onblur="hexInput('chat-bg-color',this)">#b2c4de</span>
-          <input type="color" id="chat-bg-color" value="#b2c4de" oninput="updateColor('chat-bg-color')">
-        </div>
-        <div class="color-item" onclick="pickColor('my-bubble-bg')">
-          <div class="color-swatch" id="sw-my-bubble-bg"></div>
-          <span class="color-label">보낸 말풍선 배경</span>
-          <span class="color-hex" id="hex-my-bubble-bg" contenteditable="true" onblur="hexInput('my-bubble-bg',this)">#FAE100</span>
-          <input type="color" id="my-bubble-bg" value="#FAE100" oninput="updateColor('my-bubble-bg')">
-        </div>
-        <div class="color-item" onclick="pickColor('other-bubble-bg')">
-          <div class="color-swatch" id="sw-other-bubble-bg"></div>
-          <span class="color-label">받은 말풍선 배경</span>
-          <span class="color-hex" id="hex-other-bubble-bg" contenteditable="true" onblur="hexInput('other-bubble-bg',this)">#ffffff</span>
-          <input type="color" id="other-bubble-bg" value="#ffffff" oninput="updateColor('other-bubble-bg')">
+          <span class="color-hex" id="hex-chat-bg-color" contenteditable="true" onblur="hexInput('chat-bg-color',this)">#FFDEDE</span>
+          <input type="color" id="chat-bg-color" value="#FFDEDE" oninput="updateColor('chat-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('my-bubble-text')">
           <div class="color-swatch" id="sw-my-bubble-text"></div>
           <span class="color-label">보낸 말풍선 텍스트</span>
-          <span class="color-hex" id="hex-my-bubble-text" contenteditable="true" onblur="hexInput('my-bubble-text',this)">#1a1a1a</span>
-          <input type="color" id="my-bubble-text" value="#1a1a1a" oninput="updateColor('my-bubble-text')">
+          <span class="color-hex" id="hex-my-bubble-text" contenteditable="true" onblur="hexInput('my-bubble-text',this)">#FFFFFF</span>
+          <input type="color" id="my-bubble-text" value="#FFFFFF" oninput="updateColor('my-bubble-text')">
         </div>
         <div class="color-item" onclick="pickColor('other-bubble-text')">
           <div class="color-swatch" id="sw-other-bubble-text"></div>
           <span class="color-label">받은 말풍선 텍스트</span>
-          <span class="color-hex" id="hex-other-bubble-text" contenteditable="true" onblur="hexInput('other-bubble-text',this)">#1a1a1a</span>
-          <input type="color" id="other-bubble-text" value="#1a1a1a" oninput="updateColor('other-bubble-text')">
+          <span class="color-hex" id="hex-other-bubble-text" contenteditable="true" onblur="hexInput('other-bubble-text',this)">#4D4D4D</span>
+          <input type="color" id="other-bubble-text" value="#4D4D4D" oninput="updateColor('other-bubble-text')">
         </div>
         <div class="color-item" onclick="pickColor('unread-count-color')">
           <div class="color-swatch" id="sw-unread-count-color"></div>
           <span class="color-label">안읽은 숫자</span>
-          <span class="color-hex" id="hex-unread-count-color" contenteditable="true" onblur="hexInput('unread-count-color',this)">#FAE100</span>
-          <input type="color" id="unread-count-color" value="#FAE100" oninput="updateColor('unread-count-color')">
+          <span class="color-hex" id="hex-unread-count-color" contenteditable="true" onblur="hexInput('unread-count-color',this)">#FF7F7F</span>
+          <input type="color" id="unread-count-color" value="#FF7F7F" oninput="updateColor('unread-count-color')">
+        </div>
+        <div class="sub-label" style="margin-top:4px">입력바</div>
+        <div class="color-item" onclick="pickColor('inputbar-text')">
+          <div class="color-swatch" id="sw-inputbar-text"></div>
+          <span class="color-label">입력창 텍스트</span>
+          <span class="color-hex" id="hex-inputbar-text" contenteditable="true" onblur="hexInput('inputbar-text',this)">#191919</span>
+          <input type="color" id="inputbar-text" value="#191919" oninput="updateColor('inputbar-text')">
         </div>
         <div class="color-item" onclick="pickColor('inputbar-bg')">
           <div class="color-swatch" id="sw-inputbar-bg"></div>
           <span class="color-label">입력창 배경</span>
-          <span class="color-hex" id="hex-inputbar-bg" contenteditable="true" onblur="hexInput('inputbar-bg',this)">#ffffff</span>
-          <input type="color" id="inputbar-bg" value="#ffffff" oninput="updateColor('inputbar-bg')">
+          <span class="color-hex" id="hex-inputbar-bg" contenteditable="true" onblur="hexInput('inputbar-bg',this)">#FFFFFF</span>
+          <input type="color" id="inputbar-bg" value="#FFFFFF" oninput="updateColor('inputbar-bg')">
+        </div>
+        <div class="color-item" onclick="pickColor('inputbar-menu-icon-color')">
+          <div class="color-swatch" id="sw-inputbar-menu-icon-color"></div>
+          <span class="color-label">메뉴 아이콘 색상</span>
+          <span class="color-hex" id="hex-inputbar-menu-icon-color" contenteditable="true" onblur="hexInput('inputbar-menu-icon-color',this)">#E86464</span>
+          <input type="color" id="inputbar-menu-icon-color" value="#E86464" oninput="updateColor('inputbar-menu-icon-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('inputbar-menu-button-color')">
+          <div class="color-swatch" id="sw-inputbar-menu-button-color"></div>
+          <span class="color-label">메뉴 버튼/인풋 배경</span>
+          <span class="color-hex" id="hex-inputbar-menu-button-color" contenteditable="true" onblur="hexInput('inputbar-menu-button-color',this)">#0A000000</span>
+          <input type="color" id="inputbar-menu-button-color" value="#0A000000" oninput="updateColor('inputbar-menu-button-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('inputbar-send-icon-color')">
+          <div class="color-swatch" id="sw-inputbar-send-icon-color"></div>
+          <span class="color-label">보내기 버튼 아이콘</span>
+          <span class="color-hex" id="hex-inputbar-send-icon-color" contenteditable="true" onblur="hexInput('inputbar-send-icon-color',this)">#FFFFFF</span>
+          <input type="color" id="inputbar-send-icon-color" value="#FFFFFF" oninput="updateColor('inputbar-send-icon-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('inputbar-send-button-color')">
+          <div class="color-swatch" id="sw-inputbar-send-button-color"></div>
+          <span class="color-label">보내기 버튼 배경</span>
+          <span class="color-hex" id="hex-inputbar-send-button-color" contenteditable="true" onblur="hexInput('inputbar-send-button-color',this)">#FF7F7F</span>
+          <input type="color" id="inputbar-send-button-color" value="#FF7F7F" oninput="updateColor('inputbar-send-button-color')">
         </div>
       </div>
     </div>
@@ -934,64 +1139,90 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
       <div class="color-items">
         <div class="color-item" onclick="pickColor('passcode-bg-color')">
           <div class="color-swatch" id="sw-passcode-bg-color"></div>
-          <span class="color-label">잠금화면 배경색</span>
-          <span class="color-hex" id="hex-passcode-bg-color" contenteditable="true" onblur="hexInput('passcode-bg-color',this)">#fff8f5</span>
-          <input type="color" id="passcode-bg-color" value="#fff8f5" oninput="updateColor('passcode-bg-color')">
+          <span class="color-label">잠금화면/상태바 배경색</span>
+          <span class="color-hex" id="hex-passcode-bg-color" contenteditable="true" onblur="hexInput('passcode-bg-color',this)">#FCC5C5</span>
+          <input type="color" id="passcode-bg-color" value="#FCC5C5" oninput="updateColor('passcode-bg-color')">
         </div>
         <div class="color-item" onclick="pickColor('passcode-title-color')">
           <div class="color-swatch" id="sw-passcode-title-color"></div>
-          <span class="color-label">잠금화면 타이틀</span>
-          <span class="color-hex" id="hex-passcode-title-color" contenteditable="true" onblur="hexInput('passcode-title-color',this)">#333333</span>
-          <input type="color" id="passcode-title-color" value="#333333" oninput="updateColor('passcode-title-color')">
+          <span class="color-label">타이틀/서브텍스트</span>
+          <span class="color-hex" id="hex-passcode-title-color" contenteditable="true" onblur="hexInput('passcode-title-color',this)">#664242</span>
+          <input type="color" id="passcode-title-color" value="#664242" oninput="updateColor('passcode-title-color')">
+        </div>
+        <div class="color-item" onclick="pickColor('keypad-text')">
+          <div class="color-swatch" id="sw-keypad-text"></div>
+          <span class="color-label">키패드 숫자 색상</span>
+          <span class="color-hex" id="hex-keypad-text" contenteditable="true" onblur="hexInput('keypad-text',this)">#664242</span>
+          <input type="color" id="keypad-text" value="#664242" oninput="updateColor('keypad-text')">
+        </div>
+        <div class="color-item" onclick="pickColor('keypad-pressed-color')">
+          <div class="color-swatch" id="sw-keypad-pressed-color"></div>
+          <span class="color-label">키패드 프레스 셀렉터</span>
+          <span class="color-hex" id="hex-keypad-pressed-color" contenteditable="true" onblur="hexInput('keypad-pressed-color',this)">#CCB8B8</span>
+          <input type="color" id="keypad-pressed-color" value="#CCB8B8" oninput="updateColor('keypad-pressed-color')">
         </div>
         <div class="color-item" onclick="pickColor('keypad-bg')">
           <div class="color-swatch" id="sw-keypad-bg"></div>
           <span class="color-label">키패드 배경</span>
-          <span class="color-hex" id="hex-keypad-bg" contenteditable="true" onblur="hexInput('keypad-bg',this)">#ffffff</span>
-          <input type="color" id="keypad-bg" value="#ffffff" oninput="updateColor('keypad-bg')">
+          <span class="color-hex" id="hex-keypad-bg" contenteditable="true" onblur="hexInput('keypad-bg',this)">#FFF2F2</span>
+          <input type="color" id="keypad-bg" value="#FFF2F2" oninput="updateColor('keypad-bg')">
         </div>
-        <div class="color-item" onclick="pickColor('keypad-text')">
-          <div class="color-swatch" id="sw-keypad-text"></div>
-          <span class="color-label">키패드 텍스트</span>
-          <span class="color-hex" id="hex-keypad-text" contenteditable="true" onblur="hexInput('keypad-text',this)">#333333</span>
-          <input type="color" id="keypad-text" value="#333333" oninput="updateColor('keypad-text')">
+        <div class="color-item" onclick="pickColor('keypad-pressed-bg')">
+          <div class="color-swatch" id="sw-keypad-pressed-bg"></div>
+          <span class="color-label">키패드 프레스 배경</span>
+          <span class="color-hex" id="hex-keypad-pressed-bg" contenteditable="true" onblur="hexInput('keypad-pressed-bg',this)">#99FFDEDE</span>
+          <input type="color" id="keypad-pressed-bg" value="#99FFDEDE" oninput="updateColor('keypad-pressed-bg')">
         </div>
         <div class="color-item" onclick="pickColor('dot-color')">
           <div class="color-swatch" id="sw-dot-color"></div>
-          <span class="color-label">도트 색상</span>
-          <span class="color-hex" id="hex-dot-color" contenteditable="true" onblur="hexInput('dot-color',this)">#666666</span>
-          <input type="color" id="dot-color" value="#666666" oninput="updateColor('dot-color')">
+          <span class="color-label">잠금패턴 라인 색상</span>
+          <span class="color-hex" id="hex-dot-color" contenteditable="true" onblur="hexInput('dot-color',this)">#FCC5C5</span>
+          <input type="color" id="dot-color" value="#FCC5C5" oninput="updateColor('dot-color')">
         </div>
       </div>
     </div>
 
     <div class="color-group">
-      <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-bottom:4px" onclick="toggleDetailColors()">▸ 세부 색상 조절</div>
+      <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-bottom:4px" onclick="toggleDetailColors()">▸ 세부 색상 (전달/알림 배너)</div>
       <div id="detail-colors" style="display:none">
         <div class="color-items">
+          <div class="sub-label">전달완료 배너 (Direct Share)</div>
+          <div class="color-item" onclick="pickColor('direct-share-text-color')">
+            <div class="color-swatch" id="sw-direct-share-text-color"></div>
+            <span class="color-label">전달완료 텍스트</span>
+            <span class="color-hex" id="hex-direct-share-text-color" contenteditable="true" onblur="hexInput('direct-share-text-color',this)">#664242</span>
+            <input type="color" id="direct-share-text-color" value="#664242" oninput="updateColor('direct-share-text-color')">
+          </div>
+          <div class="color-item" onclick="pickColor('direct-share-button-color')">
+            <div class="color-swatch" id="sw-direct-share-button-color"></div>
+            <span class="color-label">전달완료 버튼 텍스트</span>
+            <span class="color-hex" id="hex-direct-share-button-color" contenteditable="true" onblur="hexInput('direct-share-button-color',this)">#E87D7D</span>
+            <input type="color" id="direct-share-button-color" value="#E87D7D" oninput="updateColor('direct-share-button-color')">
+          </div>
           <div class="color-item" onclick="pickColor('header-bg-color')">
             <div class="color-swatch" id="sw-header-bg-color"></div>
-            <span class="color-label">헤더 배경색</span>
-            <span class="color-hex" id="hex-header-bg-color" contenteditable="true" onblur="hexInput('header-bg-color',this)">#ffffff</span>
-            <input type="color" id="header-bg-color" value="#ffffff" oninput="updateColor('header-bg-color')">
+            <span class="color-label">전달완료 배경</span>
+            <span class="color-hex" id="hex-header-bg-color" contenteditable="true" onblur="hexInput('header-bg-color',this)">#FFF2F2</span>
+            <input type="color" id="header-bg-color" value="#FFF2F2" oninput="updateColor('header-bg-color')">
           </div>
+          <div class="sub-label" style="margin-top:4px">메시지 알림 팝업/토스트</div>
           <div class="color-item" onclick="pickColor('list-bg-color')">
             <div class="color-swatch" id="sw-list-bg-color"></div>
-            <span class="color-label">리스트 배경</span>
-            <span class="color-hex" id="hex-list-bg-color" contenteditable="true" onblur="hexInput('list-bg-color',this)">#ffffff</span>
-            <input type="color" id="list-bg-color" value="#ffffff" oninput="updateColor('list-bg-color')">
-          </div>
-          <div class="color-item" onclick="pickColor('divider-color')">
-            <div class="color-swatch" id="sw-divider-color"></div>
-            <span class="color-label">구분선 색상</span>
-            <span class="color-hex" id="hex-divider-color" contenteditable="true" onblur="hexInput('divider-color',this)">#e5e5e5</span>
-            <input type="color" id="divider-color" value="#e5e5e5" oninput="updateColor('divider-color')">
+            <span class="color-label">알림 텍스트</span>
+            <span class="color-hex" id="hex-list-bg-color" contenteditable="true" onblur="hexInput('list-bg-color',this)">#664242</span>
+            <input type="color" id="list-bg-color" value="#664242" oninput="updateColor('list-bg-color')">
           </div>
           <div class="color-item" onclick="pickColor('noti-bg-color')">
             <div class="color-swatch" id="sw-noti-bg-color"></div>
             <span class="color-label">알림 배경</span>
-            <span class="color-hex" id="hex-noti-bg-color" contenteditable="true" onblur="hexInput('noti-bg-color',this)">#ffffff</span>
-            <input type="color" id="noti-bg-color" value="#ffffff" oninput="updateColor('noti-bg-color')">
+            <span class="color-hex" id="hex-noti-bg-color" contenteditable="true" onblur="hexInput('noti-bg-color',this)">#FFD4D4</span>
+            <input type="color" id="noti-bg-color" value="#FFD4D4" oninput="updateColor('noti-bg-color')">
+          </div>
+          <div class="color-item" onclick="pickColor('divider-color')">
+            <div class="color-swatch" id="sw-divider-color"></div>
+            <span class="color-label">알림 배경 프레스</span>
+            <span class="color-hex" id="hex-divider-color" contenteditable="true" onblur="hexInput('divider-color',this)">#FFB3B3</span>
+            <input type="color" id="divider-color" value="#FFB3B3" oninput="updateColor('divider-color')">
           </div>
         </div>
       </div>
@@ -1272,68 +1503,33 @@ function saveColorSet() { showToast('색상 세트 저장됨 ✓', 'success'); }
 
 // ── EXPORT ──
 const KAKAO_COLOR_MAP = {
-  /* 공식 가이드 26.3.0 colors.xml 키 */
-  'main-bg-color':       'theme_background_color',
-  'header-bg-color':     'theme_header_cell_color',
-  'header-text':         'theme_header_color',
-  'main-text-color':     'theme_title_color',
-  'status-msg-color':    'theme_description_color',
-  'last-msg-color':      'theme_description_color',
-  'divider-color':       'theme_body_cell_border_color',
-  'list-bg-color':       'theme_paragraph_color',
-  'section-title-color': 'theme_section_title_color',
-  'tab-inactive':        'theme_maintab_cell_color',
-  'tab-active':          'theme_header_color',
-  'tabbar-bg-color':     'theme_maintab_cell_color',
-  'tabbar-border-color': 'theme_body_cell_border_color',
-  'badge-bg-color':      'theme_tab_bannerbadge_background_color',
-  'chat-bg-color':       'theme_chatroom_background_color',
-  'my-bubble-bg':        'theme_chatroom_bubble_me_color',
-  'my-bubble-text':      'theme_chatroom_bubble_me_color',
-  'other-bubble-bg':     'theme_chatroom_bubble_you_color',
-  'other-bubble-text':   'theme_chatroom_bubble_you_color',
-  'unread-count-color':  'theme_chatroom_unread_count_color',
-  'inputbar-bg':         'theme_chatroom_input_bar_background_color',
-  'passcode-bg-color':   'theme_passcode_background_color',
-  'passcode-title-color':'theme_passcode_color',
-  'keypad-bg':           'theme_passcode_keypad_background_color',
-  'keypad-text':         'theme_passcode_keypad_color',
-  'dot-color':           'theme_passcode_color',
-  'noti-bg-color':       'theme_notification_background_color',
+  'header-text':'myprofile_name_text_color','tab-inactive':'bottom_tab_normal_icon_color','tab-active':'bottom_tab_selected_icon_color',
+  'main-bg-color':'friends_bg_color','main-text-color':'friends_name_text_color','status-msg-color':'friends_status_message_text_color',
+  'last-msg-color':'chat_list_last_message_text_color','tabbar-bg-color':'bottom_tab_bg_color','tabbar-border-color':'bottom_tab_separator_color',
+  'badge-bg-color':'badge_bg_color','chat-bg-color':'chat_bg_color','my-bubble-bg':'chat_msg_right_bg_color',
+  'my-bubble-text':'chat_msg_right_text_color','other-bubble-bg':'chat_msg_left_bg_color','other-bubble-text':'chat_msg_left_text_color',
+  'unread-count-color':'chat_msg_right_unread_count_text_color','inputbar-bg':'chat_input_bg_color','passcode-bg-color':'passcode_bg_color',
+  'passcode-title-color':'passcode_title_text_color','keypad-bg':'passcode_key_bg_color','keypad-text':'passcode_key_text_color',
+  'dot-color':'passcode_indicator_active_color','header-bg-color':'actionbar_bg_color','list-bg-color':'chat_list_bg_color',
+  'divider-color':'list_divider_color','noti-bg-color':'notification_bg_color',
 };
 const KAKAO_IMAGE_MAP = {
-  /* 공식 가이드 26.3.0 실제 파일명 (drawable-xxhdpi 폴더) */
-  'main-bg':       'theme_background_image.png',
-  'chat-bg':       'theme_chatroom_background_image.png',
-  'tabbar-bg':     'theme_maintab_cell_image.9.png',
-  'passcode-bg':   'theme_passcode_background_image.png',
-  'profile':       'theme_profile_01_image.png',
-  'ico-friends':   'theme_maintab_ico_friends_image.png',
-  'ico-friends-f': 'theme_maintab_ico_friends_focused_image.png',
-  'ico-chats':     'theme_maintab_ico_chats_image.png',
-  'ico-more':      'theme_maintab_ico_more_image.png',
-  'bubble-me1':    'theme_chatroom_bubble_me_01_image.png',
-  'bubble-me2':    'theme_chatroom_bubble_me_02_image.png',
-  'bubble-you1':   'theme_chatroom_bubble_you_01_image.png',
-  'bubble-you2':   'theme_chatroom_bubble_you_02_image.png',
-  'pc-dot':        'theme_passcode_background_image.png',
-  'pc-dot-checked':'theme_passcode_background_image.png',
+  'main-bg':'bg_main.png','chat-bg':'bg_chat_room.png','tabbar-bg':'bg_bottom_tab.9.png',
+  'passcode-bg':'bg_passcode.png','profile':'default_profile_image.png',
+  'ico-friends':'tab_home_nor.png','ico-friends-f':'tab_home_sel.png','ico-chats':'tab_chat_nor.png','ico-more':'tab_more_nor.png',
+  'bubble-me1':'chat_bubble_right_01.9.png','bubble-me2':'chat_bubble_right_02.9.png',
+  'bubble-you1':'chat_bubble_left_01.9.png','bubble-you2':'chat_bubble_left_02.9.png',
+  'pc-dot':'passcode_indicator_empty.png','pc-dot-checked':'passcode_indicator_active.png',
 };
 function hexToArgb(hex) {
-  /* 공식 가이드: #aarrggbb 또는 #rrggbb 형식 */
   const h = hex.replace('#','');
-  if (h.length === 6) return '#ff' + h;  /* 알파 ff (불투명) 추가 */
-  if (h.length === 8) return '#' + h;    /* 이미 aarrggbb */
+  if (h.length === 6) return '#ff' + h;
+  if (h.length === 8) return '#' + h;
   return '#ff000000';
 }
 function buildColorsXml(colors) {
-  /* 공식 가이드: colors.xml 형식 #aarrggbb */
   const lines = ['<?xml version="1.0" encoding="utf-8"?>','<resources>'];
-  /* 중복 키 제거 - KAKAO_COLOR_MAP에서 unique한 xmlKey만 사용 */
-  const seen = new Set();
   Object.entries(KAKAO_COLOR_MAP).forEach(([uiKey, xmlKey]) => {
-    if (seen.has(xmlKey)) return;
-    seen.add(xmlKey);
     const val = colors[uiKey] || '#ff000000';
     lines.push(`    <color name="${xmlKey}">${hexToArgb(val)}</color>`);
   });
@@ -1344,7 +1540,7 @@ function buildManifest(pkgName, themeName) {
   return `<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="${pkgName}">
-    <uses-permission android:name="com.kakao.talk.v2.theme" />
+    <uses-permission android:name="com.kakao.talk.theme.V1"/>
     <application
         android:label="${themeName}"
         android:icon="@drawable/ic_launcher">
@@ -1363,11 +1559,12 @@ function buildManifest(pkgName, themeName) {
 </manifest>`;
 }
 function buildStringsXml(themeName, author) {
-  /* 공식 가이드 strings.xml 형식 */
   return `<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="theme_title">${themeName}</string>
     <string name="app_name">${themeName}</string>
+    <string name="kakao_theme_name">${themeName}</string>
+    <string name="kakao_theme_author">${author}</string>
+    <string name="kakao_theme_version">1.0</string>
 </resources>`;
 }
 function buildGuide(pkgName, themeName) {
@@ -1386,14 +1583,10 @@ theme-source/
   AndroidManifest.xml
   res/
     values/
-      colors.xml              ← 색상값 (#aarrggbb 형식)
-      strings.xml             ← 테마 이름 (theme_title, app_name)
-    drawable-xhdpi/           ← 720×1280 스플래시
-    drawable-xxhdpi/          ← 1080×1920 일반 이미지 (주요 해상도)
-    drawable-land-xhdpi/      ← 1280×720 가로 스플래시
-    drawable-land-xxhdpi/     ← 2560×1440 가로
-    drawable-sw600dp/         ← 태블릿 대응
-    drawable-nodpi/           ← 프로필 전체보기 320×320
+      colors.xml       ← 색상값
+      strings.xml      ← 테마 이름/제작자
+    drawable-xxhdpi/
+      (업로드한 이미지들)
   BUILD_GUIDE.txt
 
 ---------------------------------------------------
