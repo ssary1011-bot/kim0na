@@ -6,46 +6,88 @@
 <title>김나영 AI 활용 제작 사이트 모음</title>
 <style>
   :root{
-    --bg: #FFF7EC;
-    --bg-soft: #FFEFD9;
-    --ink: #4A3B2E;
-    --ink-soft: #8C7762;
-    --peach: #FFB199;
-    --peach-deep: #FF8F75;
-    --mint: #9FE3C5;
-    --mint-deep: #5BC79E;
-    --sky: #A9D6F5;
-    --sky-deep: #6FB6E8;
-    --butter: #FFE08A;
-    --butter-deep: #FFC93C;
-    --lilac: #D7C4F2;
-    --lilac-deep: #B295E0;
-    --rose: #F5B8C7;
-    --rose-deep: #E8849F;
-    --sand: #E3D2B0;
-    --sand-deep: #C9A96B;
-    --card-shadow: 0 10px 0 rgba(74,59,46,0.10);
+    /* 기본(원래) 디자인 값 — 테마 적용 시 아래 --t- 변수들로 덮어씌워짐 */
+    --t-bg: #FFF7EC;
+    --t-card-bg: #FFFFFF;
+    --t-text: #4A3B2E;
+    --t-text-soft: #8C7762;
+    --t-accent: #FF8F75;
+    --t-accent-text: #FFFFFF;
+    --t-accent-soft: #FFE0D6;
+    --t-radius: 26px;
+    --t-radius-sm: 18px;
+    --t-radius-pill: 999px;
+    --t-shadow: 0 10px 0 rgba(74,59,46,0.10);
+    --t-shadow-soft: 0 4px 12px rgba(74,59,46,0.08);
+    --t-border-width: 0px;
+    --t-border-color: transparent;
+    --t-border-width-2: 3px;
+    --t-border-color-2: #FFEFD9;
+    --t-font-display: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    --t-font-body: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    --t-display-weight: 800;
+    --t-letter-spacing: -0.5px;
+    --t-blur: none;
+
+    /* 카드 아이콘 배경용 보조 팔레트 (테마가 바뀌어도 7개 유지) */
+    --c1: #FFB199; --c1b:#FFD9CC;
+    --c2: #A9D6F5; --c2b:#D6EBFA;
+    --c3: #FFE08A; --c3b:#FFF1C2;
+    --c4: #9FE3C5; --c4b:#D3F2E5;
+    --c5: #D7C4F2; --c5b:#EBE0FA;
+    --c6: #F5B8C7; --c6b:#FAD8E1;
+    --c7: #E3D2B0; --c7b:#F0E5CD;
   }
 
   *{ box-sizing: border-box; }
 
   body{
     margin:0;
-    background: var(--bg);
+    background: var(--t-bg);
+    background-attachment: fixed;
+    font-family: var(--t-font-body);
+    color: var(--t-text);
+    min-height: 100vh;
+    transition: background 0.35s ease, color 0.35s ease;
+  }
+
+  /* 기본 테마일 때만 보이는 은은한 배경 장식 (커스텀 테마에서는 굳이 안 보여도 무방) */
+  body.theme-default{
     background-image:
       radial-gradient(circle at 8% 12%, rgba(255,177,153,0.25) 0, transparent 38%),
       radial-gradient(circle at 92% 18%, rgba(159,227,197,0.28) 0, transparent 40%),
       radial-gradient(circle at 50% 95%, rgba(169,214,245,0.25) 0, transparent 45%);
-    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
-    color: var(--ink);
-    min-height: 100vh;
   }
 
   .wrap{
     max-width: 980px;
     margin: 0 auto;
     padding: 56px 24px 80px;
+    position: relative;
   }
+
+  /* ---------- 테마 바꾸기 버튼 ---------- */
+  .theme-toggle-btn{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 200;
+    display:flex;
+    align-items:center;
+    gap: 7px;
+    background: var(--t-card-bg);
+    color: var(--t-text);
+    border: var(--t-border-width-2) solid var(--t-border-color-2);
+    border-radius: var(--t-radius-pill);
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--t-font-body);
+    cursor: pointer;
+    box-shadow: var(--t-shadow-soft);
+    transition: transform 0.15s ease;
+  }
+  .theme-toggle-btn:hover{ transform: translateY(-2px); }
 
   /* ---------- Header ---------- */
   .hero{
@@ -58,34 +100,35 @@
     display:inline-flex;
     align-items:center;
     gap:6px;
-    background: white;
-    border: 2px solid var(--bg-soft);
-    border-radius: 999px;
+    background: var(--t-card-bg);
+    border: 2px solid var(--t-accent-soft);
+    border-radius: var(--t-radius-pill);
     padding: 6px 16px;
     font-size: 13px;
     font-weight: 700;
-    color: var(--peach-deep);
+    color: var(--t-accent);
     margin-bottom: 18px;
     box-shadow: 0 3px 0 rgba(74,59,46,0.06);
   }
 
   .hero h1{
+    font-family: var(--t-font-display);
     font-size: clamp(32px, 6vw, 52px);
     line-height: 1.25;
     margin: 0 0 14px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-weight: var(--t-display-weight);
+    letter-spacing: var(--t-letter-spacing);
   }
 
   .hero h1 .accent{
     display:inline-block;
     position: relative;
-    color: var(--peach-deep);
+    color: var(--t-accent);
   }
 
   .hero p{
     font-size: 16px;
-    color: var(--ink-soft);
+    color: var(--t-text-soft);
     margin: 0;
     font-weight: 500;
   }
@@ -100,12 +143,14 @@
     width: 9px; height: 9px;
     border-radius: 50%;
     display:inline-block;
+    background: var(--t-accent);
+    opacity: 0.55;
   }
-  .dots span:nth-child(1){ background: var(--peach-deep); }
-  .dots span:nth-child(2){ background: var(--butter-deep); }
-  .dots span:nth-child(3){ background: var(--mint-deep); }
-  .dots span:nth-child(4){ background: var(--sky-deep); }
-  .dots span:nth-child(5){ background: var(--lilac-deep); }
+  .dots span:nth-child(1){ opacity: 1; }
+  .dots span:nth-child(2){ opacity: 0.85; }
+  .dots span:nth-child(3){ opacity: 0.7; }
+  .dots span:nth-child(4){ opacity: 0.55; }
+  .dots span:nth-child(5){ opacity: 0.4; }
 
   /* ---------- Grid ---------- */
   .grid{
@@ -119,16 +164,17 @@
   }
 
   .card{
-    background: white;
-    border-radius: 26px;
+    background: var(--t-card-bg);
+    border-radius: var(--t-radius);
     padding: 28px 26px;
     text-decoration:none;
-    color: var(--ink);
+    color: var(--t-text);
     display:flex;
     flex-direction: column;
     gap: 14px;
-    border: 3px solid var(--bg-soft);
-    box-shadow: var(--card-shadow);
+    border: var(--t-border-width-2) solid var(--t-border-color-2);
+    box-shadow: var(--t-shadow);
+    backdrop-filter: var(--t-blur);
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     position: relative;
     overflow: hidden;
@@ -136,18 +182,17 @@
 
   .card:hover{
     transform: translateY(-5px);
-    box-shadow: 0 16px 0 rgba(74,59,46,0.12);
+    box-shadow: var(--t-shadow-soft);
   }
 
   .card:active{
     transform: translateY(-1px);
-    box-shadow: 0 4px 0 rgba(74,59,46,0.10);
   }
 
   .card .icon{
     width: 56px;
     height: 56px;
-    border-radius: 18px;
+    border-radius: var(--t-radius-sm);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -155,31 +200,32 @@
     flex-shrink:0;
   }
 
-  .card.c1 .icon{ background: var(--peach); }
-  .card.c2 .icon{ background: var(--sky); }
-  .card.c3 .icon{ background: var(--butter); }
-  .card.c4 .icon{ background: var(--mint); }
-  .card.c5 .icon{ background: var(--lilac); }
-  .card.c6 .icon{ background: var(--rose); }
-  .card.c7 .icon{ background: var(--sand); }
+  .card.c1 .icon{ background: var(--c1); }
+  .card.c2 .icon{ background: var(--c2); }
+  .card.c3 .icon{ background: var(--c3); }
+  .card.c4 .icon{ background: var(--c4); }
+  .card.c5 .icon{ background: var(--c5); }
+  .card.c6 .icon{ background: var(--c6); }
+  .card.c7 .icon{ background: var(--c7); }
 
-  .card.c1{ border-color: #FFD9CC; }
-  .card.c2{ border-color: #D6EBFA; }
-  .card.c3{ border-color: #FFF1C2; }
-  .card.c4{ border-color: #D3F2E5; }
-  .card.c5{ border-color: #EBE0FA; }
-  .card.c6{ border-color: #FAD8E1; }
-  .card.c7{ border-color: #F0E5CD; }
+  .card.c1{ border-color: var(--t-border-color-2); }
+  .card.c2{ border-color: var(--t-border-color-2); }
+  .card.c3{ border-color: var(--t-border-color-2); }
+  .card.c4{ border-color: var(--t-border-color-2); }
+  .card.c5{ border-color: var(--t-border-color-2); }
+  .card.c6{ border-color: var(--t-border-color-2); }
+  .card.c7{ border-color: var(--t-border-color-2); }
 
   .card h2{
+    font-family: var(--t-font-display);
     font-size: 19px;
     margin: 0;
-    font-weight: 800;
+    font-weight: var(--t-display-weight);
   }
 
   .card p{
     font-size: 14px;
-    color: var(--ink-soft);
+    color: var(--t-text-soft);
     margin: 0;
     line-height: 1.5;
     font-weight: 500;
@@ -190,10 +236,10 @@
     align-self:flex-start;
     font-size: 13px;
     font-weight: 700;
-    color: var(--ink);
-    background: var(--bg-soft);
+    color: var(--t-accent-text);
+    background: var(--t-accent);
     padding: 7px 14px;
-    border-radius: 999px;
+    border-radius: var(--t-radius-pill);
     display:inline-flex;
     align-items:center;
     gap: 5px;
@@ -217,17 +263,153 @@
   footer{
     text-align:center;
     margin-top: 60px;
-    color: var(--ink-soft);
+    color: var(--t-text-soft);
     font-size: 13px;
     font-weight: 500;
   }
 
   footer .heart{
-    color: var(--peach-deep);
+    color: var(--t-accent);
+  }
+
+  /* ============ 테마 선택 모달 ============ */
+  .theme-modal-overlay{
+    display:none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,16,10,0.45);
+    z-index: 300;
+    align-items:center;
+    justify-content:center;
+    padding: 24px;
+  }
+  .theme-modal-overlay.open{ display:flex; }
+
+  .theme-modal{
+    background: #FAF8F4;
+    width: min(880px, 100%);
+    max-height: 82vh;
+    border-radius: 22px;
+    overflow:hidden;
+    display:flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    font-family: -apple-system, "Apple SD Gothic Neo", sans-serif;
+  }
+
+  .theme-modal-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid #ECE6D8;
+    flex-shrink:0;
+  }
+  .theme-modal-header h3{
+    margin:0;
+    font-size: 16px;
+    font-weight: 800;
+    color: #3A332A;
+  }
+  .theme-modal-header .count{
+    font-size: 12px;
+    color: #9C9080;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  .theme-modal-close{
+    background: #F0EAE0;
+    border: none;
+    border-radius: 999px;
+    width: 32px; height: 32px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #5A4F40;
+  }
+  .theme-modal-close:hover{ background: #E5DDCE; }
+
+  .theme-modal-body{
+    overflow-y: auto;
+    padding: 16px 18px 24px;
+    flex-grow:1;
+  }
+
+  .theme-modal-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+  }
+
+  .theme-modal-cat{
+    grid-column: 1 / -1;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #B0A48E;
+    margin: 14px 0 2px;
+  }
+  .theme-modal-cat:first-child{ margin-top: 0; }
+
+  .theme-mini-card{
+    border: 2px solid #ECE6D8;
+    border-radius: 14px;
+    padding: 12px;
+    cursor: pointer;
+    text-align:left;
+    background: #fff;
+    transition: transform 0.12s ease, border-color 0.12s ease;
+    display:flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .theme-mini-card:hover{
+    transform: translateY(-2px);
+    border-color: #D8CEB8;
+  }
+  .theme-mini-card.selected{
+    border-color: #C9A96B;
+    box-shadow: 0 0 0 2px rgba(201,169,107,0.25);
+  }
+  .theme-mini-card .swatches-row{
+    display:flex;
+    gap: 4px;
+  }
+  .theme-mini-card .swatches-row span{
+    flex:1;
+    height: 20px;
+    border-radius: 5px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+  }
+  .theme-mini-card .mini-name{
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #3A332A;
+  }
+  .theme-mini-card .mini-desc{
+    font-size: 10.5px;
+    color: #9C9080;
+    line-height: 1.4;
   }
 </style>
 </head>
-<body>
+<body class="theme-default">
+
+<button class="theme-toggle-btn" id="theme-toggle-btn">🎨 테마 바꾸기</button>
+
+<div class="theme-modal-overlay" id="theme-modal-overlay">
+  <div class="theme-modal">
+    <div class="theme-modal-header">
+      <div>
+        <h3>테마 갤러리<span class="count" id="theme-modal-count"></span></h3>
+      </div>
+      <button class="theme-modal-close" id="theme-modal-close">✕</button>
+    </div>
+    <div class="theme-modal-body">
+      <div class="theme-modal-grid" id="theme-modal-grid"></div>
+    </div>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -296,6 +478,9 @@
   </footer>
 
 </div>
+
+<script src="themes-data.js"></script>
+<script src="theme-switcher.js"></script>
 
 </body>
 </html>
