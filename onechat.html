@@ -363,6 +363,18 @@ button { font-family:var(--font); }
     <p>캐릭터를 정성껏 적어주실수록, 더 그 사람답게 대답해요. 채팅 / 베이직 / 드림 세 모드는 같은 기억을 공유하며 이어집니다.</p>
   </div>
 
+  <!-- ── 0. 캐릭터 시트 붙여넣기 (자동 채우기) ── -->
+  <div class="stepblock" id="quick-fill-block" style="border:1px dashed var(--c-dream-text);background:var(--c-dream-soft);">
+    <div class="stepnum">quick start</div>
+    <h2>⚡ 캐릭터 시트 붙여넣기 <span class="opt" style="font-weight:400;font-size:11px;color:var(--mist-faint);">선택, AI가 분석해서 아래 항목을 자동으로 채워요</span></h2>
+    <p class="stepdesc">미리 작성해둔 캐릭터 설정(프로필, 시트 등)이 있다면 형식 그대로 통째로 붙여넣으세요. 표, 목록, 산문 어떤 형태든 괜찮아요. AI가 읽고 아래 양식에 맞게 자동으로 정리해드려요.</p>
+    <div class="field">
+      <textarea class="tall" id="quick-paste" style="min-height:180px;" placeholder="여기에 미리 작성한 캐릭터 시트를 통째로 붙여넣으세요..."></textarea>
+    </div>
+    <button class="btn btn-sm" type="button" id="btn-quick-fill" style="width:100%;margin-top:4px;">✨ AI로 자동 채우기</button>
+    <div id="quick-fill-status" style="font-size:11.5px;color:var(--mist-dim);margin-top:8px;display:none;"></div>
+  </div>
+
   <!-- ── 1. 캐릭터 ── -->
   <div class="stepblock">
     <div class="stepnum">section 1</div>
@@ -426,6 +438,23 @@ button { font-family:var(--font); }
     <div class="field">
       <label>절대 쓰지 않는 표현 <span class="opt">선택</span></label>
       <textarea id="f-avoid" placeholder="예: '~거냐?' 금지, 이모지 금지, 인터넷 용어 금지"></textarea>
+    </div>
+  </div>
+
+  <!-- ── 2.5 문체 참고자료 ── -->
+  <div class="stepblock">
+    <div class="stepnum">section 2.5</div>
+    <h2>문체 참고자료 <span class="opt" style="font-weight:400;font-size:11px;color:var(--mist-faint);">선택, 모든 캐릭터 공통 적용</span></h2>
+    <p class="stepdesc">실감나는 대사·문장을 위해 참고할 글쓰기 스타일이에요. 소설 구절, 대사 샘플 등 원하는 문체의 글을 붙여넣으면, 모델이 캐릭터의 성격에 맞게 그 문체의 리듬과 표현 방식을 응용해요.
+      <span class="ex">아래 기본값은 예시 참고자료이며, 자유롭게 지우고 원하는 글로 바꿔도 돼요.</span>
+    </p>
+    <div class="field">
+      <label>공통 문체 참고자료</label>
+      <textarea class="tall" id="f-style-ref" style="min-height:160px;" placeholder="예: 괄호 안에 행동/내면 묘사를 쓰고, 대사와 번갈아 사용. 감정 단어는 직접 쓰지 않고 시선이나 신체 반응으로 암시..."></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button class="btn btn-ghost btn-sm" type="button" id="btn-style-ref-default">↺ 기본 참고자료 불러오기</button>
+      <button class="btn btn-ghost btn-sm" type="button" id="btn-style-ref-clear">비우기</button>
     </div>
   </div>
 
@@ -1128,6 +1157,9 @@ function initSetupInteractions(){
   keywordChips = setupChipInput('kw-wrap','f-keywords-input');
   endingChips  = setupChipInput('ending-wrap','f-endings-input');
 
+  // 캐릭터 시트 자동 채우기
+  $('btn-quick-fill').addEventListener('click', quickFillFromPaste);
+
   // 드림 모드 토글
   $('dream-toggle').addEventListener('click', ()=>{
     const sw=$('dream-switch'), box=$('dream-collapsible');
@@ -1359,6 +1391,7 @@ function collectProfile(){
     endings: endingChips.get(),
     habits: $('f-habits').value.trim(),
     avoid: $('f-avoid').value.trim(),
+    styleRef: $('f-style-ref').value.trim(),
 
     exDaily: $('ex-daily').value.trim(),
     exWarm: $('ex-warm').value.trim(),
@@ -1422,6 +1455,7 @@ function restoreProfile(p){
   endingChips.set(p.endings||[]);
   $('f-habits').value = p.habits||'';
   $('f-avoid').value = p.avoid||'';
+  $('f-style-ref').value = (p.styleRef!==undefined ? p.styleRef : DEFAULT_STYLE_REF);
 
   $('ex-daily').value = p.exDaily||'';
   $('ex-warm').value = p.exWarm||'';
@@ -1491,6 +1525,62 @@ function restoreProfile(p){
 // ════════════════════════════════════════════════════════
 // 시스템 프롬프트 빌더
 // ════════════════════════════════════════════════════════
+const DEFAULT_STYLE_REF = `아래는 특정 작가의 문체 분석이다. 이 작가는 단일 톤이 아니라 4가지 결을 자유롭게 오간다.
+글을 쓸 때 장면의 성격에 맞는 톤을 선택하고, 그 톤의 규칙을 지켜야 한다.
+
+[톤 구분]
+① 서정·내면형 — 이별, 고백, 회상, 트라우마. 길고 유려한 문장.
+② 캐주얼·인터넷체 — 일상 잡담, 친밀한 장난. ㅋㅋㅋ, 짧은 의성어, 빠른 턴.
+③ 시니컬·거친체 — 경계심, 긴장 관계. 짧고 날카로운 반문.
+④ 편지·문어체 — 편지, 추모, 독백성 서술. 정중한 추측형 어미.
+
+[공통 구조 원칙]
+- 대사와 내면/행동을 괄호로 분리한다.
+- 서정형 괄호는 [신체반응 → 내면 억누름 → 표면 복원] 3단계.
+- 캐주얼형 괄호는 해석 없이 동작만 빠르게 나열한다.
+- 괄호 안 시점은 3인칭 관찰자. "나는"이 아니라 "제", "저" 또는 주어 생략.
+- 감정을 직접 쓰지 않는다. 신체 반응(서정형) 또는 동작/반응어(캐주얼형)로 대체한다.
+
+[톤별 어미 규칙]
+- 서정형 밝음: ~요/~죠/~구요~/~잖아요오 (모음 늘림 가능)
+- 서정형 진지함: 어미 탈락, 단어로 끝남 ("기꺼이.", "괜찮아.")
+- 서정형 떨림: 요→효 ("죄송해효")
+- 캐주얼형: ㅋㅋㅋ를 괄호 안 지문에 그대로 삽입. 짧은 반말 의성어(짭, 쩝쩝).
+- 시니컬형: "하?", "참나", 끝을 흐리는 반문("...아시려나 몰라~?")
+- 편지체: ~겠죠/~ㄹ까요/~바랐는데. 추신과 서명으로 마무리.
+
+[감정 표현]
+- 울음은 4단계: 부정 → 징조 → 항복 → 수용 (서정형 전용)
+- 웃음 종류 구분: 부서지듯(임계점,서정) / 헤헤·으헤헤(순수,캐주얼) / 비소(냉소,시니컬)
+- 장난은 감정 은폐 장치다. 서정형에서는 그 이유를 괄호 안에서 설명하지만,
+  캐주얼형에서는 설명 없이 장난으로 끝낸다.
+- 시니컬형은 자기 객관화 대신 반문으로 받아친다: "그런 거까지 생각해야 돼...?"
+
+[신체 언어]
+- 서정형 손 묘사: 온도·힘의 변화까지 단계별로. ("잡은 손에 힘이 들어간다")
+- 캐주얼형 손 묘사: 도구적이고 빠름. "쏙", "콕콕" 같은 의태어 동반.
+- 캐주얼형은 거리두기보다 즉각적으로 다가가는 동작이 많다(와락, 폭 안김).
+
+[문장 기술]
+- 말줄임표는 위치마다 기능이 다르다 (서정형 핵심 도구).
+- 캐주얼형은 말줄임표 대신 물음표·느낌표 연쇄로 같은 효과를 낸다: "내가?!? 당신을?!??"
+- 캐주얼형 반복은 자모음을 늘려 감정의 즉각적 폭발을 표현: "히, 하이이이아헤이이이"
+- 서정형 반복은 단어를 그대로 되풀이해 의미의 무게를 강조: "하늘은, ...하늘은"
+- 의성어/의태어(ㅋㅋㅋ 포함)는 캐주얼·코믹 장면 전용. 서정형 진지한 장면엔 절대 쓰지 않는다.
+
+[시간 감각]
+- 서정형: "미리 그리워하기" — 현재를 살면서 이미 기억이 될 것을 안다.
+- 편지체: 역방향 — 이미 떠난 화자가 산 사람의 미래를 그리워한다.
+
+[상황별 패턴]
+- 일상 잡담: 짧은 턴 + ㅋㅋㅋ + 서로 따라하는 행동으로 친밀감 쌓기. 해석 생략.
+- 긴장 관계: 짧은 반문 + 비꼬는 어투 + 침묵으로 표정만 묘사.
+- 편지/추모: 받는 이를 부르며 시작, 추측형 어미 일관, 추신/서명으로 마무리.
+- 단체 대화: 여러 인물이 짧게 동시에 들뜸, 즉각적 신체 반응, 느낌표 연쇄.
+
+[반복 소재]
+이름, 기억, 손, 하늘, 바다, 옥상, 울음, 편지, 꽃/계절, 약속, 미완성, 음식(친밀감의 매개)`;
+
 const MODE_LABEL = { chat:'채팅 모드 (메신저)', basic:'베이직 모드 (서술형 롤플레이)', dream:'드림 모드 (드림주와의 관계)', novel:'소설 모드' };
 
 function buildSystemPrompt(mode, opts={}){
@@ -1513,6 +1603,14 @@ function buildSystemPrompt(mode, opts={}){
   if(p.endings?.length) lines.push(`- 자주 쓰는 어미: ${p.endings.join(', ')}`);
   if(p.habits) lines.push(`- 말버릇/추임새: ${p.habits}`);
   if(p.avoid) lines.push(`- 절대 쓰지 않을 표현: ${p.avoid}`);
+
+  if(p.styleRef){
+    lines.push(``);
+    lines.push(`## 문체 참고자료 (글쓰기 스타일 — 캐릭터의 성격에 맞게 응용할 것)`);
+    lines.push(`아래는 참고할 글쓰기 문체입니다. 이 자료에 등장하는 캐릭터 이름, 설정, 구체적인 대사 내용을 그대로 가져오지 마세요. 오직 문장을 쓰는 방식(괄호 사용법, 어미 처리, 말줄임표 위치, 감정을 직접 말하지 않고 행동/감각으로 암시하는 방식, 문장 호흡과 리듬)만 참고해서, 위에서 정의한 이 캐릭터의 성격과 말투 규칙에 자연스럽게 녹여내세요.`);
+    lines.push(``);
+    lines.push(p.styleRef);
+  }
 
   const samples = [
     ['평범한 인사/일상', p.exDaily],
@@ -1726,6 +1824,91 @@ async function callGemini(systemPrompt, contents){
     throw new Error('빈 응답을 받았어요. 다시 시도해주세요.');
   }
   return text;
+}
+
+// ════════════════════════════════════════════════════════
+// 캐릭터 시트 붙여넣기 → AI 자동 분석/채우기
+// ════════════════════════════════════════════════════════
+const QUICK_FILL_SCHEMA_PROMPT = `당신은 사용자가 미리 작성한 캐릭터 시트(프로필)를 분석해서, 캐릭터 챗봇 설정 양식에 맞게 정리하는 도구입니다.
+
+사용자가 보내는 텍스트는 캐릭터 설정 시트입니다. 형식은 자유롭습니다 — 표, 목록, 산문, 대화체 어떤 형태든 옵니다. 이모지나 장식 기호(▶️ ▲ # ▩ 등)가 섞여 있어도 내용만 추출하세요. 이 내용을 분석해서 다음 JSON 스키마에 맞는 객체 하나만 응답하세요. 다른 설명, 마크다운, 코드블록 표시 없이 순수 JSON 텍스트만 출력하세요.
+
+[스키마]
+{
+  "name": "캐릭터의 이름 (본명과 애칭/별명이 있다면 '본명 (애칭)' 형태로, 문자열)",
+  "source": "원작이 있으면 작품명, 자캐/오리지널이면 세계관 한줄 요약 (문자열, 없으면 빈 문자열)",
+  "appearance": "키, 체형, 머리/눈 색, 분위기, 옷차림 등 외형 묘사를 자연스러운 문단으로 정리 (문자열)",
+  "keywords": ["성격을 압축한 키워드들", "5개 내외", "예: 소심한, 다정한, 비관적인"],
+  "personality": "성격을 설명하는 상세 문단 서술. 시트에 있는 성격 항목들을 자연스러운 문장으로 풀어서 정리 (문자열)",
+  "backstory": "배경, 과거사, 중요 사건, 가족관계, 현재 상황 등을 정리한 문단 (문자열)",
+  "speechLevel": "반말/존댓말 여부 및 상황별 차이 (문자열, 명시 없으면 빈 문자열)",
+  "address": "캐릭터가 상대를 부르는 호칭 (문자열, 명시 없으면 빈 문자열)",
+  "endings": ["자주 쓰는 어미들", "예: ~군, ~거든"],
+  "habits": "말버릇, 추임새, 자주 쓰는 표현 (문자열)",
+  "avoid": "절대 쓰지 않는 표현이 명시돼 있으면 정리, 없으면 빈 문자열",
+  "knows": "캐릭터가 자연스럽게 알고 말할 수 있는 지식/정보 (문자열, 명시 없으면 빈 문자열)",
+  "notKnows": "캐릭터가 모르거나 말하면 안 되는 것 (문자열, 명시 없으면 빈 문자열)",
+  "sensitive": "민감한 주제나 조심해야 할 화제가 있으면 정리 (문자열, 없으면 빈 문자열)",
+  "situation": "시트에 첫 만남 상황이나 현재 시추에이션이 암시되어 있다면 정리, 없으면 빈 문자열"
+}
+
+규칙:
+- 시트에 없는 정보를 지어내지 마세요. 정보가 부족한 항목은 빈 문자열 또는 빈 배열로 두세요.
+- 장식용 기호, 헤더 줄, '▶️', '▲', '#' 같은 서식 문자는 결과에 포함하지 마세요.
+- 모든 텍스트는 한국어로 정리하세요.
+- 응답은 순수 JSON 객체 하나뿐이어야 합니다. 코드블록 표시(\`\`\`)를 쓰지 마세요.`;
+
+function applyQuickFillData(data){
+  const setIf = (id, v) => { const el=$(id); if(el && v!==undefined && v!==null && String(v).trim()!=='') el.value = String(v).trim(); };
+  setIf('f-name', data.name);
+  setIf('f-source', data.source);
+  setIf('f-appearance', data.appearance);
+  if(Array.isArray(data.keywords) && data.keywords.length && keywordChips) keywordChips.set(data.keywords.map(s=>String(s).trim()).filter(Boolean));
+  setIf('f-personality', data.personality);
+  setIf('f-backstory', data.backstory);
+  setIf('f-speech-level', data.speechLevel);
+  setIf('f-address', data.address);
+  if(Array.isArray(data.endings) && data.endings.length && endingChips) endingChips.set(data.endings.map(s=>String(s).trim()).filter(Boolean));
+  setIf('f-habits', data.habits);
+  setIf('f-avoid', data.avoid);
+  setIf('f-knows', data.knows);
+  setIf('f-not-knows', data.notKnows);
+  setIf('f-sensitive', data.sensitive);
+  setIf('f-situation', data.situation);
+}
+
+async function quickFillFromPaste(){
+  const raw = $('quick-paste').value.trim();
+  const statusEl = $('quick-fill-status');
+  const btn = $('btn-quick-fill');
+  const currentKey = $('f-api-key').value.trim() || apiKey;
+
+  if(!raw){ showToast('붙여넣을 캐릭터 시트를 먼저 입력해주세요.'); return; }
+  if(!currentKey){
+    showToast('먼저 Gemini API 키를 입력해주세요.');
+    $('f-api-key').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  apiKey = currentKey;
+
+  btn.disabled = true;
+  btn.textContent = '분석 중...';
+  statusEl.style.display = 'block';
+  statusEl.textContent = 'AI가 시트를 읽고 항목을 채우고 있어요...';
+
+  try{
+    const reply = await callGemini(QUICK_FILL_SCHEMA_PROMPT, [{role:'user', parts:[{text: raw}]}]);
+    const cleaned = (reply||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const data = JSON.parse(cleaned);
+    applyQuickFillData(data);
+    statusEl.textContent = '✅ 자동으로 채웠어요. 아래 항목들을 확인하고 다듬어주세요.';
+    $('f-name').scrollIntoView({behavior:'smooth', block:'center'});
+  }catch(e){
+    statusEl.textContent = '⚠️ ' + (/JSON/i.test(e.message||'') ? 'AI 응답을 분석하지 못했어요. 다시 시도해주세요.' : (e.message||'채우는 데 실패했어요. 다시 시도해주세요.'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = '✨ AI로 자동 채우기';
+  }
 }
 
 // ════════════════════════════════════════════════════════
@@ -2497,6 +2680,14 @@ function bindEvents(){
     showScreen('setup');
   });
 
+  $('btn-style-ref-default').addEventListener('click', ()=>{
+    $('f-style-ref').value = DEFAULT_STYLE_REF;
+    showToast('기본 참고자료를 불러왔어요');
+  });
+  $('btn-style-ref-clear').addEventListener('click', ()=>{
+    $('f-style-ref').value = '';
+  });
+
   // 모드 전환
   document.querySelectorAll('.mode-pill').forEach(btn=>{
     btn.addEventListener('click', ()=>switchMode(btn.dataset.mode));
@@ -2614,6 +2805,7 @@ function init(){
 
   const savedProfile = lsGet(STORAGE_KEY_PROFILE, null);
   if(savedProfile) restoreProfile(savedProfile);
+  else $('f-style-ref').value = DEFAULT_STYLE_REF;
 
   // 입력 중 자동으로 임시 저장 (새로고침해도 시트 안 날아가게)
   document.querySelectorAll('#screen-setup input, #screen-setup textarea, #screen-setup select').forEach(el=>{
