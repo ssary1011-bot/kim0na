@@ -462,7 +462,11 @@ button { font-family:var(--font); }
   <div class="stepblock">
     <div class="stepnum">section 3 · 제 일 중 요 함</div>
     <h2>대사 샘플</h2>
-    <p class="stepdesc">상황별 실제 말투를 보여주세요. 모델이 가장 많이 참고하는 부분입니다.</p>
+    <p class="stepdesc">상황별 실제 말투를 보여주세요. 모델이 가장 많이 참고하는 부분입니다.<br>
+      <span class="ex">위 성격·말투·문체 참고자료를 바탕으로 AI가 빈 칸을 채워줄 수도 있어요. 이미 적어둔 칸은 건드리지 않아요.</span>
+    </p>
+    <button class="btn btn-ghost btn-sm" type="button" id="btn-gen-examples" style="width:100%;margin-bottom:14px;">✨ 빈 대사 샘플 AI로 생성</button>
+    <div id="gen-examples-status" style="font-size:11.5px;color:var(--mist-dim);margin:-8px 0 14px;display:none;"></div>
 
     <div class="field">
       <label>평범한 인사 / 일상</label>
@@ -1159,6 +1163,8 @@ function initSetupInteractions(){
 
   // 캐릭터 시트 자동 채우기
   $('btn-quick-fill').addEventListener('click', quickFillFromPaste);
+  // 대사 샘플 AI 생성
+  $('btn-gen-examples').addEventListener('click', ()=>generateExamplesFromAI());
 
   // 드림 모드 토글
   $('dream-toggle').addEventListener('click', ()=>{
@@ -1901,13 +1907,138 @@ async function quickFillFromPaste(){
     const cleaned = (reply||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
     const data = JSON.parse(cleaned);
     applyQuickFillData(data);
-    statusEl.textContent = '✅ 자동으로 채웠어요. 아래 항목들을 확인하고 다듬어주세요.';
+    statusEl.textContent = '✅ 자동으로 채웠어요. 이어서 대사 샘플도 생성할게요...';
     $('f-name').scrollIntoView({behavior:'smooth', block:'center'});
+
+    // 이어서 빈 대사 샘플도 함께 시도 (실패해도 위 채우기 결과는 유지됨)
+    try{
+      await generateExamplesFromAI({ silent:true });
+      statusEl.textContent = '✅ 시트 분석과 대사 샘플 생성을 모두 마쳤어요. 항목들을 확인하고 다듬어주세요.';
+    }catch(e2){
+      statusEl.textContent = '✅ 시트는 채웠지만, 대사 샘플 생성은 실패했어요. "대사 샘플 AI로 생성" 버튼으로 다시 시도해보세요.';
+    }
   }catch(e){
     statusEl.textContent = '⚠️ ' + (/JSON/i.test(e.message||'') ? 'AI 응답을 분석하지 못했어요. 다시 시도해주세요.' : (e.message||'채우는 데 실패했어요. 다시 시도해주세요.'));
   }finally{
     btn.disabled = false;
     btn.textContent = '✨ AI로 자동 채우기';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 대사 샘플 AI 자동 생성 (빈 칸만, 문체 참고자료 + 성격 반영)
+// ════════════════════════════════════════════════════════
+const EXAMPLE_FIELDS = [
+  { id:'ex-daily',      label:'평범한 인사 / 일상' },
+  { id:'ex-warm',       label:'감동하거나 따뜻한 순간' },
+  { id:'ex-flustered',  label:'당황하거나 곤란한 순간' },
+  { id:'ex-angry',      label:'화나거나 단호한 순간' },
+  { id:'ex-vulnerable', label:'부드럽고 취약한 순간 (속마음이 새는 순간)' },
+];
+
+function buildExampleGenPrompt(emptyKeys){
+  const name = $('f-name').value.trim() || '캐릭터';
+  const personality = $('f-personality').value.trim();
+  const keywords = (keywordChips?.get()||[]).join(', ');
+  const speechLevel = $('f-speech-level').value.trim();
+  const address = $('f-address').value.trim();
+  const endings = (endingChips?.get()||[]).join(', ');
+  const habits = $('f-habits').value.trim();
+  const avoid = $('f-avoid').value.trim();
+  const styleRef = $('f-style-ref').value.trim();
+  const appearance = $('f-appearance').value.trim();
+  const backstory = $('f-backstory').value.trim();
+
+  const targets = EXAMPLE_FIELDS.filter(f=>emptyKeys.includes(f.id));
+
+  const lines = [];
+  lines.push(`당신은 캐릭터 챗봇의 "대사 샘플"을 작성하는 도구입니다. 아래 캐릭터 설정을 바탕으로, 지정된 상황들에 맞는 캐릭터의 실제 대사를 한국어로 새로 창작하세요.`);
+  lines.push('');
+  lines.push(`[캐릭터: ${name}]`);
+  if(keywords) lines.push(`성격 키워드: ${keywords}`);
+  if(personality) lines.push(`성격: ${personality}`);
+  if(appearance) lines.push(`외형/분위기: ${appearance}`);
+  if(backstory) lines.push(`배경: ${backstory}`);
+  if(speechLevel) lines.push(`반말/존댓말: ${speechLevel}`);
+  if(address) lines.push(`상대 호칭: ${address}`);
+  if(endings) lines.push(`자주 쓰는 어미: ${endings}`);
+  if(habits) lines.push(`말버릇: ${habits}`);
+  if(avoid) lines.push(`절대 쓰지 않는 표현: ${avoid}`);
+
+  if(styleRef){
+    lines.push('');
+    lines.push('[문체 참고자료 — 그대로 베끼지 말고 아래 글의 문체적 기법(어휘 선택, 문장 호흡, 말줄임표·반복 등 문장부호 사용, 감정을 직접 말하지 않고 암시하는 방식, 괄호 안 묘사 기법 등)만 분석해서, 위 캐릭터의 성격과 말투에 맞게 응용하세요. 참고자료 속 등장인물 이름이나 구체적 설정, 줄거리는 절대 가져오지 마세요.]');
+    lines.push(styleRef);
+  }
+
+  lines.push('');
+  lines.push('[작성할 대사]');
+  targets.forEach(t=>lines.push(`- ${t.id}: ${t.label}`));
+  lines.push('');
+  lines.push('규칙:');
+  lines.push('- 각 상황마다 그 캐릭터가 실제로 할 법한 대사를 1~3문장으로 작성하세요. 대사 텍스트만 쓰고, 괄호 행동 묘사나 설명은 넣지 마세요 (단, 문체 참고자료에 괄호 기법이 있고 그게 대사 운율에 필수적이면 짧게 허용).');
+  lines.push('- 성격 키워드와 모순되지 않게, 위에 명시된 어미/호칭/말버릇을 실제로 사용하세요.');
+  lines.push('- "절대 쓰지 않는 표현"은 피하세요.');
+  lines.push('- 다음 JSON 형식으로만 응답하세요. 다른 설명, 코드블록 표시 없이 순수 JSON만 출력하세요.');
+  lines.push('{');
+  targets.forEach((t,i)=>lines.push(`  "${t.id}": "대사 내용"${i<targets.length-1?',':''}`));
+  lines.push('}');
+
+  return lines.join('\n');
+}
+
+async function generateExamplesFromAI(opts){
+  const silent = opts && opts.silent;
+  const statusEl = $('gen-examples-status');
+  const btn = $('btn-gen-examples');
+  const currentKey = $('f-api-key').value.trim() || apiKey;
+
+  const emptyKeys = EXAMPLE_FIELDS.filter(f => !$(f.id).value.trim()).map(f=>f.id);
+  if(emptyKeys.length===0){
+    if(!silent) showToast('이미 모든 대사 샘플이 채워져 있어요.');
+    return;
+  }
+  if(!$('f-personality').value.trim() && !$('f-name').value.trim()){
+    if(silent) throw new Error('성격/이름 정보 부족으로 대사 샘플 생성을 건너뛰었어요.');
+    showToast('먼저 캐릭터 이름이나 성격을 입력해주세요.');
+    return;
+  }
+  if(!currentKey){
+    if(silent) throw new Error('API 키 없음');
+    showToast('먼저 Gemini API 키를 입력해주세요.');
+    $('f-api-key').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  apiKey = currentKey;
+
+  if(!silent){
+    btn.disabled = true;
+    btn.textContent = '생성 중...';
+    statusEl.style.display = 'block';
+    statusEl.textContent = `AI가 빈 칸 ${emptyKeys.length}개의 대사를 쓰고 있어요...`;
+  }
+
+  try{
+    const prompt = buildExampleGenPrompt(emptyKeys);
+    const reply = await callGemini('당신은 캐릭터 대사 샘플을 작성하는 도구입니다. 지시받은 JSON 형식만 출력하세요.', [{role:'user', parts:[{text: prompt}]}]);
+    const cleaned = (reply||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const data = JSON.parse(cleaned);
+    let filled = 0;
+    EXAMPLE_FIELDS.forEach(f=>{
+      if(emptyKeys.includes(f.id) && data[f.id] && !$(f.id).value.trim()){
+        $(f.id).value = String(data[f.id]).trim();
+        filled++;
+      }
+    });
+    if(!silent) statusEl.textContent = `✅ 대사 샘플 ${filled}개를 채웠어요. 캐릭터답게 다듬어 주세요.`;
+  }catch(e){
+    if(silent) throw e;
+    statusEl.textContent = '⚠️ ' + (/JSON/i.test(e.message||'') ? 'AI 응답을 분석하지 못했어요. 다시 시도해주세요.' : (e.message||'생성에 실패했어요. 다시 시도해주세요.'));
+  }finally{
+    if(!silent){
+      btn.disabled = false;
+      btn.textContent = '✨ 빈 대사 샘플 AI로 생성';
+    }
   }
 }
 
