@@ -504,6 +504,9 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
       </div>
       <button class="bulk-btn" onclick="bulkUpload()">📁 일괄 교체</button>
     </div>
+    <div style="font-size:9.5px;color:var(--text3);padding:6px 12px;line-height:1.5;border-bottom:1.5px solid var(--border)">
+      💡 파일명은 CSS에서 확장자만 참조해요 (예: <b>mainBgImage.png</b>). 실제 배포 시엔 같은 이름에 <b>@2x</b>/<b>@3x</b>를 붙인 두 해상도를 함께 넣으면 기기에 맞춰 자동 선택됩니다. 아래는 <b>@3x</b> 기준 업로드 슬롯입니다.
+    </div>
 
     <!-- 배경 -->
     <div class="img-section">
@@ -512,25 +515,25 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         <label class="img-slot" id="slot-main-bg" oncontextmenu="clearSlot('main-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('main-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-main-bg"><span id="thumb-icon-main-bg">🖼</span><img id="thumb-img-main-bg"></div>
-          <div class="img-slot-info"><div class="img-slot-name">mainBgImage.png 메인 배경</div><div class="img-slot-size">2배수 권장 · 상단/센터 크롭 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">mainBgImage.png</div><div class="img-slot-size">1125×2250 · PNG</div></div>
           <span class="img-slot-badge" id="badge-main-bg">비어있음</span>
         </label>
         <label class="img-slot" id="slot-chat-bg" oncontextmenu="clearSlot('chat-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('chat-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-chat-bg"><span id="thumb-icon-chat-bg">💬</span><img id="thumb-img-chat-bg"></div>
-          <div class="img-slot-info"><div class="img-slot-name">chatroomBgImage.png 채팅방 배경</div><div class="img-slot-size">2배수 권장 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBgImage.png</div><div class="img-slot-size">1125×2250 · PNG</div></div>
           <span class="img-slot-badge" id="badge-chat-bg">비어있음</span>
         </label>
         <label class="img-slot" id="slot-tabbar-bg" oncontextmenu="clearSlot('tabbar-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('tabbar-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-tabbar-bg"><span id="thumb-icon-tabbar-bg">🔲</span><img id="thumb-img-tabbar-bg"></div>
-          <div class="img-slot-info"><div class="img-slot-name">maintabBgImage.png 탭바 배경</div><div class="img-slot-size">2배수 권장 · 센터 크롭 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabBgImage.png</div><div class="img-slot-size">1410×147 · PNG</div></div>
           <span class="img-slot-badge" id="badge-tabbar-bg">비어있음</span>
         </label>
         <label class="img-slot" id="slot-passcode-bg" oncontextmenu="clearSlot('passcode-bg',event)">
           <input type="file" accept="image/*" onchange="handleSlot('passcode-bg',this,event)">
           <div class="img-slot-thumb" id="thumb-passcode-bg"><span id="thumb-icon-passcode-bg">🔒</span><img id="thumb-img-passcode-bg"></div>
-          <div class="img-slot-info"><div class="img-slot-name">passcodeBgImage.png 잠금화면 배경</div><div class="img-slot-size">2배수 권장 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeBgImage.png</div><div class="img-slot-size">1200×1200 · PNG</div></div>
           <span class="img-slot-badge" id="badge-passcode-bg">비어있음</span>
         </label>
       </div>
@@ -538,87 +541,213 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 
     <!-- 탭 아이콘 -->
     <div class="img-section">
-      <div class="img-section-label">탭 아이콘 (iOS @3x)</div>
+      <div class="img-section-label">탭 아이콘 (@3x · 114×114)</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-ico-friends" oncontextmenu="clearSlot('ico-friends',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-friends',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-friends"><span id="thumb-icon-ico-friends">👤</span><img id="thumb-img-ico-friends"></div>
-          <div class="img-slot-info"><div class="img-slot-name">tab_friends_nor@3x.png 친구 비활성</div><div class="img-slot-size">81×81 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoFriends.png 친구 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-friends">비어있음</span>
         </label>
         <label class="img-slot" id="slot-ico-friends-f" oncontextmenu="clearSlot('ico-friends-f',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-friends-f',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-friends-f"><span id="thumb-icon-ico-friends-f">👤</span><img id="thumb-img-ico-friends-f"></div>
-          <div class="img-slot-info"><div class="img-slot-name">tab_friends_sel@3x.png 친구 활성</div><div class="img-slot-size">81×81 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoFriendsSelected.png 친구 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-friends-f">비어있음</span>
         </label>
         <label class="img-slot" id="slot-ico-chats" oncontextmenu="clearSlot('ico-chats',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-chats',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-chats"><span id="thumb-icon-ico-chats">💬</span><img id="thumb-img-ico-chats"></div>
-          <div class="img-slot-info"><div class="img-slot-name">tab_chats_nor@3x.png 채팅 비활성</div><div class="img-slot-size">81×81 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoChats.png 채팅 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-chats">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-chats-f" oncontextmenu="clearSlot('ico-chats-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-chats-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-chats-f"><span id="thumb-icon-ico-chats-f">💬</span><img id="thumb-img-ico-chats-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoChatsSelected.png 채팅 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-chats-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-now" oncontextmenu="clearSlot('ico-now',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-now',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-now"><span id="thumb-icon-ico-now">#️⃣</span><img id="thumb-img-ico-now"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoNow.png 지금 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-now">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-now-f" oncontextmenu="clearSlot('ico-now-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-now-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-now-f"><span id="thumb-icon-ico-now-f">#️⃣</span><img id="thumb-img-ico-now-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoNowSelected.png 지금 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-now-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-shopping" oncontextmenu="clearSlot('ico-shopping',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-shopping',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-shopping"><span id="thumb-icon-ico-shopping">🛒</span><img id="thumb-img-ico-shopping"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoShopping.png 쇼핑 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-shopping">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-shopping-f" oncontextmenu="clearSlot('ico-shopping-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-shopping-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-shopping-f"><span id="thumb-icon-ico-shopping-f">🛒</span><img id="thumb-img-ico-shopping-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoShoppingSelected.png 쇼핑 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-shopping-f">비어있음</span>
         </label>
         <label class="img-slot" id="slot-ico-more" oncontextmenu="clearSlot('ico-more',event)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-more',this,event)">
           <div class="img-slot-thumb" id="thumb-ico-more"><span id="thumb-icon-ico-more">⋯</span><img id="thumb-img-ico-more"></div>
-          <div class="img-slot-info"><div class="img-slot-name">tab_more_nor@3x.png 더보기 비활성</div><div class="img-slot-size">81×81 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoMore.png 더보기 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-more">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-more-f" oncontextmenu="clearSlot('ico-more-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-more-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-more-f"><span id="thumb-icon-ico-more-f">⋯</span><img id="thumb-img-ico-more-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoMoreSelected.png 더보기 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-more-f">비어있음</span>
+        </label>
+        <label class="img-slot" id="slot-ico-call" oncontextmenu="clearSlot('ico-call',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-call',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-call"><span id="thumb-icon-ico-call">📞</span><img id="thumb-img-ico-call"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoCall.png 콜 비활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-call">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-call-f" oncontextmenu="clearSlot('ico-call-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-call-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-call-f"><span id="thumb-icon-ico-call-f">📞</span><img id="thumb-img-ico-call-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">maintabIcoCallSelected.png 콜 활성</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-call-f">선택사항</span>
         </label>
       </div>
     </div>
 
     <!-- 말풍선 -->
     <div class="img-section">
-      <div class="img-section-label">말풍선 이미지 (iOS resizable)</div>
+      <div class="img-section-label">말풍선 이미지 (@3x · 120×105)</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-bubble-me1" oncontextmenu="clearSlot('bubble-me1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me1',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-me1"><span id="thumb-icon-bubble-me1">💛</span><img id="thumb-img-bubble-me1"></div>
-          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_right_01@3x.png 보낸 첫번째</div><div class="img-slot-size">자유 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-me1">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleSend01.png 보낸 첫번째</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me1">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-bubble-me1s" oncontextmenu="clearSlot('bubble-me1s',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('bubble-me1s',this,event)">
+          <div class="img-slot-thumb" id="thumb-bubble-me1s"><span id="thumb-icon-bubble-me1s">💛</span><img id="thumb-img-bubble-me1s"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleSend01Selected.png 보낸 첫번째 선택</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me1s">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-me2" oncontextmenu="clearSlot('bubble-me2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-me2',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-me2"><span id="thumb-icon-bubble-me2">💛</span><img id="thumb-img-bubble-me2"></div>
-          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_right_02@3x.png 보낸 연속</div><div class="img-slot-size">자유 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-me2">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleSend02.png 보낸 연속</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me2">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-bubble-me2s" oncontextmenu="clearSlot('bubble-me2s',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('bubble-me2s',this,event)">
+          <div class="img-slot-thumb" id="thumb-bubble-me2s"><span id="thumb-icon-bubble-me2s">💛</span><img id="thumb-img-bubble-me2s"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleSend02Selected.png 보낸 연속 선택</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-me2s">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-you1" oncontextmenu="clearSlot('bubble-you1',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you1',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-you1"><span id="thumb-icon-bubble-you1">🤍</span><img id="thumb-img-bubble-you1"></div>
-          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_left_01@3x.png 받은 첫번째</div><div class="img-slot-size">자유 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-you1">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleReceive01.png 받은 첫번째</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you1">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-bubble-you1s" oncontextmenu="clearSlot('bubble-you1s',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('bubble-you1s',this,event)">
+          <div class="img-slot-thumb" id="thumb-bubble-you1s"><span id="thumb-icon-bubble-you1s">🤍</span><img id="thumb-img-bubble-you1s"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleReceive01Selected.png 받은 첫번째 선택</div><div class="img-slot-size">121×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you1s">선택사항</span>
         </label>
         <label class="img-slot" id="slot-bubble-you2" oncontextmenu="clearSlot('bubble-you2',event)">
           <input type="file" accept="image/*" onchange="handleSlot('bubble-you2',this,event)">
           <div class="img-slot-thumb" id="thumb-bubble-you2"><span id="thumb-icon-bubble-you2">🤍</span><img id="thumb-img-bubble-you2"></div>
-          <div class="img-slot-info"><div class="img-slot-name">chat_bubble_left_02@3x.png 받은 연속</div><div class="img-slot-size">자유 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-bubble-you2">자동생성</span>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleReceive02.png 받은 연속</div><div class="img-slot-size">120×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you2">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-bubble-you2s" oncontextmenu="clearSlot('bubble-you2s',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('bubble-you2s',this,event)">
+          <div class="img-slot-thumb" id="thumb-bubble-you2s"><span id="thumb-icon-bubble-you2s">🤍</span><img id="thumb-img-bubble-you2s"></div>
+          <div class="img-slot-info"><div class="img-slot-name">chatroomBubbleReceive02Selected.png 받은 연속 선택</div><div class="img-slot-size">121×105 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-bubble-you2s">선택사항</span>
         </label>
       </div>
     </div>
 
     <!-- 기타 -->
     <div class="img-section">
-      <div class="img-section-label">프로필 / 잠금 코드</div>
+      <div class="img-section-label">프로필 / 친구추가 버튼</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-profile" oncontextmenu="clearSlot('profile',event)">
           <input type="file" accept="image/*" onchange="handleSlot('profile',this,event)">
           <div class="img-slot-thumb" id="thumb-profile"><span id="thumb-icon-profile">🧑</span><img id="thumb-img-profile"></div>
-          <div class="img-slot-info"><div class="img-slot-name">default_profile@3x.png</div><div class="img-slot-size">216×216 · PNG</div></div>
+          <div class="img-slot-info"><div class="img-slot-name">profileImg01.png</div><div class="img-slot-size">360×360 · PNG</div></div>
           <span class="img-slot-badge" id="badge-profile">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-pc-dot" oncontextmenu="clearSlot('pc-dot',event)">
-          <input type="file" accept="image/*" onchange="handleSlot('pc-dot',this,event)">
-          <div class="img-slot-thumb" id="thumb-pc-dot"><span id="thumb-icon-pc-dot">⭕</span><img id="thumb-img-pc-dot"></div>
-          <div class="img-slot-info"><div class="img-slot-name">passcode_dot_empty@3x.png</div><div class="img-slot-size">66×66 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-pc-dot">선택사항</span>
+        <label class="img-slot" id="slot-find-friend-btn" oncontextmenu="clearSlot('find-friend-btn',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('find-friend-btn',this,event)">
+          <div class="img-slot-thumb" id="thumb-find-friend-btn"><span id="thumb-icon-find-friend-btn">➕</span><img id="thumb-img-find-friend-btn"></div>
+          <div class="img-slot-info"><div class="img-slot-name">findBtnAddFriend.png</div><div class="img-slot-size">126×102 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-find-friend-btn">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-pc-dot-checked" oncontextmenu="clearSlot('pc-dot-checked',event)">
-          <input type="file" accept="image/*" onchange="handleSlot('pc-dot-checked',this,event)">
-          <div class="img-slot-thumb" id="thumb-pc-dot-checked"><span id="thumb-icon-pc-dot-checked">🔵</span><img id="thumb-img-pc-dot-checked"></div>
-          <div class="img-slot-info"><div class="img-slot-name">passcode_dot_active@3x.png</div><div class="img-slot-size">66×66 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-pc-dot-checked">선택사항</span>
+      </div>
+    </div>
+
+    <div class="img-section">
+      <div class="img-section-label">잠금 비밀번호 도트 이미지 (132×132)</div>
+      <div class="img-grid">
+        <label class="img-slot" id="slot-pc-01" oncontextmenu="clearSlot('pc-01',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-01',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-01"><span id="thumb-icon-pc-01">⭕</span><img id="thumb-img-pc-01"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode01.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-01">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-01-c" oncontextmenu="clearSlot('pc-01-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-01-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-01-c"><span id="thumb-icon-pc-01-c">🔵</span><img id="thumb-img-pc-01-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode01Selected.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-01-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-02" oncontextmenu="clearSlot('pc-02',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-02',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-02"><span id="thumb-icon-pc-02">⭕</span><img id="thumb-img-pc-02"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode02.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-02">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-02-c" oncontextmenu="clearSlot('pc-02-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-02-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-02-c"><span id="thumb-icon-pc-02-c">🔵</span><img id="thumb-img-pc-02-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode02Selected.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-02-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-03" oncontextmenu="clearSlot('pc-03',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-03',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-03"><span id="thumb-icon-pc-03">⭕</span><img id="thumb-img-pc-03"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode03.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-03">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-03-c" oncontextmenu="clearSlot('pc-03-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-03-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-03-c"><span id="thumb-icon-pc-03-c">🔵</span><img id="thumb-img-pc-03-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode03Selected.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-03-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-04" oncontextmenu="clearSlot('pc-04',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-04',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-04"><span id="thumb-icon-pc-04">⭕</span><img id="thumb-img-pc-04"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode04.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-04">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-04-c" oncontextmenu="clearSlot('pc-04-c',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-04-c',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-04-c"><span id="thumb-icon-pc-04-c">🔵</span><img id="thumb-img-pc-04-c"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeImgCode04Selected.png</div><div class="img-slot-size">132×132 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-04-c">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-pc-keypad-pressed" oncontextmenu="clearSlot('pc-keypad-pressed',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('pc-keypad-pressed',this,event)">
+          <div class="img-slot-thumb" id="thumb-pc-keypad-pressed"><span id="thumb-icon-pc-keypad-pressed">🔘</span><img id="thumb-img-pc-keypad-pressed"></div>
+          <div class="img-slot-info"><div class="img-slot-name">passcodeKeypadPressed.png 키패드 프레스</div><div class="img-slot-size">180×180 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-pc-keypad-pressed">선택사항</span>
         </label>
       </div>
     </div>
@@ -853,7 +982,11 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         <div class="color-item" onclick="pickColor('my-bubble-text')"><div class="color-swatch" id="sw-my-bubble-text"></div><span class="color-label">보낸 말풍선 텍스트</span><span class="color-hex" id="hex-my-bubble-text" contenteditable="true" onblur="hexInput('my-bubble-text',this)">#1a1a1a</span><input type="color" id="my-bubble-text" value="#1a1a1a" oninput="updateColor('my-bubble-text')"></div>
         <div class="color-item" onclick="pickColor('other-bubble-text')"><div class="color-swatch" id="sw-other-bubble-text"></div><span class="color-label">받은 말풍선 텍스트</span><span class="color-hex" id="hex-other-bubble-text" contenteditable="true" onblur="hexInput('other-bubble-text',this)">#1a1a1a</span><input type="color" id="other-bubble-text" value="#1a1a1a" oninput="updateColor('other-bubble-text')"></div>
         <div class="color-item" onclick="pickColor('unread-count-color')"><div class="color-swatch" id="sw-unread-count-color"></div><span class="color-label">안읽은 숫자</span><span class="color-hex" id="hex-unread-count-color" contenteditable="true" onblur="hexInput('unread-count-color',this)">#FAE100</span><input type="color" id="unread-count-color" value="#FAE100" oninput="updateColor('unread-count-color')"></div>
+        <div class="sub-label" style="margin-top:4px">입력바 (iOS 전용)</div>
         <div class="color-item" onclick="pickColor('inputbar-bg')"><div class="color-swatch" id="sw-inputbar-bg"></div><span class="color-label">입력창 배경</span><span class="color-hex" id="hex-inputbar-bg" contenteditable="true" onblur="hexInput('inputbar-bg',this)">#ffffff</span><input type="color" id="inputbar-bg" value="#ffffff" oninput="updateColor('inputbar-bg')"></div>
+        <div class="color-item" onclick="pickColor('send-btn-bg')"><div class="color-swatch" id="sw-send-btn-bg"></div><span class="color-label">보내기 버튼 배경</span><span class="color-hex" id="hex-send-btn-bg" contenteditable="true" onblur="hexInput('send-btn-bg',this)">#FAE100</span><input type="color" id="send-btn-bg" value="#FAE100" oninput="updateColor('send-btn-bg')"></div>
+        <div class="color-item" onclick="pickColor('send-btn-icon')"><div class="color-swatch" id="sw-send-btn-icon"></div><span class="color-label">보내기 버튼 아이콘</span><span class="color-hex" id="hex-send-btn-icon" contenteditable="true" onblur="hexInput('send-btn-icon',this)">#1a1a1a</span><input type="color" id="send-btn-icon" value="#1a1a1a" oninput="updateColor('send-btn-icon')"></div>
+        <div class="color-item" onclick="pickColor('menu-icon-color')"><div class="color-swatch" id="sw-menu-icon-color"></div><span class="color-label">메뉴 버튼 아이콘</span><span class="color-hex" id="hex-menu-icon-color" contenteditable="true" onblur="hexInput('menu-icon-color',this)">#aaaaaa</span><input type="color" id="menu-icon-color" value="#aaaaaa" oninput="updateColor('menu-icon-color')"></div>
       </div>
     </div>
 
@@ -864,18 +997,20 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
         <div class="color-item" onclick="pickColor('passcode-title-color')"><div class="color-swatch" id="sw-passcode-title-color"></div><span class="color-label">잠금화면 타이틀</span><span class="color-hex" id="hex-passcode-title-color" contenteditable="true" onblur="hexInput('passcode-title-color',this)">#333333</span><input type="color" id="passcode-title-color" value="#333333" oninput="updateColor('passcode-title-color')"></div>
         <div class="color-item" onclick="pickColor('keypad-bg')"><div class="color-swatch" id="sw-keypad-bg"></div><span class="color-label">키패드 배경</span><span class="color-hex" id="hex-keypad-bg" contenteditable="true" onblur="hexInput('keypad-bg',this)">#ffffff</span><input type="color" id="keypad-bg" value="#ffffff" oninput="updateColor('keypad-bg')"></div>
         <div class="color-item" onclick="pickColor('keypad-text')"><div class="color-swatch" id="sw-keypad-text"></div><span class="color-label">키패드 텍스트</span><span class="color-hex" id="hex-keypad-text" contenteditable="true" onblur="hexInput('keypad-text',this)">#333333</span><input type="color" id="keypad-text" value="#333333" oninput="updateColor('keypad-text')"></div>
-        <div class="color-item" onclick="pickColor('dot-color')"><div class="color-swatch" id="sw-dot-color"></div><span class="color-label">도트 색상</span><span class="color-hex" id="hex-dot-color" contenteditable="true" onblur="hexInput('dot-color',this)">#666666</span><input type="color" id="dot-color" value="#666666" oninput="updateColor('dot-color')"></div>
+        <div class="color-item" onclick="pickColor('dot-color')"><div class="color-swatch" id="sw-dot-color"></div><span class="color-label">도트 색상 (프리뷰용)</span><span class="color-hex" id="hex-dot-color" contenteditable="true" onblur="hexInput('dot-color',this)">#666666</span><input type="color" id="dot-color" value="#666666" oninput="updateColor('dot-color')"></div>
       </div>
     </div>
 
     <div class="color-group">
-      <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-bottom:4px" onclick="toggleDetailColors()">▸ 세부 색상 조절</div>
+      <div style="font-size:10px;color:var(--text3);cursor:pointer;margin-bottom:4px" onclick="toggleDetailColors()">▸ 세부 색상 (알림/공유)</div>
       <div id="detail-colors" style="display:none">
         <div class="color-items">
-          <div class="color-item" onclick="pickColor('header-bg-color')"><div class="color-swatch" id="sw-header-bg-color"></div><span class="color-label">헤더 배경색</span><span class="color-hex" id="hex-header-bg-color" contenteditable="true" onblur="hexInput('header-bg-color',this)">#ffffff</span><input type="color" id="header-bg-color" value="#ffffff" oninput="updateColor('header-bg-color')"></div>
-          <div class="color-item" onclick="pickColor('list-bg-color')"><div class="color-swatch" id="sw-list-bg-color"></div><span class="color-label">리스트 배경</span><span class="color-hex" id="hex-list-bg-color" contenteditable="true" onblur="hexInput('list-bg-color',this)">#ffffff</span><input type="color" id="list-bg-color" value="#ffffff" oninput="updateColor('list-bg-color')"></div>
-          <div class="color-item" onclick="pickColor('divider-color')"><div class="color-swatch" id="sw-divider-color"></div><span class="color-label">구분선 색상</span><span class="color-hex" id="hex-divider-color" contenteditable="true" onblur="hexInput('divider-color',this)">#e5e5e5</span><input type="color" id="divider-color" value="#e5e5e5" oninput="updateColor('divider-color')"></div>
-          <div class="color-item" onclick="pickColor('noti-bg-color')"><div class="color-swatch" id="sw-noti-bg-color"></div><span class="color-label">알림 배경</span><span class="color-hex" id="hex-noti-bg-color" contenteditable="true" onblur="hexInput('noti-bg-color',this)">#ffffff</span><input type="color" id="noti-bg-color" value="#ffffff" oninput="updateColor('noti-bg-color')"></div>
+          <div class="sub-label">메시지 알림 배너</div>
+          <div class="color-item" onclick="pickColor('noti-bg-color')"><div class="color-swatch" id="sw-noti-bg-color"></div><span class="color-label">알림 배너 배경</span><span class="color-hex" id="hex-noti-bg-color" contenteditable="true" onblur="hexInput('noti-bg-color',this)">#ffffff</span><input type="color" id="noti-bg-color" value="#ffffff" oninput="updateColor('noti-bg-color')"></div>
+          <div class="color-item" onclick="pickColor('noti-name-color')"><div class="color-swatch" id="sw-noti-name-color"></div><span class="color-label">알림 배너 이름</span><span class="color-hex" id="hex-noti-name-color" contenteditable="true" onblur="hexInput('noti-name-color',this)">#1a1a1a</span><input type="color" id="noti-name-color" value="#1a1a1a" oninput="updateColor('noti-name-color')"></div>
+          <div class="color-item" onclick="pickColor('noti-msg-color')"><div class="color-swatch" id="sw-noti-msg-color"></div><span class="color-label">알림 배너 메시지</span><span class="color-hex" id="hex-noti-msg-color" contenteditable="true" onblur="hexInput('noti-msg-color',this)">#666666</span><input type="color" id="noti-msg-color" value="#666666" oninput="updateColor('noti-msg-color')"></div>
+          <div class="sub-label" style="margin-top:4px">전달완료 배너</div>
+          <div class="color-item" onclick="pickColor('direct-share-bg')"><div class="color-swatch" id="sw-direct-share-bg"></div><span class="color-label">전달완료 배너 배경</span><span class="color-hex" id="hex-direct-share-bg" contenteditable="true" onblur="hexInput('direct-share-bg',this)">#ffffff</span><input type="color" id="direct-share-bg" value="#ffffff" oninput="updateColor('direct-share-bg')"></div>
         </div>
       </div>
     </div>
@@ -1110,174 +1245,446 @@ function applyPreset() {
 }
 function saveColorSet() { showToast('색상 세트 저장됨 ✓', 'success'); }
 
-// ── iOS 전용 파일명 매핑 ──
+// ── iOS 공식 파일명 매핑 (KakaoTalkTheme.css 기준 25.8.0) ──
+// CSS는 베이스명만 참조('xxx.png'); 실제 배포 시 xxx@2x.png / xxx@3x.png 형태로 함께 둠
+// 이 도구는 @3x(가장 고해상도) 기준으로 업로드를 받습니다
 const IOS_IMAGE_MAP = {
-  'main-bg':        'bg_main@3x.png',
-  'chat-bg':        'bg_chat_room@3x.png',
-  'tabbar-bg':      'bg_tab_bar@3x.png',
-  'passcode-bg':    'bg_passcode@3x.png',
-  'profile':        'default_profile@3x.png',
-  'ico-friends':    'tab_friends_nor@3x.png',
-  'ico-friends-f':  'tab_friends_sel@3x.png',
-  'ico-chats':      'tab_chats_nor@3x.png',
-  'ico-more':       'tab_more_nor@3x.png',
-  'bubble-me1':     'chat_bubble_right_01@3x.png',
-  'bubble-me2':     'chat_bubble_right_02@3x.png',
-  'bubble-you1':    'chat_bubble_left_01@3x.png',
-  'bubble-you2':    'chat_bubble_left_02@3x.png',
-  'pc-dot':         'passcode_dot_empty@3x.png',
-  'pc-dot-checked': 'passcode_dot_active@3x.png',
-};
-// iOS 색상 키 매핑 (colors.xml 동일 구조 사용)
-const IOS_COLOR_MAP = {
-  'header-text':'myprofile_name_text_color','tab-inactive':'bottom_tab_normal_icon_color','tab-active':'bottom_tab_selected_icon_color',
-  'main-bg-color':'friends_bg_color','main-text-color':'friends_name_text_color','status-msg-color':'friends_status_message_text_color',
-  'last-msg-color':'chat_list_last_message_text_color','tabbar-bg-color':'bottom_tab_bg_color','tabbar-border-color':'bottom_tab_separator_color',
-  'badge-bg-color':'badge_bg_color','chat-bg-color':'chat_bg_color','my-bubble-bg':'chat_msg_right_bg_color',
-  'my-bubble-text':'chat_msg_right_text_color','other-bubble-bg':'chat_msg_left_bg_color','other-bubble-text':'chat_msg_left_text_color',
-  'unread-count-color':'chat_msg_right_unread_count_text_color','inputbar-bg':'chat_input_bg_color','passcode-bg-color':'passcode_bg_color',
-  'passcode-title-color':'passcode_title_text_color','keypad-bg':'passcode_key_bg_color','keypad-text':'passcode_key_text_color',
-  'dot-color':'passcode_indicator_active_color','header-bg-color':'actionbar_bg_color','list-bg-color':'chat_list_bg_color',
-  'divider-color':'list_divider_color','noti-bg-color':'notification_bg_color',
+  'main-bg':           'mainBgImage.png',
+  'chat-bg':           'chatroomBgImage.png',
+  'tabbar-bg':         'maintabBgImage.png',
+  'passcode-bg':       'passcodeBgImage.png',
+  'profile':           'profileImg01.png',
+  'find-friend-btn':   'findBtnAddFriend.png',
+  'ico-friends':       'maintabIcoFriends.png',
+  'ico-friends-f':     'maintabIcoFriendsSelected.png',
+  'ico-chats':         'maintabIcoChats.png',
+  'ico-chats-f':       'maintabIcoChatsSelected.png',
+  'ico-now':           'maintabIcoNow.png',
+  'ico-now-f':         'maintabIcoNowSelected.png',
+  'ico-shopping':      'maintabIcoShopping.png',
+  'ico-shopping-f':    'maintabIcoShoppingSelected.png',
+  'ico-more':          'maintabIcoMore.png',
+  'ico-more-f':        'maintabIcoMoreSelected.png',
+  'ico-call':          'maintabIcoCall.png',
+  'ico-call-f':        'maintabIcoCallSelected.png',
+  'bubble-me1':        'chatroomBubbleSend01.png',
+  'bubble-me1s':       'chatroomBubbleSend01Selected.png',
+  'bubble-me2':        'chatroomBubbleSend02.png',
+  'bubble-me2s':       'chatroomBubbleSend02Selected.png',
+  'bubble-you1':       'chatroomBubbleReceive01.png',
+  'bubble-you1s':      'chatroomBubbleReceive01Selected.png',
+  'bubble-you2':       'chatroomBubbleReceive02.png',
+  'bubble-you2s':      'chatroomBubbleReceive02Selected.png',
+  'pc-01':             'passcodeImgCode01.png',
+  'pc-01-c':           'passcodeImgCode01Selected.png',
+  'pc-02':             'passcodeImgCode02.png',
+  'pc-02-c':           'passcodeImgCode02Selected.png',
+  'pc-03':             'passcodeImgCode03.png',
+  'pc-03-c':           'passcodeImgCode03Selected.png',
+  'pc-04':             'passcodeImgCode04.png',
+  'pc-04-c':           'passcodeImgCode04Selected.png',
+  'pc-keypad-pressed': 'passcodeKeypadPressed.png',
 };
 
-function hexToArgb(hex) {
+// ── CSS 값 헬퍼 ──
+function hexToRgbStr(hex) {
   const h = hex.replace('#','');
-  if (h.length === 6) return '#ff' + h;
-  if (h.length === 8) return '#' + h;
-  return '#ff000000';
+  const r = (parseInt(h.slice(0,2),16)/255).toFixed(3);
+  const g = (parseInt(h.slice(2,4),16)/255).toFixed(3);
+  const b = (parseInt(h.slice(4,6),16)/255).toFixed(3);
+  return `${r} ${g} ${b} 1.000`;
 }
-function buildColorsXml() {
-  const lines = ['<?xml version="1.0" encoding="utf-8"?>','<resources>'];
-  Object.entries(IOS_COLOR_MAP).forEach(([uiKey, xmlKey]) => {
-    const inp = document.getElementById(uiKey);
-    const val = inp ? inp.value : '#ffffff';
-    lines.push(`    <color name="${xmlKey}">${hexToArgb(val)}</color>`);
-  });
-  lines.push('</resources>');
-  return lines.join('\n');
+function gv(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '#ffffff';
 }
-function buildColorsPlist() {
-  // iOS용 colors.plist 생성
-  const lines = ['<?xml version="1.0" encoding="UTF-8"?>',
-    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">',
-    '<plist version="1.0"><dict>'];
-  Object.entries(IOS_COLOR_MAP).forEach(([uiKey, key]) => {
-    const inp = document.getElementById(uiKey);
-    const hex = inp ? inp.value.replace('#','') : 'ffffff';
-    const r = parseInt(hex.slice(0,2),16)/255;
-    const g = parseInt(hex.slice(2,4),16)/255;
-    const b = parseInt(hex.slice(4,6),16)/255;
-    lines.push(`\t<key>${key}</key>`);
-    lines.push(`\t<string>${r.toFixed(3)} ${g.toFixed(3)} ${b.toFixed(3)} 1.000</string>`);
-  });
-  lines.push('</dict></plist>');
-  return lines.join('\n');
+
+// ── 공식 KakaoTalkTheme.css 생성 ──
+function buildThemeCSS(themeName, author, themeId) {
+  const mainBg       = gv('main-bg-color');
+  const headerText   = gv('header-text');
+  const tabText      = gv('tab-inactive');
+  const tabSelText   = gv('tab-active');
+  const mainText     = gv('main-text-color');
+  const descText     = gv('status-msg-color');
+  const paraText     = gv('last-msg-color');
+  const chatBg       = gv('chat-bg-color');
+  const myBubbleTxt  = gv('my-bubble-text');
+  const youBubbleTxt = gv('other-bubble-text');
+  const unreadColor  = gv('unread-count-color');
+  const inputBg      = gv('inputbar-bg');
+  const sendBtnBg    = gv('send-btn-bg');
+  const sendBtnIco   = gv('send-btn-icon');
+  const menuIcoColor = gv('menu-icon-color');
+  const passcodeBg   = gv('passcode-bg-color');
+  const passcodeTitle= gv('passcode-title-color');
+  const keypadBg     = gv('keypad-bg');
+  const keypadText   = gv('keypad-text');
+  const notiBg       = gv('noti-bg-color');
+  const notiName     = gv('noti-name-color');
+  const notiMsg      = gv('noti-msg-color');
+  const directBg     = gv('direct-share-bg');
+  const tabbarBg     = gv('tabbar-bg-color');
+  const badgeBg      = gv('badge-bg-color');
+
+  return `/*
+ Manifest
+ */
+
+ManifestStyle
+{
+    -kakaotalk-theme-name: '${themeName}';
+    -kakaotalk-theme-version: '1.0.0';
+    -kakaotalk-theme-url: '';
+    -kakaotalk-author-name: '${author}';
+    -kakaotalk-theme-id: '${themeId}';
 }
-function buildGuide(themeName) {
+
+
+/*
+ TabBar Style
+ */
+
+TabBarStyle-Main
+{
+    background-color: ${tabbarBg};
+    -ios-background-image: 'maintabBgImage.png';
+
+    -ios-friends-normal-icon-image: 'maintabIcoFriends.png';
+    -ios-friends-selected-icon-image: 'maintabIcoFriendsSelected.png';
+    -ios-chats-normal-icon-image: 'maintabIcoChats.png';
+    -ios-chats-selected-icon-image: 'maintabIcoChatsSelected.png';
+    -ios-now-normal-icon-image: 'maintabIcoNow.png';
+    -ios-now-selected-icon-image: 'maintabIcoNowSelected.png';
+    -ios-openchats-normal-icon-image: 'maintabIcoNow.png';
+    -ios-openchats-selected-icon-image: 'maintabIcoNowSelected.png';
+    -ios-piccoma-normal-icon-image: 'maintabIcoPiccoma.png';
+    -ios-piccoma-selected-icon-image: 'maintabIcoPiccomaSelected.png';
+    -ios-shopping-normal-icon-image: 'maintabIcoShopping.png';
+    -ios-shopping-selected-icon-image: 'maintabIcoShoppingSelected.png';
+    -ios-call-normal-icon-image: 'maintabIcoCall.png';
+    -ios-call-selected-icon-image: 'maintabIcoCallSelected.png';
+    -ios-more-normal-icon-image: 'maintabIcoMore.png';
+    -ios-more-selected-icon-image: 'maintabIcoMoreSelected.png';
+}
+
+
+/*
+ MainView Style
+ */
+
+HeaderStyle-Main
+{
+    -ios-text-color: ${headerText};
+    -ios-tab-text-color: ${tabText};
+    -ios-tab-highlighted-text-color: ${tabSelText};
+}
+
+MainViewStyle-Primary
+{
+    background-color: ${mainBg};
+    -ios-background-image: 'mainBgImage.png';
+
+    -ios-text-color: ${mainText};
+    -ios-highlighted-text-color: ${mainText};
+
+    -ios-description-text-color: ${descText};
+    -ios-description-highlighted-text-color: ${descText};
+
+    -ios-paragraph-text-color: ${paraText};
+    -ios-paragraph-highlighted-text-color: ${paraText};
+
+    -ios-normal-background-color: ${mainBg};
+    -ios-normal-background-alpha: 0.0;
+
+    -ios-selected-background-color: ${mainText};
+    -ios-selected-background-alpha: 0.05;
+}
+
+MainViewStyle-Secondary
+{
+    background-color: ${mainBg};
+}
+
+SectionTitleStyle-Main
+{
+    border-color: ${mainText};
+    border-alpha: 0.09;
+
+    -ios-text-color: ${mainText};
+    -ios-text-alpha: 1.0;
+}
+
+
+/*
+ Feature Style
+ */
+
+FeatureStyle-Primary
+{
+    -ios-text-color: ${descText};
+}
+
+ButtonStyle-AddFriend
+{
+    -ios-image: 'findBtnAddFriend.png';
+}
+
+DefaultProfileStyle
+{
+    -ios-profile-images: 'profileImg01.png';
+}
+
+
+/*
+ ChatRoom Style
+ */
+
+BackgroundStyle-ChatRoom
+{
+    background-color: ${chatBg};
+    -ios-background-image: 'chatroomBgImage.png';
+}
+
+InputBarStyle-Chat
+{
+    background-color: ${inputBg};
+
+    -ios-send-normal-background-color: ${sendBtnBg};
+    -ios-send-normal-foreground-color: ${sendBtnIco};
+
+    -ios-send-highlighted-background-color: ${sendBtnBg};
+    -ios-send-highlighted-foreground-color: ${sendBtnIco};
+
+    -ios-button-normal-foreground-color: ${menuIcoColor};
+    -ios-button-highlighted-foreground-color: ${menuIcoColor};
+
+    -ios-button-text-color: ${mainText};
+    -ios-button-normal-background-color: #000000;
+    -ios-button-normal-background-alpha: 0.04;
+}
+
+
+/*
+ Message Style
+ */
+
+MessageCellStyle-Send
+{
+    -ios-background-image: 'chatroomBubbleSend01.png' 17px 17px;
+    -ios-selected-background-image: 'chatroomBubbleSend01Selected.png' 17px 17px;
+    -ios-group-background-image: 'chatroomBubbleSend02.png' 17px 17px;
+    -ios-group-selected-background-image: 'chatroomBubbleSend02Selected.png' 17px 17px;
+    -ios-title-edgeinsets: 10px 11px 7px 17px;
+    -ios-group-title-edgeinsets: 10px 11px 7px 17px;
+
+    -ios-text-color: ${myBubbleTxt};
+    -ios-selected-text-color: ${myBubbleTxt};
+    -ios-unread-text-color: ${unreadColor};
+}
+
+MessageCellStyle-Receive
+{
+    -ios-background-image: 'chatroomBubbleReceive01.png' 22px 17px;
+    -ios-selected-background-image: 'chatroomBubbleReceive01Selected.png' 22px 17px;
+    -ios-group-background-image: 'chatroomBubbleReceive02.png' 22px 17px;
+    -ios-group-selected-background-image: 'chatroomBubbleReceive02Selected.png' 22px 17px;
+    -ios-title-edgeinsets: 10px 17px 7px 11px;
+    -ios-group-title-edgeinsets: 10px 17px 7px 11px;
+
+    -ios-text-color: ${youBubbleTxt};
+    -ios-selected-text-color: ${youBubbleTxt};
+    -ios-unread-text-color: ${unreadColor};
+}
+
+
+/*
+ Passcode Style
+ */
+
+BackgroundStyle-Passcode
+{
+    background-color: ${passcodeBg};
+    -ios-background-image: 'passcodeBgImage.png';
+}
+
+LabelStyle-PasscodeTitle
+{
+    -ios-text-color: ${passcodeTitle};
+}
+
+PasscodeStyle
+{
+    -ios-bullet-first-image: 'passcodeImgCode01.png';
+    -ios-bullet-second-image: 'passcodeImgCode02.png';
+    -ios-bullet-third-image: 'passcodeImgCode03.png';
+    -ios-bullet-fourth-image: 'passcodeImgCode04.png';
+
+    -ios-bullet-selected-first-image: 'passcodeImgCode01Selected.png';
+    -ios-bullet-selected-second-image: 'passcodeImgCode02Selected.png';
+    -ios-bullet-selected-third-image: 'passcodeImgCode03Selected.png';
+    -ios-bullet-selected-fourth-image: 'passcodeImgCode04Selected.png';
+
+    -ios-keypad-background-color: ${keypadBg};
+    -ios-keypad-text-normal-color: ${keypadText};
+
+    -ios-keypad-number-highlighted-image : 'passcodeKeypadPressed.png';
+}
+
+
+/*
+ Message Notification Bar Style
+ */
+
+BackgroundStyle-MessageNotificationBar
+{
+    background-color: ${notiBg};
+}
+
+LabelStyle-MessageNotificationBarName
+{
+    -ios-text-color: ${notiName};
+}
+
+LabelStyle-MessageNotificationBarMessage
+{
+    -ios-text-color: ${notiMsg};
+}
+
+
+/*
+ Direct Share
+*/
+
+BackgroundStyle-DirectShareBar
+{
+    background-color: ${directBg};
+}
+
+LabelStyle-DirectShareBarName
+{
+    -ios-text-color: ${mainText};
+}
+
+LabelStyle-DirectShareBarMessage
+{
+    -ios-text-color: ${descText};
+}
+
+
+/*
+ BottomBanner Style
+ */
+
+BottomBannerStyle {
+    background-color: ${badgeBg};
+}
+
+BottomBannerStyle-Light {
+    background-color: ${badgeBg};
+}
+`;
+}
+
+function buildGuide(themeName, themeId) {
   return `===================================================
   카카오톡 테마 메이커 - iOS 빌드 가이드
 ===================================================
 
 테마명: ${themeName}
+테마 ID: ${themeId}
 플랫폼: iOS (iPhone)
 생성일: ${new Date().toLocaleDateString('ko-KR')}
 
 ---------------------------------------------------
-[ iOS 테마 구조 ]
+[ 이 ZIP의 구조 ]
 ---------------------------------------------------
-theme-ios/
-  Info.plist              ← 테마 기본 정보
-  colors.plist            ← 색상값 (iOS 형식)
-  colors.xml              ← 색상값 (Android 호환)
-  Images/
-    @3x/                  ← 아이폰 고해상도 이미지
-      bg_main@3x.png
-      bg_chat_room@3x.png
-      ...
-  BUILD_GUIDE.txt
+${themeId}/
+  KakaoTalkTheme.css   ← 색상/이미지 참조 정의
+  Images/              ← @3x(고해상도) 기준 이미지
+    mainBgImage@3x.png          1125×2250
+    chatroomBgImage@3x.png      1125×2250
+    maintabBgImage@3x.png       1410×147
+    passcodeBgImage@3x.png      1200×1200
+    profileImg01@3x.png         360×360
+    findBtnAddFriend@3x.png     126×102
+    maintabIcoFriends@3x.png    114×114  (+ Selected)
+    maintabIcoChats@3x.png      114×114  (+ Selected)
+    maintabIcoNow@3x.png        114×114  (+ Selected)
+    maintabIcoShopping@3x.png   114×114  (+ Selected)
+    maintabIcoMore@3x.png       114×114  (+ Selected)
+    maintabIcoCall@3x.png       114×114  (+ Selected, 선택사항)
+    chatroomBubbleSend01@3x.png 120×105  (+ 02, Selected 변형들)
+    chatroomBubbleReceive01@3x.png 120×105 (+ 02, Selected 변형들)
+    passcodeImgCode01~04@3x.png 132×132  (+ Selected 변형들)
+    passcodeKeypadPressed@3x.png 180×180
+  BUILD_GUIDE.txt      ← 이 파일
 
----------------------------------------------------
-[ iOS 카카오톡 테마 배포 방법 ]
----------------------------------------------------
-
-⚠️  iOS는 Android와 달리 APK 방식이 아닙니다.
-
-★ 방법 1 - 카카오 공식 경로 (권장)
-  1. 카카오 크리에이터스 센터 가입:
-     https://creators.kakao.com
-  2. 이모티콘/테마 제출 메뉴 선택
-  3. 가이드에 따라 리소스 제출
-  4. 심사 후 카카오 스토어에 등록
-
-★ 방법 2 - 내부 배포 (TestFlight)
-  1. Apple 개발자 계정 필요 (연 129,000원)
-  2. Xcode로 테마 번들 빌드
-  3. TestFlight으로 최대 10,000명까지 배포 가능
-
-★ 방법 3 - 파일 직접 교체 (탈옥 기기 전용)
-  ⚠️ 탈옥 기기에서만 가능
-  1. iFile / Filza 등 파일 매니저 사용
-  2. /var/containers/Bundle/Application/ 아래
-     KakaoTalk 앱 번들 찾기
-  3. 이미지 파일 직접 교체
+※ CSS 안에서는 'mainBgImage.png'처럼 확장자 앞부분(베이스명)만
+  참조합니다. 실제 파일은 같은 이름에 @2x/@3x를 붙여 두면
+  카카오톡이 기기 해상도에 맞는 쪽을 자동으로 골라 씁니다.
+  이 ZIP은 @3x만 포함하므로, 구형 기기까지 챙기고 싶다면
+  같은 이미지를 2/3 비율로 줄인 @2x 버전을 직접 추가하세요.
 
 ---------------------------------------------------
-[ 이미지 규격 요약 (iOS @3x) ]
+[ .ktheme 파일 만들기 ]
 ---------------------------------------------------
-  bg_main@3x.png         : 1290×2796 (iPhone 14 Pro)
-  bg_chat_room@3x.png    : 1290×2796
-  bg_tab_bar@3x.png      : 1290×300
-  bg_passcode@3x.png     : 1290×2796
-  tab_*@3x.png           : 81×81
-  chat_bubble_*@3x.png   : 자유 (resizable)
-  default_profile@3x.png : 216×216
+
+★ 방법 1 - 공식 샘플과 합치기 (권장, 가장 안전)
+  1. 카카오 고객센터에서 '내가 직접 테마를 만들 수도
+     있나요?' 검색 → 공식 샘플(.ktheme) 다운로드
+  2. 샘플 .ktheme 파일의 확장자를 .zip으로 바꾼 뒤 압축 해제
+     (.ktheme은 내부적으로 ZIP 포맷입니다)
+  3. 압축 해제된 폴더 안의 KakaoTalkTheme.css와 Images/를
+     이 ZIP에 든 파일들로 통째로 교체
+  4. 폴더명을 ${themeId} 로 변경 (선택사항)
+  5. 폴더 전체를 다시 ZIP으로 압축
+  6. 압축파일 확장자를 .zip → .ktheme 으로 변경
+
+★ 방법 2 - 처음부터 만들기
+  위 [이 ZIP의 구조]를 그대로 최상위 폴더로 만들고
+  방법 1의 5~6번과 동일하게 압축 → 확장자 변경
+
+★ 설치
+  완성된 .ktheme 파일을 아이폰으로 전송(AirDrop, 메일,
+  파일 앱 등) → 파일 앱에서 열기 → "카카오톡으로 열기"
+  선택 → 카카오톡 설정 > 테마에서 적용
+
+★ 공식 스토어 공개 배포 (심사 필요)
+  카카오 크리에이터스: https://creators.kakao.com
 
 ---------------------------------------------------
-[ 색상 파일 사용법 ]
+[ 주의사항 ]
 ---------------------------------------------------
-  colors.plist → iOS 네이티브 코드에서 사용
-  colors.xml   → 카카오 공식 Android 포맷 (참고용)
+  - CSS 파일은 UTF-8 인코딩 유지
+  - 위 Images 목록의 파일명을 임의로 바꾸면 CSS에서
+    참조를 못 찾아 해당 이미지가 적용되지 않습니다
+  - 말풍선/탭 아이콘의 Selected(선택됨) 이미지를 비워두면
+    기본(비활성) 이미지가 대신 사용될 수 있습니다
 
-===================================================
-  카카오톡 테마 메이커
 ===================================================`;
-}
-function buildInfoPlist(themeName, author) {
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>CFBundleName</key>
-    <string>${themeName}</string>
-    <key>KakaoThemeName</key>
-    <string>${themeName}</string>
-    <key>KakaoThemeAuthor</key>
-    <string>${author}</string>
-    <key>KakaoThemeVersion</key>
-    <string>1.0</string>
-    <key>KakaoThemePlatform</key>
-    <string>iOS</string>
-</dict>
-</plist>`;
 }
 
 async function exportZIP() {
   if (typeof JSZip === 'undefined') { showToast('JSZip 로딩 중...', 'error'); return; }
   const themeName = prompt('테마 이름을 입력하세요:', '나만의 카카오 테마') || '나만의 카카오 테마';
   const author = prompt('제작자 이름:', '작자미상') || '작자미상';
+  const slug = themeName.toLowerCase().replace(/[^a-z0-9]/g,'').substring(0,12);
+  const themeId = 'com.kakao.talk.theme.' + (slug || 'theme' + Date.now().toString(36).slice(-6));
   const zip = new JSZip();
-  const root = zip.folder('theme-ios');
-  root.file('Info.plist', buildInfoPlist(themeName, author));
-  root.file('colors.plist', buildColorsPlist());
-  root.file('colors.xml', buildColorsXml());
-  root.file('BUILD_GUIDE.txt', buildGuide(themeName));
-  const imgFolder = root.folder('Images/@3x');
+  // 실제 .ktheme 배포 구조: 테마ID 폴더 안에 CSS + Images/
+  const root = zip.folder(themeId);
+  root.file('KakaoTalkTheme.css', buildThemeCSS(themeName, author, themeId));
+  root.file('BUILD_GUIDE.txt', buildGuide(themeName, themeId));
+  const imgFolder = root.folder('Images');
   let imgCount = 0;
   Object.entries(uploads).forEach(([key, data]) => {
     if (data && IOS_IMAGE_MAP[key]) {
       const b64 = data.split(',')[1];
-      imgFolder.file(IOS_IMAGE_MAP[key], b64, {base64: true});
+      // CSS는 'xxx.png'(베이스명)를 참조하지만, 실제 배포 파일은 xxx@2x.png / xxx@3x.png 형태로 둠
+      // 업로드는 @3x(최고해상도) 기준으로 받았으므로 @3x 파일명으로 저장
+      const baseName = IOS_IMAGE_MAP[key].replace(/\.png$/, '');
+      imgFolder.file(`${baseName}@3x.png`, b64, {base64: true});
       imgCount++;
     }
   });
@@ -1285,10 +1692,10 @@ async function exportZIP() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `${themeName.replace(/\s/g,'-')}-ios-theme.zip`;
+  a.download = `${themeId}-source.zip`;
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast(`✅ iOS 테마 ZIP 다운로드 완료! (이미지 ${imgCount}개)`, 'success');
+  showToast(`✅ iOS 테마 소스 ZIP 완료! (이미지 ${imgCount}개) — 폴더를 .ktheme으로 압축하세요`, 'success');
 }
 
 function newProject() { showToast('새 프로젝트를 시작합니다'); }
