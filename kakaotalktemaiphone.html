@@ -1021,6 +1021,8 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 
 <script>
 const uploads = {};
+const bubbleCaps = {}; // key -> {leftCap, topCap} (pt 단위), 업로드 이미지에서 자동 감지된 값
+const BUBBLE_KEYS = ['bubble-me1','bubble-me1s','bubble-me2','bubble-me2s','bubble-you1','bubble-you1s','bubble-you2','bubble-you2s'];
 let currentTab = 'friends';
 let currentStep = 1;
 let pressMode = false;
@@ -1040,13 +1042,22 @@ function handleSlot(key, input, event) {
     if (slot) slot.classList.add('has-file');
     if (badge) { badge.textContent = '✓ 완료'; }
     if (key === 'chat-bg') renderPreview();
-    showToast('이미지 업로드 완료 ✓', 'success');
+    if (BUBBLE_KEYS.includes(key)) {
+      // 가이드: "이미지에서 자동 감지" → 업로드된 말풍선 이미지를 분석해 cap 값을 추정
+      detectBubbleCap(e.target.result).then(cap => {
+        bubbleCaps[key] = cap;
+        showToast(`이미지 업로드 완료 ✓ (캡 자동감지: ${cap.leftCap}pt / ${cap.topCap}pt)`, 'success');
+      }).catch(() => showToast('이미지 업로드 완료 ✓', 'success'));
+    } else {
+      showToast('이미지 업로드 완료 ✓', 'success');
+    }
   };
   reader.readAsDataURL(file);
 }
 function clearSlot(key, e) {
   e.preventDefault();
   uploads[key] = null;
+  delete bubbleCaps[key];
   const thumbImg = document.getElementById('thumb-img-' + key);
   const thumbIcon = document.getElementById('thumb-icon-' + key);
   const slot = document.getElementById('slot-' + key);
@@ -1057,6 +1068,82 @@ function clearSlot(key, e) {
   if (badge) badge.textContent = '비어있음';
   showToast('이미지 제거됨');
 }
+
+// ── 말풍선 9-patch 캡(cap) 자동 감지 ──
+// 가이드: "stretch line이 캐릭터를 피해야 함" → 모서리 라운딩이 끝나는 지점(=캐릭터/장식이 시작되기 전)을
+// stretch 직전 캡 위치로 추정한다. 좌상단 코너의 투명 영역이 끝나는 픽셀 수를 측정해 캡으로 사용.
+function detectBubbleCap(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, w, h).data;
+        const alphaAt = (x, y) => data[(y * w + x) * 4 + 3];
+
+        // 좌상단 코너: 위쪽 가장자리 행에서 첫 불투명 픽셀의 x좌표, 왼쪽 가장자리 열에서 첫 불투명 픽셀의 y좌표
+        let cornerX = 0, cornerY = 0;
+        const midY = Math.min(2, h - 1);
+        for (let x = 0; x < w; x++) { if (alphaAt(x, midY) > 10) { cornerX = x; break; } }
+        const midX = Math.min(2, w - 1);
+        for (let y = 0; y < h; y++) { if (alphaAt(midX, y) > 10) { cornerY = y; break; } }
+
+        // @3x 픽셀 → pt 변환 (px ÷ 3), 코너 라운딩을 피하도록 여유(buffer) 추가
+        const leftCapPx = cornerX + Math.max(4, Math.round(h * 0.03));
+        const topCapPx = cornerY + Math.max(4, Math.round(w * 0.03));
+        const leftCap = Math.max(6, Math.round(leftCapPx / 3));
+        const topCap = Math.max(6, Math.round(topCapPx / 3));
+        resolve({ leftCap, topCap, widthPx: w, heightPx: h });
+      } catch (err) { reject(err); }
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+
+// ── 이미지 미업로드 시 색상 기반 자동 생성 말풍선 (가이드: 90×99 @3x 고정 크기) ──
+function generateFallbackBubblePNG(bgColor, marginPt, radiusPx3x, side, selected) {
+  const baseW = 90, baseH = 99;
+  const marginPx = Math.max(0, Math.round(marginPt * 3));
+  const w = baseW + marginPx;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = baseH;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, w, baseH);
+  // Send: 우측에 투명 마진 / Receive: 좌측에 투명 마진
+  const rectX = side === 'send' ? 0 : marginPx;
+  const rectW = baseW;
+  let color = bgColor;
+  if (selected) color = darkenHex(bgColor, 0.25); // 가이드: Selected는 20~30% 어둡게
+  const r = Math.max(0, Math.min(radiusPx3x, rectW / 2 - 1, baseH / 2 - 1));
+  ctx.fillStyle = color;
+  roundRectPath(ctx, rectX, 0, rectW, baseH, r);
+  ctx.fill();
+  return canvas.toDataURL('image/png');
+}
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function darkenHex(hex, amount) {
+  const h = hex.replace('#', '');
+  const r = Math.max(0, Math.round(parseInt(h.slice(0, 2), 16) * (1 - amount)));
+  const g = Math.max(0, Math.round(parseInt(h.slice(2, 4), 16) * (1 - amount)));
+  const b = Math.max(0, Math.round(parseInt(h.slice(4, 6), 16) * (1 - amount)));
+  return '#' + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+function dataURLtoBase64(dataUrl) { return dataUrl.split(',')[1]; }
+
+
 
 function pickColor(id) { document.getElementById(id).click(); }
 function updateColor(id) {
@@ -1163,6 +1250,9 @@ function renderPreview() {
   // iOS 말풍선: 오른쪽 꼬리 반대편만 작게
   ['bubble-other1','bubble-other2'].forEach(id => setStyle(id, {background: otherBubbleBg, color: otherBubbleText, borderRadius: `${r} ${r} ${r} 4px`}));
   ['bubble-mine1','bubble-mine2'].forEach(id => setStyle(id, {background: myBubbleBg, color: myBubbleText, borderRadius: `${r} ${r} 4px ${r}`}));
+  // 가장자리 여백(margin) 슬라이더를 프리뷰에도 실제로 반영 (화면 가장자리 ↔ 말풍선 간 여백)
+  const marginPt = parseInt(g('sl-margin'), 10) || 0;
+  if (chatArea) chatArea.style.padding = `10px ${10 + marginPt}px`;
   setStyle('unread1', {color: unreadColor});
   setStyle('ph-footer', {background: inputbarBg, borderTopColor: dividerColor});
 
@@ -1327,6 +1417,22 @@ function buildThemeCSS(themeName, author, themeId) {
   const tabbarBg     = gv('tabbar-bg-color');
   const badgeBg      = gv('badge-bg-color');
 
+  // ── 말풍선 캡/인셋 계산 (가이드 규칙 반영) ──
+  // 1) 업로드된 이미지가 있으면 자동 감지된 cap(bubbleCaps)을 사용, 없으면 기본값
+  // 2) 가장자리 여백(margin) 슬라이더 값을 인셋에 자동 합산 (Send: 우측, Receive: 좌측)
+  const marginPt = parseInt(g('sl-margin'), 10) || 0;
+  const radiusPx3x = (parseInt(g('sl-radius'), 10) || 16) * 3;
+  const radiusCapPt = Math.max(6, Math.round(radiusPx3x / 3) + 2); // 자동 생성 말풍선(이미지 없음)의 코너 라운딩에 맞춘 캡
+  const DEFAULT_INSET = { top: 11, left: 10, bottom: 9, right: 9 }; // 가이드 표 기본값
+  const capOf = (key, fallbackLeft, fallbackTop) => bubbleCaps[key] || { leftCap: fallbackLeft, topCap: fallbackTop };
+  const meCap1  = capOf('bubble-me1', radiusCapPt, radiusCapPt);
+  const meCap2  = capOf('bubble-me2', meCap1.leftCap, meCap1.topCap);
+  const youCap1 = capOf('bubble-you1', radiusCapPt, radiusCapPt);
+  const youCap2 = capOf('bubble-you2', youCap1.leftCap, youCap1.topCap);
+  // Send: 우측 인셋 += margin, Receive: 좌측 인셋 += margin
+  const meInset  = `${DEFAULT_INSET.top}px ${DEFAULT_INSET.left}px ${DEFAULT_INSET.bottom}px ${DEFAULT_INSET.right + marginPt}px`;
+  const youInset = `${DEFAULT_INSET.top}px ${DEFAULT_INSET.left + marginPt}px ${DEFAULT_INSET.bottom}px ${DEFAULT_INSET.right}px`;
+
   return `/*
  Manifest
  */
@@ -1471,12 +1577,12 @@ InputBarStyle-Chat
 
 MessageCellStyle-Send
 {
-    -ios-background-image: 'chatroomBubbleSend01.png' 17px 17px;
-    -ios-selected-background-image: 'chatroomBubbleSend01Selected.png' 17px 17px;
-    -ios-group-background-image: 'chatroomBubbleSend02.png' 17px 17px;
-    -ios-group-selected-background-image: 'chatroomBubbleSend02Selected.png' 17px 17px;
-    -ios-title-edgeinsets: 10px 11px 7px 17px;
-    -ios-group-title-edgeinsets: 10px 11px 7px 17px;
+    -ios-background-image: 'chatroomBubbleSend01.png' ${meCap1.leftCap}px ${meCap1.topCap}px;
+    -ios-selected-background-image: 'chatroomBubbleSend01Selected.png' ${meCap1.leftCap}px ${meCap1.topCap}px;
+    -ios-group-background-image: 'chatroomBubbleSend02.png' ${meCap2.leftCap}px ${meCap2.topCap}px;
+    -ios-group-selected-background-image: 'chatroomBubbleSend02Selected.png' ${meCap2.leftCap}px ${meCap2.topCap}px;
+    -ios-title-edgeinsets: ${meInset};
+    -ios-group-title-edgeinsets: ${meInset};
 
     -ios-text-color: ${myBubbleTxt};
     -ios-selected-text-color: ${myBubbleTxt};
@@ -1485,12 +1591,12 @@ MessageCellStyle-Send
 
 MessageCellStyle-Receive
 {
-    -ios-background-image: 'chatroomBubbleReceive01.png' 22px 17px;
-    -ios-selected-background-image: 'chatroomBubbleReceive01Selected.png' 22px 17px;
-    -ios-group-background-image: 'chatroomBubbleReceive02.png' 22px 17px;
-    -ios-group-selected-background-image: 'chatroomBubbleReceive02Selected.png' 22px 17px;
-    -ios-title-edgeinsets: 10px 17px 7px 11px;
-    -ios-group-title-edgeinsets: 10px 17px 7px 11px;
+    -ios-background-image: 'chatroomBubbleReceive01.png' ${youCap1.leftCap}px ${youCap1.topCap}px;
+    -ios-selected-background-image: 'chatroomBubbleReceive01Selected.png' ${youCap1.leftCap}px ${youCap1.topCap}px;
+    -ios-group-background-image: 'chatroomBubbleReceive02.png' ${youCap2.leftCap}px ${youCap2.topCap}px;
+    -ios-group-selected-background-image: 'chatroomBubbleReceive02Selected.png' ${youCap2.leftCap}px ${youCap2.topCap}px;
+    -ios-title-edgeinsets: ${youInset};
+    -ios-group-title-edgeinsets: ${youInset};
 
     -ios-text-color: ${youBubbleTxt};
     -ios-selected-text-color: ${youBubbleTxt};
@@ -1688,6 +1794,31 @@ async function exportZIP() {
       imgCount++;
     }
   });
+
+  // ── 가이드: "이미지를 넣지 않으면 보낸/받은 말풍선 배경색으로 자동 생성" ──
+  // 업로드되지 않은 말풍선 슬롯은 CSS가 참조하는 PNG가 누락되지 않도록 색상 기반으로 직접 생성한다.
+  const marginPt = parseInt(g('sl-margin'), 10) || 0;
+  const radiusPx3x = (parseInt(g('sl-radius'), 10) || 16) * 3;
+  const myBubbleBg = gv('my-bubble-bg');
+  const otherBubbleBg = gv('other-bubble-bg');
+  const fallbackSpecs = [
+    { key: 'bubble-me1',  color: myBubbleBg,    side: 'send',    selected: false },
+    { key: 'bubble-me1s', color: myBubbleBg,    side: 'send',    selected: true  },
+    { key: 'bubble-me2',  color: myBubbleBg,    side: 'send',    selected: false },
+    { key: 'bubble-me2s', color: myBubbleBg,    side: 'send',    selected: true  },
+    { key: 'bubble-you1', color: otherBubbleBg, side: 'receive', selected: false },
+    { key: 'bubble-you1s',color: otherBubbleBg, side: 'receive', selected: true  },
+    { key: 'bubble-you2', color: otherBubbleBg, side: 'receive', selected: false },
+    { key: 'bubble-you2s',color: otherBubbleBg, side: 'receive', selected: true  },
+  ];
+  fallbackSpecs.forEach(spec => {
+    if (uploads[spec.key]) return; // 이미 업로드된 이미지가 있으면 건드리지 않음
+    const dataUrl = generateFallbackBubblePNG(spec.color, marginPt, radiusPx3x, spec.side, spec.selected);
+    const baseName = IOS_IMAGE_MAP[spec.key].replace(/\.png$/, '');
+    imgFolder.file(`${baseName}@3x.png`, dataURLtoBase64(dataUrl), {base64: true});
+    imgCount++;
+  });
+
   const blob = await zip.generateAsync({type:'blob'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
