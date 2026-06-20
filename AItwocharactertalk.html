@@ -9,30 +9,30 @@
 <style>
 * { box-sizing: border-box; }
 :root {
-  --bg: #0d0f18;
-  --bg-soft: #131626;
-  --paper: #1a1d2e;
-  --ink: #e8eaf6;
-  --ink2: #9fa8c7;
-  --ink3: #5c6491;
-  --ink4: #3a3f5c;
+  --bg: #f5f0eb;
+  --bg-soft: #faf7f4;
+  --paper: #ffffff;
+  --ink: #2d1f1f;
+  --ink2: #6b5050;
+  --ink3: #a08080;
+  --ink4: #c0a0a0;
 
-  --a-bg: #0e1a33;
-  --a-border: #3d6fff;
-  --a-text: #7eb3ff;
-  --a-bubble: #111f3e;
+  --a-bg: #e8f0fe;
+  --a-border: #93b4f9;
+  --a-text: #1a3a8a;
+  --a-bubble: #dce8fd;
 
-  --b-bg: #1e0e2e;
-  --b-border: #b060ff;
-  --b-text: #d09aff;
-  --b-bubble: #1a0d2a;
+  --b-bg: #fde8e0;
+  --b-border: #f9a080;
+  --b-text: #7a2810;
+  --b-bubble: #fcddd4;
 
-  --accent: #5c7cff;
-  --danger: #ff5c6a;
-  --danger-soft: #1f0d10;
+  --accent: #3d2f2f;
+  --danger: #c0392b;
+  --danger-soft: #fdf0ee;
 
-  --warm: #252840;
-  --warm2: #1e2038;
+  --warm: #e8ddd4;
+  --warm2: #f0e8e0;
 
   --font: 'Pretendard Variable', -apple-system, sans-serif;
 }
@@ -48,23 +48,23 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
 #screen-setup { max-width:600px; margin:0 auto; padding:36px 16px 80px; }
 
 .title { text-align:center; margin-bottom:32px; }
-.title .badge { display:inline-block; font-size:10px; letter-spacing:.2em; color:var(--accent); margin-bottom:10px; background:rgba(92,124,255,.12); border:1px solid rgba(92,124,255,.25); border-radius:20px; padding:3px 12px; }
-.title h1 { font-size:28px; font-weight:700; margin:0 0 10px; letter-spacing:.04em; background:linear-gradient(135deg,#7eb3ff,#d09aff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.title .badge { display:inline-block; font-size:10px; letter-spacing:.15em; color:var(--ink3); margin-bottom:8px; }
+.title h1 { font-size:28px; font-weight:700; margin:0 0 10px; letter-spacing:.06em; }
 .title p { margin:0; font-size:13px; color:var(--ink3); line-height:1.7; }
 
 .char-tabs { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.char-tab { padding:10px 16px; border-radius:10px; border:1px solid var(--warm); background:var(--paper); font-family:var(--font); font-size:13px; font-weight:600; cursor:pointer; transition:.15s; color:var(--ink3); }
-.char-tab.active-a { border-color:var(--a-border); background:var(--a-bg); color:var(--a-text); box-shadow:0 0 12px rgba(61,111,255,.2); }
-.char-tab.active-b { border-color:var(--b-border); background:var(--b-bg); color:var(--b-text); box-shadow:0 0 12px rgba(176,96,255,.2); }
+.char-tab { padding:10px 16px; border-radius:14px; border:1.5px solid var(--warm); background:var(--paper); font-family:var(--font); font-size:13px; font-weight:600; cursor:pointer; transition:.15s; color:var(--ink3); }
+.char-tab.active-a { border-color:var(--a-border); background:var(--a-bg); color:var(--a-text); }
+.char-tab.active-b { border-color:var(--b-border); background:var(--b-bg); color:var(--b-text); }
 .char-tab:not(.active-a):not(.active-b):hover { background:var(--bg-soft); }
 
 .char-panel { display:none; }
 .char-panel.active { display:block; }
 
-.section { background:var(--bg-soft); border:1px solid var(--warm); border-radius:14px; padding:20px; margin-bottom:12px; }
-.section.a-section { border-color:rgba(61,111,255,.4); background:var(--a-bg); }
-.section.b-section { border-color:rgba(176,96,255,.4); background:var(--b-bg); }
-.section-title { font-size:11px; font-weight:700; letter-spacing:.1em; color:var(--ink3); margin:0 0 4px; text-transform:uppercase; }
+.section { background:var(--bg-soft); border:1px solid var(--warm); border-radius:18px; padding:20px; margin-bottom:12px; }
+.section.a-section { border-color:var(--a-border); background:var(--a-bg); }
+.section.b-section { border-color:var(--b-border); background:var(--b-bg); }
+.section-title { font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--ink3); margin:0 0 4px; }
 .section.a-section .section-title { color:var(--a-text); }
 .section.b-section .section-title { color:var(--b-text); }
 .section-desc { font-size:11px; color:var(--ink3); margin:0 0 14px; line-height:1.6; }
@@ -74,65 +74,61 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
 .field label { display:block; font-size:12px; color:var(--ink3); margin-bottom:5px; }
 .field label .req { color:var(--danger); }
 .field input[type=text], .field textarea {
-  width:100%; background:var(--bg); border:1px solid var(--warm);
-  border-radius:8px; padding:9px 12px; color:var(--ink);
+  width:100%; background:var(--paper); border:1px solid var(--warm);
+  border-radius:11px; padding:9px 12px; color:var(--ink);
   font-family:var(--font); font-size:14px; line-height:1.5;
   outline:none; transition:.15s;
 }
 .field textarea { resize:vertical; min-height:54px; }
 .field textarea.tall { min-height:80px; }
-.field input:focus, .field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(92,124,255,.15); }
-.field input::placeholder, .field textarea::placeholder { color:var(--ink4); }
+.field input:focus, .field textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(61,47,47,.1); }
+.field input::placeholder, .field textarea::placeholder { color:#c8b4b4; }
 
 .shared-section { margin-bottom:12px; }
 
 .backup-row { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
-.backup-btn { flex:1; min-width:120px; background:var(--paper); color:var(--ink2); border:1px solid var(--warm); border-radius:8px; padding:9px 12px; font-family:var(--font); font-size:12px; font-weight:500; cursor:pointer; transition:.15s; }
-.backup-btn:hover { background:var(--bg-soft); border-color:var(--accent); color:var(--ink); }
+.backup-btn { flex:1; min-width:120px; background:var(--paper); color:var(--ink2); border:1px solid var(--warm); border-radius:12px; padding:9px 12px; font-family:var(--font); font-size:12px; font-weight:500; cursor:pointer; transition:.15s; }
+.backup-btn:hover { background:var(--bg-soft); }
 
 .byok-toggle { text-align:center; margin:14px 0; }
 .byok-toggle a { color:var(--ink3); font-size:12px; text-decoration:underline dotted; cursor:pointer; }
-.byok-toggle a:hover { color:var(--accent); }
-.byok-box { display:none; background:var(--bg-soft); border:1px solid var(--warm); border-radius:10px; padding:14px; margin-bottom:12px; }
+.byok-box { display:none; background:var(--bg-soft); border:1px solid var(--warm); border-radius:14px; padding:14px; margin-bottom:12px; }
 .byok-box.open { display:block; }
 .byok-box p { font-size:12px; color:var(--ink3); margin:0 0 10px; line-height:1.6; }
 
-.btn { display:inline-block; padding:12px 24px; background:var(--accent); color:#fff; border:none; border-radius:8px; font-family:var(--font); font-size:14px; font-weight:500; cursor:pointer; transition:.15s; }
-.btn:hover { opacity:.85; box-shadow:0 0 16px rgba(92,124,255,.4); }
+.btn { display:inline-block; padding:12px 24px; background:var(--accent); color:#fff; border:none; border-radius:14px; font-family:var(--font); font-size:14px; font-weight:500; cursor:pointer; transition:.15s; }
+.btn:hover { opacity:.85; }
 .btn:active { transform:scale(.98); }
-.btn:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
+.btn:disabled { opacity:.4; cursor:not-allowed; }
 .btn-ghost { background:var(--paper); color:var(--ink2); border:1px solid var(--warm); }
-.btn-ghost:hover { background:var(--bg-soft); box-shadow:none; border-color:var(--ink3); }
-.btn-danger { background:var(--paper); color:var(--danger); border:1px solid rgba(255,92,106,.3); }
-.btn-danger:hover { background:var(--danger-soft); box-shadow:none; }
-.btn-sm { padding:7px 14px; font-size:12px; border-radius:7px; }
+.btn-ghost:hover { background:var(--bg-soft); }
+.btn-danger { background:var(--paper); color:var(--danger); border:1px solid #f0d0d0; }
+.btn-danger:hover { background:var(--danger-soft); }
+.btn-sm { padding:7px 14px; font-size:12px; border-radius:11px; }
 .btn-block { width:100%; padding:14px; font-size:15px; text-align:center; }
 
 .actions { margin-top:20px; }
-.error-msg { background:var(--danger-soft); border:1px solid rgba(255,92,106,.3); color:var(--danger); padding:10px 14px; border-radius:8px; font-size:13px; margin-top:10px; line-height:1.5; }
+.error-msg { background:var(--danger-soft); border:1px solid #f0d0d0; color:var(--danger); padding:10px 14px; border-radius:11px; font-size:13px; margin-top:10px; line-height:1.5; }
 
 /* ── CHAT ── */
 .chat-header { background:var(--paper); border-bottom:1px solid var(--warm); padding:10px 14px; display:flex; align-items:center; gap:10px; flex-shrink:0; }
 .header-chars { display:flex; gap:8px; flex:1; min-width:0; }
 .header-char { display:flex; align-items:center; gap:7px; padding:5px 10px; border-radius:20px; font-size:12px; font-weight:600; flex:1; min-width:0; }
-.header-char.a { background:var(--a-bg); color:var(--a-text); border:1px solid rgba(61,111,255,.4); }
-.header-char.b { background:var(--b-bg); color:var(--b-text); border:1px solid rgba(176,96,255,.4); }
+.header-char.a { background:var(--a-bg); color:var(--a-text); border:1px solid var(--a-border); }
+.header-char.b { background:var(--b-bg); color:var(--b-text); border:1px solid var(--b-border); }
 .header-char .dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
 .header-char.a .dot { background:var(--a-text); opacity:.5; }
 .header-char.b .dot { background:var(--b-text); opacity:.5; }
 .header-char.speaking .dot { opacity:1; animation:pulse .8s infinite; }
-@keyframes pulse { 0%,100%{transform:scale(1);box-shadow:none;} 50%{transform:scale(1.4);box-shadow:0 0 6px currentColor;} }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.4);} }
 .hchar-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .header-actions { display:flex; gap:6px; flex-shrink:0; }
-.turn-badge { font-size:10px; color:var(--ink3); white-space:nowrap; padding:4px 8px; background:var(--bg); border-radius:6px; border:1px solid var(--warm); letter-spacing:.05em; }
+.turn-badge { font-size:10px; color:var(--ink3); white-space:nowrap; padding:4px 8px; background:var(--bg); border-radius:8px; }
 
-.chat-body { flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:10px; background:var(--bg); }
-.chat-body::-webkit-scrollbar { width:4px; }
-.chat-body::-webkit-scrollbar-track { background:transparent; }
-.chat-body::-webkit-scrollbar-thumb { background:var(--warm); border-radius:4px; }
+.chat-body { flex:1; overflow-y:auto; padding:16px 14px; display:flex; flex-direction:column; gap:10px; }
 
-.situation-card { align-self:center; background:var(--paper); border:1px dashed var(--warm); border-radius:10px; padding:11px 16px; font-size:12px; color:var(--ink2); text-align:center; line-height:1.6; max-width:92%; }
-.situation-card .label { display:block; font-size:10px; color:var(--ink3); letter-spacing:.12em; margin-bottom:4px; text-transform:uppercase; }
+.situation-card { align-self:center; background:var(--paper); border:1px dashed var(--warm); border-radius:14px; padding:11px 16px; font-size:12px; color:var(--ink2); text-align:center; line-height:1.6; max-width:92%; }
+.situation-card .label { display:block; font-size:10px; color:var(--ink3); letter-spacing:.1em; margin-bottom:4px; }
 
 .msg-row { display:flex; gap:8px; align-items:flex-end; max-width:82%; animation:msgIn .2s ease-out; }
 .msg-row.a { align-self:flex-start; }
@@ -141,19 +137,19 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
 @keyframes msgIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
 
 .msg-avatar { width:28px; height:28px; border-radius:50%; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; margin-bottom:2px; }
-.msg-avatar.a { background:var(--a-bg); color:var(--a-text); border:1px solid rgba(61,111,255,.5); }
-.msg-avatar.b { background:var(--b-bg); color:var(--b-text); border:1px solid rgba(176,96,255,.5); }
+.msg-avatar.a { background:var(--a-bg); color:var(--a-text); border:1px solid var(--a-border); }
+.msg-avatar.b { background:var(--b-bg); color:var(--b-text); border:1px solid var(--b-border); }
 .msg-avatar img { width:100%; height:100%; object-fit:cover; }
 
-.msg-bubble { padding:9px 13px; border-radius:14px; font-size:14px; line-height:1.65; white-space:pre-wrap; word-wrap:break-word; flex:1; }
-.msg-row.a .msg-bubble { background:var(--a-bubble); color:var(--ink); border-bottom-left-radius:3px; border:1px solid rgba(61,111,255,.3); }
-.msg-row.b .msg-bubble { background:var(--b-bubble); color:var(--ink); border-bottom-right-radius:3px; border:1px solid rgba(176,96,255,.3); }
-.msg-bubble.narrate { background:var(--bg-soft); color:var(--ink2); border:1px dashed var(--warm); border-radius:8px; text-align:center; font-style:italic; font-size:12px; }
+.msg-bubble { padding:9px 13px; border-radius:16px; font-size:14px; line-height:1.65; white-space:pre-wrap; word-wrap:break-word; flex:1; }
+.msg-row.a .msg-bubble { background:var(--a-bubble); color:var(--ink); border-bottom-left-radius:4px; border:1px solid var(--a-border); }
+.msg-row.b .msg-bubble { background:var(--b-bubble); color:var(--ink); border-bottom-right-radius:4px; border:1px solid var(--b-border); }
+.msg-bubble.narrate { background:var(--bg-soft); color:var(--ink2); border:1px dashed var(--warm); border-radius:10px; text-align:center; font-style:italic; font-size:12px; }
 .msg-bubble.system { background:transparent; color:var(--ink3); border:none; text-align:center; font-size:12px; font-style:italic; }
-.msg-bubble.intervene { background:rgba(255,196,0,.07); color:#ffd060; border:1px solid rgba(255,196,0,.25); border-radius:8px; text-align:center; font-size:12px; }
+.msg-bubble.intervene { background:#fff8e1; color:#5d4037; border:1px solid #ffe082; border-radius:10px; text-align:center; font-size:12px; }
 
-.loading-bubble { background:var(--bg-soft); border:1px solid var(--warm); border-radius:14px; padding:10px 14px; display:inline-flex; gap:5px; align-items:center; }
-.loading-dot { width:6px; height:6px; border-radius:50%; background:var(--ink3); animation:dotBounce 1.2s infinite; }
+.loading-bubble { background:var(--bg-soft); border:1px solid var(--warm); border-radius:16px; padding:10px 14px; display:inline-flex; gap:5px; align-items:center; }
+.loading-dot { width:6px; height:6px; border-radius:50%; background:var(--ink4); animation:dotBounce 1.2s infinite; }
 .loading-dot:nth-child(2) { animation-delay:.2s; }
 .loading-dot:nth-child(3) { animation-delay:.4s; }
 @keyframes dotBounce { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-5px);} }
@@ -164,12 +160,12 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
 /* mode selector */
 .mode-bar { display:flex; gap:6px; margin-bottom:8px; align-items:center; }
 .mode-label { font-size:11px; color:var(--ink3); flex-shrink:0; }
-.mode-btn { padding:5px 12px; border-radius:20px; border:1px solid var(--warm); background:var(--bg); font-family:var(--font); font-size:11px; font-weight:500; cursor:pointer; color:var(--ink3); transition:.15s; }
-.mode-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 0 10px rgba(92,124,255,.35); }
-.mode-btn:not(.active):hover { background:var(--bg-soft); border-color:var(--ink3); }
+.mode-btn { padding:5px 12px; border-radius:16px; border:1px solid var(--warm); background:var(--paper); font-family:var(--font); font-size:11px; font-weight:500; cursor:pointer; color:var(--ink3); transition:.15s; }
+.mode-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+.mode-btn:not(.active):hover { background:var(--bg-soft); }
 .speed-row { display:flex; gap:6px; margin-bottom:8px; align-items:center; }
 .speed-label { font-size:11px; color:var(--ink3); flex-shrink:0; }
-.speed-select { border:1px solid var(--warm); border-radius:6px; padding:3px 8px; font-family:var(--font); font-size:11px; background:var(--bg); color:var(--ink2); outline:none; cursor:pointer; }
+.speed-select { border:1px solid var(--warm); border-radius:8px; padding:3px 8px; font-family:var(--font); font-size:11px; background:var(--paper); color:var(--ink2); outline:none; cursor:pointer; }
 
 /* auto controls */
 .auto-controls { display:flex; gap:8px; align-items:center; }
@@ -182,22 +178,22 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
 
 /* intervene controls */
 .intervene-row { display:flex; gap:8px; align-items:flex-end; }
-#intervene-input { flex:1; background:var(--bg); border:1px solid var(--warm); border-radius:10px; padding:8px 12px; color:var(--ink); font-family:var(--font); font-size:13px; line-height:1.5; outline:none; resize:none; max-height:100px; min-height:36px; transition:.15s; }
-#intervene-input:focus { border-color:var(--accent); box-shadow:0 0 0 2px rgba(92,124,255,.15); }
+#intervene-input { flex:1; background:var(--bg-soft); border:1px solid var(--warm); border-radius:14px; padding:8px 12px; color:var(--ink); font-family:var(--font); font-size:13px; line-height:1.5; outline:none; resize:none; max-height:100px; min-height:36px; transition:.15s; }
+#intervene-input:focus { border-color:var(--accent); }
 #intervene-input::placeholder { color:var(--ink4); }
-.btn-intervene-send { background:var(--accent); color:#fff; border:none; border-radius:10px; padding:0 14px; height:36px; font-family:var(--font); font-size:12px; font-weight:500; cursor:pointer; flex-shrink:0; transition:.15s; }
-.btn-intervene-send:hover { opacity:.85; box-shadow:0 0 10px rgba(92,124,255,.4); }
-.btn-intervene-send:disabled { opacity:.35; cursor:not-allowed; box-shadow:none; }
+.btn-intervene-send { background:var(--accent); color:#fff; border:none; border-radius:14px; padding:0 14px; height:36px; font-family:var(--font); font-size:12px; font-weight:500; cursor:pointer; flex-shrink:0; }
+.btn-intervene-send:hover { opacity:.85; }
+.btn-intervene-send:disabled { opacity:.4; cursor:not-allowed; }
 .intervene-hint { font-size:11px; color:var(--ink3); margin-bottom:6px; }
 
 /* ── modals ── */
-.modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.7); backdrop-filter:blur(4px); z-index:9998; display:flex; align-items:center; justify-content:center; padding:20px; }
-.modal { background:var(--paper); border:1px solid var(--warm); border-radius:14px; padding:22px; max-width:340px; width:100%; box-shadow:0 8px 40px rgba(0,0,0,.5); }
+.modal-backdrop { position:fixed; inset:0; background:rgba(45,31,31,.45); z-index:9998; display:flex; align-items:center; justify-content:center; padding:20px; }
+.modal { background:var(--paper); border-radius:18px; padding:22px; max-width:340px; width:100%; box-shadow:0 8px 32px rgba(45,31,31,.15); }
 .modal h3 { margin:0 0 8px; font-size:16px; color:var(--ink); font-weight:700; }
 .modal p { margin:0 0 16px; font-size:13px; color:var(--ink3); line-height:1.6; }
 .modal-actions { display:flex; gap:8px; justify-content:flex-end; }
 
-.toast { position:fixed; bottom:86px; left:50%; transform:translateX(-50%); background:var(--accent); color:#fff; padding:9px 18px; border-radius:20px; font-size:13px; z-index:9999; animation:toastIn .2s ease-out; white-space:nowrap; box-shadow:0 4px 20px rgba(92,124,255,.4); }
+.toast { position:fixed; bottom:86px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:9px 18px; border-radius:20px; font-size:13px; z-index:9999; animation:toastIn .2s ease-out; white-space:nowrap; }
 @keyframes toastIn { from{opacity:0;transform:translate(-50%,8px);} to{opacity:1;transform:translate(-50%,0);} }
 
 @media(max-width:480px){
@@ -235,6 +231,13 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
     <div class="section a-section">
       <h2 class="section-title">🔵 캐릭터 A</h2>
 
+      <div class="field" style="background:var(--a-bg);border:1px dashed var(--a-border);border-radius:12px;padding:12px;">
+        <label>⚡ 캐릭터 시트 붙여넣기 <span style="font-size:11px;font-weight:400;color:var(--ink3);">선택, AI가 분석해서 자동으로 채워요</span></label>
+        <textarea id="a-quick-paste" class="tall" maxlength="20000" placeholder="미리 작성한 캐릭터 시트를 통째로 붙여넣으세요."></textarea>
+        <button class="btn btn-sm" type="button" id="a-btn-quick-fill" style="margin-top:8px;width:100%;">✨ AI로 자동 채우기</button>
+        <div id="a-quick-fill-status" style="font-size:11.5px;color:var(--ink2);margin-top:6px;display:none;"></div>
+      </div>
+
       <div class="field">
         <label>캐릭터 이미지</label>
         <div style="display:flex;align-items:center;gap:12px;">
@@ -259,6 +262,18 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
       <div class="field"><label>절대 쓰지 않는 표현</label><textarea id="a-forbidden" maxlength="2000"></textarea></div>
       <div class="field"><label>캐릭터 서사 / 배경</label><textarea id="a-story" class="tall" maxlength="2000"></textarea></div>
       <div class="field"><label>세계관 / 무대</label><textarea id="a-world" maxlength="2000"></textarea></div>
+      <div class="field"><label>이 캐릭터만의 추가 문체 참고자료 <span style="font-size:11px;color:var(--ink3);">선택, 공통 문체에 더해서 적용</span></label><textarea id="a-styleRef" maxlength="4000" placeholder="공통 문체에 이 캐릭터만 추가로 참고했으면 하는 글이 있다면 적어주세요."></textarea></div>
+
+      <div class="field" style="background:var(--a-bg);border:1px dashed var(--a-border);border-radius:12px;padding:12px;">
+        <label>💬 대사 샘플 <span style="font-size:11px;font-weight:400;color:var(--ink3);">선택, 성격·문체 참고자료를 보고 AI가 빈 칸을 채워줘요</span></label>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">평범한 인사 / 일상</label><textarea id="a-ex-daily" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">감동하거나 따뜻한 순간</label><textarea id="a-ex-warm" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">당황하거나 곤란한 순간</label><textarea id="a-ex-flustered" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">화나거나 단호한 순간</label><textarea id="a-ex-angry" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:0;"><label style="font-size:11px;">부드럽고 취약한 순간</label><textarea id="a-ex-vulnerable" maxlength="500"></textarea></div>
+        <button class="btn btn-sm" type="button" id="a-btn-gen-examples" style="margin-top:8px;width:100%;">✨ 빈 대사 샘플 AI로 생성</button>
+        <div id="a-gen-examples-status" style="font-size:11.5px;color:var(--ink2);margin-top:6px;display:none;"></div>
+      </div>
     </div>
   </div>
 
@@ -266,6 +281,13 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
   <div class="char-panel" id="panel-b">
     <div class="section b-section">
       <h2 class="section-title">🔴 캐릭터 B</h2>
+
+      <div class="field" style="background:var(--b-bg);border:1px dashed var(--b-border);border-radius:12px;padding:12px;">
+        <label>⚡ 캐릭터 시트 붙여넣기 <span style="font-size:11px;font-weight:400;color:var(--ink3);">선택, AI가 분석해서 자동으로 채워요</span></label>
+        <textarea id="b-quick-paste" class="tall" maxlength="20000" placeholder="미리 작성한 캐릭터 시트를 통째로 붙여넣으세요."></textarea>
+        <button class="btn btn-sm" type="button" id="b-btn-quick-fill" style="margin-top:8px;width:100%;">✨ AI로 자동 채우기</button>
+        <div id="b-quick-fill-status" style="font-size:11.5px;color:var(--ink2);margin-top:6px;display:none;"></div>
+      </div>
 
       <div class="field">
         <label>캐릭터 이미지</label>
@@ -291,6 +313,18 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
       <div class="field"><label>절대 쓰지 않는 표현</label><textarea id="b-forbidden" maxlength="2000"></textarea></div>
       <div class="field"><label>캐릭터 서사 / 배경</label><textarea id="b-story" class="tall" maxlength="2000"></textarea></div>
       <div class="field"><label>세계관 / 무대</label><textarea id="b-world" maxlength="2000"></textarea></div>
+      <div class="field"><label>이 캐릭터만의 추가 문체 참고자료 <span style="font-size:11px;color:var(--ink3);">선택, 공통 문체에 더해서 적용</span></label><textarea id="b-styleRef" maxlength="4000" placeholder="공통 문체에 이 캐릭터만 추가로 참고했으면 하는 글이 있다면 적어주세요."></textarea></div>
+
+      <div class="field" style="background:var(--b-bg);border:1px dashed var(--b-border);border-radius:12px;padding:12px;">
+        <label>💬 대사 샘플 <span style="font-size:11px;font-weight:400;color:var(--ink3);">선택, 성격·문체 참고자료를 보고 AI가 빈 칸을 채워줘요</span></label>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">평범한 인사 / 일상</label><textarea id="b-ex-daily" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">감동하거나 따뜻한 순간</label><textarea id="b-ex-warm" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">당황하거나 곤란한 순간</label><textarea id="b-ex-flustered" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:8px;"><label style="font-size:11px;">화나거나 단호한 순간</label><textarea id="b-ex-angry" maxlength="500"></textarea></div>
+        <div class="field" style="margin-bottom:0;"><label style="font-size:11px;">부드럽고 취약한 순간</label><textarea id="b-ex-vulnerable" maxlength="500"></textarea></div>
+        <button class="btn btn-sm" type="button" id="b-btn-gen-examples" style="margin-top:8px;width:100%;">✨ 빈 대사 샘플 AI로 생성</button>
+        <div id="b-gen-examples-status" style="font-size:11.5px;color:var(--ink2);margin-top:6px;display:none;"></div>
+      </div>
     </div>
   </div>
 
@@ -301,6 +335,15 @@ html, body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-f
       <p class="section-desc">두 캐릭터의 관계와 대화가 시작되는 상황을 설정해주세요.</p>
       <div class="field"><label>두 캐릭터의 관계</label><textarea id="relationship" maxlength="2000" placeholder="예: 오랜 친구 사이, 처음 만난 라이벌, 선생님과 학생..."></textarea></div>
       <div class="field"><label>시작 상황 (선택)</label><textarea id="situation" class="tall" maxlength="2000" placeholder="대화가 시작되는 장면이나 상황을 설정해주세요."></textarea></div>
+    </div>
+    <div class="section">
+      <h2 class="section-title">✒️ 문체 참고자료 <span style="font-size:11px;font-weight:400;color:var(--ink3);">선택, 두 캐릭터 공통 적용</span></h2>
+      <p class="section-desc">실감나는 대사를 위해 참고할 글쓰기 스타일이에요. 두 캐릭터 모두 이 문체를 참고해서, 각자의 성격에 맞게 응용해요.</p>
+      <div class="field"><label>공통 문체 참고자료</label><textarea id="style-ref-common" class="tall" maxlength="8000" placeholder="참고할 글쓰기 문체(대사 샘플, 소설 구절 등)를 붙여넣어 주세요."></textarea></div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-style-ref-default">↺ 기본 참고자료 불러오기</button>
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-style-ref-clear">비우기</button>
+      </div>
     </div>
   </div>
 
@@ -428,9 +471,65 @@ let autoTimer = null;
 let autoBusy = false;
 let sending = false;
 
+const DEFAULT_STYLE_REF = `아래는 특정 작가의 문체 분석이다. 이 작가는 단일 톤이 아니라 4가지 결을 자유롭게 오간다.
+글을 쓸 때 장면의 성격에 맞는 톤을 선택하고, 그 톤의 규칙을 지켜야 한다.
+
+[톤 구분]
+① 서정·내면형 — 이별, 고백, 회상, 트라우마. 길고 유려한 문장.
+② 캐주얼·인터넷체 — 일상 잡담, 친밀한 장난. ㅋㅋㅋ, 짧은 의성어, 빠른 턴.
+③ 시니컬·거친체 — 경계심, 긴장 관계. 짧고 날카로운 반문.
+④ 편지·문어체 — 편지, 추모, 독백성 서술. 정중한 추측형 어미.
+
+[공통 구조 원칙]
+- 대사와 내면/행동을 괄호로 분리한다.
+- 서정형 괄호는 [신체반응 → 내면 억누름 → 표면 복원] 3단계.
+- 캐주얼형 괄호는 해석 없이 동작만 빠르게 나열한다.
+- 괄호 안 시점은 3인칭 관찰자. "나는"이 아니라 "제", "저" 또는 주어 생략.
+- 감정을 직접 쓰지 않는다. 신체 반응(서정형) 또는 동작/반응어(캐주얼형)로 대체한다.
+
+[톤별 어미 규칙]
+- 서정형 밝음: ~요/~죠/~구요~/~잖아요오 (모음 늘림 가능)
+- 서정형 진지함: 어미 탈락, 단어로 끝남 ("기꺼이.", "괜찮아.")
+- 서정형 떨림: 요→효 ("죄송해효")
+- 캐주얼형: ㅋㅋㅋ를 괄호 안 지문에 그대로 삽입. 짧은 반말 의성어(짭, 쩝쩝).
+- 시니컬형: "하?", "참나", 끝을 흐리는 반문("...아시려나 몰라~?")
+- 편지체: ~겠죠/~ㄹ까요/~바랐는데. 추신과 서명으로 마무리.
+
+[감정 표현]
+- 울음은 4단계: 부정 → 징조 → 항복 → 수용 (서정형 전용)
+- 웃음 종류 구분: 부서지듯(임계점,서정) / 헤헤·으헤헤(순수,캐주얼) / 비소(냉소,시니컬)
+- 장난은 감정 은폐 장치다. 서정형에서는 그 이유를 괄호 안에서 설명하지만,
+  캐주얼형에서는 설명 없이 장난으로 끝낸다.
+- 시니컬형은 자기 객관화 대신 반문으로 받아친다: "그런 거까지 생각해야 돼...?"
+
+[신체 언어]
+- 서정형 손 묘사: 온도·힘의 변화까지 단계별로. ("잡은 손에 힘이 들어간다")
+- 캐주얼형 손 묘사: 도구적이고 빠름. "쏙", "콕콕" 같은 의태어 동반.
+- 캐주얼형은 거리두기보다 즉각적으로 다가가는 동작이 많다(와락, 폭 안김).
+
+[문장 기술]
+- 말줄임표는 위치마다 기능이 다르다 (서정형 핵심 도구).
+- 캐주얼형은 말줄임표 대신 물음표·느낌표 연쇄로 같은 효과를 낸다: "내가?!? 당신을?!??"
+- 캐주얼형 반복은 자모음을 늘려 감정의 즉각적 폭발을 표현: "히, 하이이이아헤이이이"
+- 서정형 반복은 단어를 그대로 되풀이해 의미의 무게를 강조: "하늘은, ...하늘은"
+- 의성어/의태어(ㅋㅋㅋ 포함)는 캐주얼·코믹 장면 전용. 서정형 진지한 장면엔 절대 쓰지 않는다.
+
+[시간 감각]
+- 서정형: "미리 그리워하기" — 현재를 살면서 이미 기억이 될 것을 안다.
+- 편지체: 역방향 — 이미 떠난 화자가 산 사람의 미래를 그리워한다.
+
+[상황별 패턴]
+- 일상 잡담: 짧은 턴 + ㅋㅋㅋ + 서로 따라하는 행동으로 친밀감 쌓기. 해석 생략.
+- 긴장 관계: 짧은 반문 + 비꼬는 어투 + 침묵으로 표정만 묘사.
+- 편지/추모: 받는 이를 부르며 시작, 추측형 어미 일관, 추신/서명으로 마무리.
+- 단체 대화: 여러 인물이 짧게 동시에 들뜸, 즉각적 신체 반응, 느낌표 연쇄.
+
+[반복 소재]
+이름, 기억, 손, 하늘, 바다, 옥상, 울음, 편지, 꽃/계절, 약속, 미완성, 음식(친밀감의 매개)`;
+
 const CHAR_FIELDS = {
-  a: ['name','gender','age','personality','tone','habits','forbidden','story','world'],
-  b: ['name','gender','age','personality','tone','habits','forbidden','story','world'],
+  a: ['name','gender','age','personality','tone','habits','forbidden','story','world','styleRef','ex-daily','ex-warm','ex-flustered','ex-angry','ex-vulnerable'],
+  b: ['name','gender','age','personality','tone','habits','forbidden','story','world','styleRef','ex-daily','ex-warm','ex-flustered','ex-angry','ex-vulnerable'],
 };
 
 // ════════════════════════════════════════════════════════
@@ -528,6 +627,7 @@ $('btn-save-config').addEventListener('click',()=>{
     _format:'two-chat/v1', _exported_at:new Date().toISOString(),
     charA:a, charB:b,
     relationship:val('relationship'), situation:val('situation'),
+    styleRefCommon: val('style-ref-common'),
     images:{a:imgA||null,b:imgB||null},
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -547,6 +647,7 @@ $('config-file-input').addEventListener('change', async e=>{
     writeChar('a',data.charA); writeChar('b',data.charB);
     if(data.relationship) $('relationship').value=data.relationship;
     if(data.situation)    $('situation').value=data.situation;
+    $('style-ref-common').value = (data.styleRefCommon!==undefined ? data.styleRefCommon : DEFAULT_STYLE_REF);
     const imgs=data.images||{};
     imgA=imgs.a&&imgs.a.startsWith('data:image/')?imgs.a:null;
     imgB=imgs.b&&imgs.b.startsWith('data:image/')?imgs.b:null;
@@ -558,6 +659,15 @@ $('config-file-input').addEventListener('change', async e=>{
 $('byok-link').addEventListener('click',()=>{
   $('byok-box').classList.toggle('open');
 });
+
+$('btn-style-ref-default').addEventListener('click',()=>{
+  $('style-ref-common').value = DEFAULT_STYLE_REF;
+  showToast('기본 참고자료를 불러왔어요');
+});
+$('btn-style-ref-clear').addEventListener('click',()=>{
+  $('style-ref-common').value = '';
+});
+if(!$('style-ref-common').value) $('style-ref-common').value = DEFAULT_STYLE_REF;
 
 // API 키 localStorage 자동 저장
 ['user-api-key'].forEach(id=>{
@@ -572,6 +682,11 @@ $('byok-link').addEventListener('click',()=>{
 // ════════════════════════════════════════════════════════
 // 시작
 // ════════════════════════════════════════════════════════
+$('a-btn-quick-fill').addEventListener('click', ()=>quickFillChar('a'));
+$('b-btn-quick-fill').addEventListener('click', ()=>quickFillChar('b'));
+$('a-btn-gen-examples').addEventListener('click', ()=>generateExamplesForChar('a'));
+$('b-btn-gen-examples').addEventListener('click', ()=>generateExamplesForChar('b'));
+
 $('btn-start').addEventListener('click',()=>{
   charA=readChar('a'); charB=readChar('b');
   if(!charA.name){ showError('캐릭터 A의 이름을 적어주세요'); switchTab('a'); return; }
@@ -588,6 +703,8 @@ $('btn-start').addEventListener('click',()=>{
   charB.relationship=val('relationship');
   charA.situation=val('situation');
   charB.situation=val('situation');
+  charA.styleRefCommon=val('style-ref-common');
+  charB.styleRefCommon=val('style-ref-common');
 
   stopAuto();
   history=[]; turns=0;
@@ -722,6 +839,172 @@ async function callAPI(systemPrompt, messages, maxTokens=400){
 }
 
 // ════════════════════════════════════════════════════════
+// 캐릭터 시트 붙여넣기 → AI 자동 분석/채우기
+// ════════════════════════════════════════════════════════
+const QUICK_FILL_CHAR_SCHEMA_PROMPT = `당신은 사용자가 미리 작성한 캐릭터 시트(프로필)를 분석해서, 캐릭터 채팅 설정 양식에 맞게 정리하는 도구입니다.
+
+사용자가 보내는 텍스트는 캐릭터 설정 시트입니다 (형식은 자유로움 — 표, 목록, 산문 등 어떤 형태든 옵니다). 이 내용을 분석해서 다음 JSON 스키마에 맞는 객체 하나만 응답하세요. 다른 설명, 마크다운, 코드블록 표시 없이 순수 JSON 텍스트만 출력하세요.
+
+[스키마]
+{
+  "name": "캐릭터의 본명/애칭 (문자열)",
+  "gender": "성별 (문자열, 명시 없으면 빈 문자열)",
+  "age": "나이 (문자열, 명시 없으면 빈 문자열)",
+  "personality": "성격을 설명하는 문단 서술 (문자열)",
+  "tone": "말투/어미 디테일 — 반말/존댓말, 자주 쓰는 어미, 1·2·3인칭 호칭 등 (문자열)",
+  "habits": "말버릇, 즐겨쓰는 표현, 추임새 (문자열)",
+  "forbidden": "절대 쓰지 않는 표현이 명시돼 있으면 정리, 없으면 빈 문자열",
+  "story": "캐릭터 서사/배경 — 중요한 사건, 가족관계, 현재 상황 등 (문자열)",
+  "world": "세계관/무대 설명 (문자열, 명시 없으면 빈 문자열)"
+}
+
+규칙:
+- 시트에 없는 정보를 지어내지 마세요. 정보가 부족한 항목은 빈 문자열로 두세요.
+- 모든 텍스트는 한국어로 정리하세요.
+- 응답은 순수 JSON 객체 하나뿐이어야 합니다. 코드블록 표시(\`\`\`)를 쓰지 마세요.`;
+
+function applyParsedChar(who, data){
+  const setIf = (id, v) => { const el=$(id); if(el && v!==undefined && v!==null && String(v).trim()!=='') el.value = String(v).trim(); };
+  setIf(`${who}-name`, data.name);
+  setIf(`${who}-gender`, data.gender);
+  setIf(`${who}-age`, data.age);
+  setIf(`${who}-personality`, data.personality);
+  setIf(`${who}-tone`, data.tone);
+  setIf(`${who}-habits`, data.habits);
+  setIf(`${who}-forbidden`, data.forbidden);
+  setIf(`${who}-story`, data.story);
+  setIf(`${who}-world`, data.world);
+}
+
+async function quickFillChar(who){
+  const raw = val(`${who}-quick-paste`);
+  const statusEl = $(`${who}-quick-fill-status`);
+  const btn = $(`${who}-btn-quick-fill`);
+  const workerUrl = val('worker-url') || localStorage.getItem('twochat_worker_url') || '';
+  const userKey   = val('user-api-key') || localStorage.getItem('twochat_user_api_key') || '';
+  if(!raw){ showToast('붙여넣을 캐릭터 시트를 먼저 입력해주세요.'); return; }
+  if(!workerUrl || !userKey){
+    showToast('먼저 Gemini API 키를 입력해주세요.');
+    $('byok-box').classList.add('open');
+    $('user-api-key').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = '분석 중...';
+  statusEl.style.display = 'block';
+  statusEl.textContent = 'AI가 시트를 읽고 항목을 채우고 있어요...';
+  try{
+    const reply = await callAPI(QUICK_FILL_CHAR_SCHEMA_PROMPT, [{role:'user', content: raw}], 3000);
+    const cleaned = (reply||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const data = JSON.parse(cleaned);
+    applyParsedChar(who, data);
+    statusEl.textContent = '✅ 자동으로 채웠어요. 아래 항목들을 확인하고 다듬어주세요.';
+    $(`${who}-name`).scrollIntoView({behavior:'smooth', block:'center'});
+  }catch(e){
+    statusEl.textContent = '⚠️ ' + (e.message==='Unexpected end of JSON input'||/JSON/.test(e.message||'') ? 'AI 응답을 분석하지 못했어요. 다시 시도해주세요.' : (e.message||'채우는 데 실패했어요. 다시 시도해주세요.'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = '✨ AI로 자동 채우기';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 대사 샘플 AI 자동 생성 (빈 칸만, 성격·문체 참고자료 반영)
+// ════════════════════════════════════════════════════════
+const EXAMPLE_FIELDS = [
+  { key:'ex-daily',      label:'평범한 인사 / 일상' },
+  { key:'ex-warm',       label:'감동하거나 따뜻한 순간' },
+  { key:'ex-flustered',  label:'당황하거나 곤란한 순간' },
+  { key:'ex-angry',      label:'화나거나 단호한 순간' },
+  { key:'ex-vulnerable', label:'부드럽고 취약한 순간 (속마음이 새는 순간)' },
+];
+
+function buildExampleGenPrompt(who, targets){
+  const name = val(`${who}-name`) || '캐릭터';
+  const personality = val(`${who}-personality`);
+  const tone = val(`${who}-tone`);
+  const habits = val(`${who}-habits`);
+  const forbidden = val(`${who}-forbidden`);
+  const story = val(`${who}-story`);
+  const styleRefCommon = val('style-ref-common');
+  const styleRef = val(`${who}-styleRef`);
+
+  const lines=[];
+  lines.push('당신은 캐릭터 챗봇의 "대사 샘플"을 작성하는 도구입니다. 아래 캐릭터 설정을 바탕으로, 지정된 상황들에 맞는 캐릭터의 실제 대사를 한국어로 새로 창작하세요.');
+  lines.push('');
+  lines.push(`[캐릭터: ${name}]`);
+  if(personality) lines.push(`성격: ${personality}`);
+  if(tone) lines.push(`말투/어미: ${tone}`);
+  if(habits) lines.push(`말버릇: ${habits}`);
+  if(forbidden) lines.push(`절대 쓰지 않는 표현: ${forbidden}`);
+  if(story) lines.push(`배경: ${story}`);
+
+  if(styleRefCommon || styleRef){
+    lines.push('');
+    lines.push('[문체 참고자료 — 그대로 베끼지 말고 어휘 선택, 문장 호흡, 말줄임표 등 문장부호 사용, 감정을 직접 말하지 않고 암시하는 방식, 괄호 안 행동·내면 묘사 기법만 분석해서, 위 캐릭터의 성격과 말투에 맞게 응용하세요. 참고자료 속 등장인물 이름이나 구체적 설정, 줄거리는 절대 가져오지 마세요.]');
+    if(styleRefCommon) lines.push(styleRefCommon);
+    if(styleRef) lines.push(styleRef);
+  }
+
+  lines.push('');
+  lines.push('[작성할 대사]');
+  targets.forEach(t=>lines.push(`- ${t.key}: ${t.label}`));
+  lines.push('');
+  lines.push('규칙:');
+  lines.push('- 각 상황마다 이 캐릭터가 실제로 할 법한 대사를 1~3문장으로 작성하세요.');
+  lines.push('- 필요하면 괄호 안에 짧은 행동·표정·내면 묘사를 곁들여도 되지만, 남발하지 마세요.');
+  lines.push('- 위에 명시된 말투/어미/말버릇을 실제로 사용하고, "절대 쓰지 않는 표현"은 피하세요.');
+  lines.push('- 다음 JSON 형식으로만 응답하세요. 다른 설명, 코드블록 표시 없이 순수 JSON만 출력하세요.');
+  lines.push('{');
+  targets.forEach((t,i)=>lines.push(`  "${t.key}": "대사 내용"${i<targets.length-1?',':''}`));
+  lines.push('}');
+  return lines.join('\n');
+}
+
+async function generateExamplesForChar(who){
+  const statusEl = $(`${who}-gen-examples-status`);
+  const btn = $(`${who}-btn-gen-examples`);
+  const workerUrl = val('worker-url') || localStorage.getItem('twochat_worker_url') || '';
+  const userKey   = val('user-api-key') || localStorage.getItem('twochat_user_api_key') || '';
+
+  const targets = EXAMPLE_FIELDS.filter(f => !val(`${who}-${f.key}`));
+  if(targets.length===0){ showToast('이미 모든 대사 샘플이 채워져 있어요.'); return; }
+  if(!val(`${who}-name`) && !val(`${who}-personality`)){
+    showToast('먼저 캐릭터 이름이나 성격을 입력해주세요.');
+    return;
+  }
+  if(!workerUrl || !userKey){
+    showToast('먼저 Gemini API 키를 입력해주세요.');
+    $('byok-box').classList.add('open');
+    $('user-api-key').scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '생성 중...';
+  statusEl.style.display = 'block';
+  statusEl.textContent = `AI가 빈 칸 ${targets.length}개의 대사를 쓰고 있어요...`;
+
+  try{
+    const prompt = buildExampleGenPrompt(who, targets);
+    const reply = await callAPI('당신은 캐릭터 대사 샘플을 작성하는 도구입니다. 지시받은 JSON 형식만 출력하세요.', [{role:'user', content: prompt}], 2000);
+    const cleaned = (reply||'').trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const data = JSON.parse(cleaned);
+    let filled = 0;
+    targets.forEach(t=>{
+      const el = $(`${who}-${t.key}`);
+      if(el && data[t.key] && !el.value.trim()){ el.value = String(data[t.key]).trim(); filled++; }
+    });
+    statusEl.textContent = `✅ 대사 샘플 ${filled}개를 채웠어요. 캐릭터답게 다듬어 주세요.`;
+  }catch(e){
+    statusEl.textContent = '⚠️ ' + (/JSON/i.test(e.message||'') ? 'AI 응답을 분석하지 못했어요. 다시 시도해주세요.' : (e.message||'생성에 실패했어요. 다시 시도해주세요.'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = '✨ 빈 대사 샘플 AI로 생성';
+  }
+}
+
+// ════════════════════════════════════════════════════════
 // 캐릭터 시스템 프롬프트
 // ════════════════════════════════════════════════════════
 function buildSystemPrompt(who){
@@ -738,11 +1021,32 @@ function buildSystemPrompt(who){
   if(speaker.story)        lines.push(`배경: ${speaker.story}`);
   if(speaker.world)        lines.push(`세계관: ${speaker.world}`);
   if(speaker.relationship) lines.push(`상대방(${listener.name})과의 관계: ${speaker.relationship}`);
+
+  if(speaker.styleRefCommon || speaker.styleRef){
+    lines.push('');
+    lines.push('## 문체 참고자료 (어휘·리듬·뉘앙스·묘사 기법을 참고할 것)');
+    lines.push('아래는 참고할 글쓰기 문체입니다. 등장 캐릭터 이름이나 구체적인 설정, 대사 내용을 그대로 가져오지 마세요. 대사 자체의 어휘 선택, 말줄임표 사용, 어미 처리, 감정을 직접 말하지 않고 돌려 말하는 방식, 문장 호흡과 리듬, 그리고 괄호 안 행동·내면 묘사 기법까지 참고해서 이 캐릭터의 성격과 말투에 맞게 응용하세요.');
+    if(speaker.styleRefCommon) lines.push(speaker.styleRefCommon);
+    if(speaker.styleRef){ lines.push(''); lines.push(`(이 캐릭터 전용 추가 참고자료)`); lines.push(speaker.styleRef); }
+  }
+
+  const exPairs = [
+    ['ex-daily','평범한 인사/일상'], ['ex-warm','감동·따뜻한 순간'],
+    ['ex-flustered','당황·곤란한 순간'], ['ex-angry','화남·단호한 순간'],
+    ['ex-vulnerable','부드럽고 취약한 순간'],
+  ].filter(([k])=>speaker[k]);
+  if(exPairs.length){
+    lines.push('');
+    lines.push('## 대사 샘플 (이 캐릭터의 실제 말투 예시 — 톤과 어휘를 그대로 따르세요)');
+    exPairs.forEach(([k,label])=>lines.push(`- ${label}: ${speaker[k]}`));
+  }
+
   lines.push('');
   lines.push('대화 규칙:');
   lines.push('- 캐릭터에서 절대 벗어나지 마세요.');
   lines.push('- 한 번에 1~3문장으로 자연스럽게 말하세요.');
-  lines.push('- 대사만 출력하세요. 설명이나 행동 묘사([행동])는 쓰지 마세요.');
+  lines.push('- 대사와 함께, 필요하면 괄호 안에 짧은 행동·표정·내면 묘사를 곁들여도 됩니다. 예: (시선을 피하며) 그런 거 아니야.');
+  lines.push('- 묘사를 남발하지 말고, 장면에 꼭 필요한 순간에만 자연스럽게 섞으세요.');
   lines.push('- 상대방의 말에 자연스럽게 반응하세요.');
   return lines.join('\n');
 }
