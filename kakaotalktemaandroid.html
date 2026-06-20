@@ -480,6 +480,24 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
     </div>
 
     <div class="img-section">
+      <div class="img-section-label">APK 설정 이미지</div>
+      <div class="img-grid">
+        <label class="img-slot" id="slot-app-icon" oncontextmenu="clearSlot('app-icon',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('app-icon',this,event)">
+          <div class="img-slot-thumb" id="thumb-app-icon"><span id="thumb-icon-app-icon">📱</span><img id="thumb-img-app-icon"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_app_icon.png</div><div class="img-slot-size">512×512 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-app-icon">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-preview-image" oncontextmenu="clearSlot('preview-image',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('preview-image',this,event)">
+          <div class="img-slot-thumb" id="thumb-preview-image"><span id="thumb-icon-preview-image">🖼</span><img id="thumb-img-preview-image"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_preview_image.png</div><div class="img-slot-size">720×1280 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-preview-image">선택사항</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="img-section">
       <div class="img-section-label">배경 이미지</div>
       <div class="img-grid">
         <label class="img-slot" id="slot-main-bg" oncontextmenu="clearSlot('main-bg',event)">
@@ -589,6 +607,30 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <div class="img-slot-thumb" id="thumb-ico-call-f"><span id="thumb-icon-ico-call-f">📞</span><img id="thumb-img-ico-call-f"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_call_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-call-f">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-openchat" oncontextmenu="clearSlot('ico-openchat',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-openchat',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-openchat"><span id="thumb-icon-ico-openchat">🌐</span><img id="thumb-img-ico-openchat"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_openchat_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-openchat">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-openchat-f" oncontextmenu="clearSlot('ico-openchat-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-openchat-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-openchat-f"><span id="thumb-icon-ico-openchat-f">🌐</span><img id="thumb-img-ico-openchat-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_openchat_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-openchat-f">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-piccoma" oncontextmenu="clearSlot('ico-piccoma',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-piccoma',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-piccoma"><span id="thumb-icon-ico-piccoma">📖</span><img id="thumb-img-ico-piccoma"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_piccoma_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-piccoma">선택사항</span>
+        </label>
+        <label class="img-slot" id="slot-ico-piccoma-f" oncontextmenu="clearSlot('ico-piccoma-f',event)">
+          <input type="file" accept="image/*" onchange="handleSlot('ico-piccoma-f',this,event)">
+          <div class="img-slot-thumb" id="thumb-ico-piccoma-f"><span id="thumb-icon-ico-piccoma-f">📖</span><img id="thumb-img-ico-piccoma-f"></div>
+          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_piccoma_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
+          <span class="img-slot-badge" id="badge-ico-piccoma-f">선택사항</span>
         </label>
       </div>
     </div>
@@ -1076,6 +1118,18 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
           <span class="color-hex" id="hex-chat-bg-color" contenteditable="true" onblur="hexInput('chat-bg-color',this)">#FFDEDE</span>
           <input type="color" id="chat-bg-color" value="#FFDEDE" oninput="updateColor('chat-bg-color')">
         </div>
+        <div class="color-item" onclick="pickColor('my-bubble-bg')">
+          <div class="color-swatch" id="sw-my-bubble-bg"></div>
+          <span class="color-label">보낸 말풍선 배경</span>
+          <span class="color-hex" id="hex-my-bubble-bg" contenteditable="true" onblur="hexInput('my-bubble-bg',this)">#FAE100</span>
+          <input type="color" id="my-bubble-bg" value="#FAE100" oninput="updateColor('my-bubble-bg')">
+        </div>
+        <div class="color-item" onclick="pickColor('other-bubble-bg')">
+          <div class="color-swatch" id="sw-other-bubble-bg"></div>
+          <span class="color-label">받은 말풍선 배경</span>
+          <span class="color-hex" id="hex-other-bubble-bg" contenteditable="true" onblur="hexInput('other-bubble-bg',this)">#FFFFFF</span>
+          <input type="color" id="other-bubble-bg" value="#FFFFFF" oninput="updateColor('other-bubble-bg')">
+        </div>
         <div class="color-item" onclick="pickColor('my-bubble-text')">
           <div class="color-swatch" id="sw-my-bubble-text"></div>
           <span class="color-label">보낸 말풍선 텍스트</span>
@@ -1234,6 +1288,8 @@ input[type=color]{position:absolute;opacity:0;width:0;height:0;pointer-events:no
 
 <script>
 const uploads = {};
+const ninePatchCaps = {}; // key -> {leftCap, topCap, rightCap, bottomCap} (xxhdpi px, 자동감지 결과)
+const NINE_PATCH_KEYS = ['bubble-me1','bubble-me2','bubble-you1','bubble-you2','tabbar-bg'];
 let currentTab = 'friends';
 let currentStep = 1;
 let pressMode = false;
@@ -1254,13 +1310,22 @@ function handleSlot(key, input, event) {
     if (slot) slot.classList.add('has-file');
     if (badge) { badge.textContent = '✓ 완료'; }
     if (key === 'chat-bg' || key === 'profile') renderPreview();
-    showToast('이미지 업로드 완료 ✓', 'success');
+    if (NINE_PATCH_KEYS.includes(key)) {
+      // 가이드: "프로그램이 말풍선 이미지를 분석하여 캡/인셋을 자동 감지" — 업로드된 일반 PNG에서 cap 추정
+      detectNinePatchCaps(e.target.result).then(caps => {
+        ninePatchCaps[key] = caps;
+        showToast(`이미지 업로드 완료 ✓ (캡 자동감지: ${caps.leftCap}/${caps.topCap}px)`, 'success');
+      }).catch(() => showToast('이미지 업로드 완료 ✓', 'success'));
+    } else {
+      showToast('이미지 업로드 완료 ✓', 'success');
+    }
   };
   reader.readAsDataURL(file);
 }
 function clearSlot(key, e) {
   e.preventDefault();
   uploads[key] = null;
+  delete ninePatchCaps[key];
   const thumbImg = document.getElementById('thumb-img-' + key);
   const thumbIcon = document.getElementById('thumb-icon-' + key);
   const slot = document.getElementById('slot-' + key);
@@ -1271,6 +1336,126 @@ function clearSlot(key, e) {
   if (badge) badge.textContent = '비어있음';
   showToast('이미지 제거됨');
 }
+
+// ── 9-patch 캡 자동 감지 ──
+// 가이드: "stretch line이 캐릭터를 피해야 함" → 네 모서리에서 코너 라운딩(또는 캐릭터)이 끝나는 지점을 캡으로 추정
+function detectNinePatchCaps(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      try {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, w, h).data;
+        const alphaAt = (x, y) => data[(y * w + x) * 4 + 3];
+        const midY = Math.min(2, h - 1);
+        const midX = Math.min(2, w - 1);
+        let leftPx = 0, rightPx = 0, topPx = 0, bottomPx = 0;
+        for (let x = 0; x < w; x++) { if (alphaAt(x, midY) > 10) { leftPx = x; break; } }
+        for (let x = w - 1; x >= 0; x--) { if (alphaAt(x, midY) > 10) { rightPx = (w - 1 - x); break; } }
+        for (let y = 0; y < h; y++) { if (alphaAt(midX, y) > 10) { topPx = y; break; } }
+        for (let y = h - 1; y >= 0; y--) { if (alphaAt(midX, y) > 10) { bottomPx = (h - 1 - y); break; } }
+        const buf = Math.max(4, Math.round(Math.min(w, h) * 0.03));
+        resolve({
+          leftCap: Math.max(6, leftPx + buf),
+          topCap: Math.max(6, topPx + buf),
+          rightCap: Math.max(6, rightPx + buf),
+          bottomCap: Math.max(6, bottomPx + buf),
+          widthPx: w, heightPx: h,
+        });
+      } catch (err) { reject(err); }
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+
+// ── 실제 .9.png 인코딩 ──
+// 가이드의 나인패치 규칙: 상단+좌측 1px = stretch 가이드(여러 구간 가능, 여기선 단일 구간),
+// 하단+우측 1px = content padding(연속 1구간만), 네 꼭짓점은 반드시 투명.
+function encodeNinePatch(srcCanvas, leftCap, topCap, rightCap, bottomCap, insetTop, insetLeft, insetBottom, insetRight) {
+  const w = srcCanvas.width, h = srcCanvas.height;
+  const out = document.createElement('canvas');
+  out.width = w + 2; out.height = h + 2;
+  const ctx = out.getContext('2d');
+  ctx.clearRect(0, 0, out.width, out.height);
+  // 본문 이미지를 (1,1) 위치에 그대로 배치
+  ctx.drawImage(srcCanvas, 1, 1);
+
+  const stretchX0 = Math.min(leftCap, w - 1), stretchX1 = Math.max(stretchX0 + 1, w - rightCap);
+  const stretchY0 = Math.min(topCap, h - 1), stretchY1 = Math.max(stretchY0 + 1, h - bottomCap);
+  const padX0 = Math.min(insetLeft, w - 1), padX1 = Math.max(padX0 + 1, w - insetRight);
+  const padY0 = Math.min(insetTop, h - 1), padY1 = Math.max(padY0 + 1, h - insetBottom);
+
+  ctx.fillStyle = '#000000';
+  // 상단 가이드라인 (y=0): stretch 구간만 검정, 나머지(코너 포함) 투명
+  for (let x = stretchX0; x < stretchX1; x++) ctx.fillRect(x + 1, 0, 1, 1);
+  // 좌측 가이드라인 (x=0): stretch 구간만 검정
+  for (let y = stretchY0; y < stretchY1; y++) ctx.fillRect(0, y + 1, 1, 1);
+  // 하단 가이드라인 (y=h+1): content padding, 연속 1구간만
+  for (let x = padX0; x < padX1; x++) ctx.fillRect(x + 1, h + 1, 1, 1);
+  // 우측 가이드라인 (x=w+1): content padding, 연속 1구간만
+  for (let y = padY0; y < padY1; y++) ctx.fillRect(w + 1, y + 1, 1, 1);
+  // 네 꼭짓점은 항상 완전 투명 (clearRect로 이미 보장되지만 명시적으로 한번 더 보정)
+  ctx.clearRect(0, 0, 1, 1); ctx.clearRect(w + 1, 0, 1, 1);
+  ctx.clearRect(0, h + 1, 1, 1); ctx.clearRect(w + 1, h + 1, 1, 1);
+  return out;
+}
+function dataUrlToCanvas(dataUrl) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth; c.height = img.naturalHeight;
+      c.getContext('2d').drawImage(img, 0, 0);
+      resolve(c);
+    };
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+}
+// 가이드: "방법 1: 이미지 없이 — 색상 + 라운딩" 자동 생성 말풍선 (기본 62×57, +가이드 2px = 64×59)
+function generateFallbackBubbleCanvas(bgColor, radiusPx, withTail, tailSide, marginPx) {
+  const w = 62, h = 57, tail = 8;
+  const margin = Math.max(0, marginPx || 0);
+  const totalW = w + (withTail ? tail : 0) + margin;
+  const c = document.createElement('canvas');
+  c.width = totalW; c.height = h;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, totalW, h);
+  // 꼬리(있는 경우)는 화면 가장자리를 향하고, 그 바깥쪽에 투명 마진을 둔다.
+  // me(보낸): [본문][꼬리][마진] / you(받은): [마진][꼬리][본문]
+  const rectX = tailSide === 'left' ? margin + (withTail ? tail : 0) : 0;
+  const r = Math.max(0, Math.min(radiusPx, w / 2 - 1, h / 2 - 1));
+  ctx.fillStyle = bgColor;
+  roundRectPath(ctx, rectX, 0, w, h, r);
+  ctx.fill();
+  if (withTail) {
+    ctx.beginPath();
+    if (tailSide === 'right') {
+      ctx.moveTo(rectX + w - 2, h - 14); ctx.lineTo(rectX + w + tail, h - 6); ctx.lineTo(rectX + w - 2, h - 2);
+    } else {
+      ctx.moveTo(rectX + 2, h - 14); ctx.lineTo(rectX - tail, h - 6); ctx.lineTo(rectX + 2, h - 2);
+    }
+    ctx.closePath(); ctx.fill();
+  }
+  return c;
+}
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function canvasToBase64(canvas) { return canvas.toDataURL('image/png').split(',')[1]; }
+
+
 
 // ── COLOR PICKING ──
 function pickColor(id) { document.getElementById(id).click(); }
@@ -1324,7 +1509,7 @@ function renderPreview() {
   const mainText = g('main-text-color');
   const statusMsg = g('status-msg-color');
   const lastMsg = g('last-msg-color');
-  const headerBg = g('header-bg-color') || mainBg;
+  const headerBg = g('header-cell-color') || mainBg;
   const headerText = g('header-text');
   const tabInactive = g('tab-inactive');
   const tabActiveColor = g('tab-active');
@@ -1503,23 +1688,78 @@ function saveColorSet() { showToast('색상 세트 저장됨 ✓', 'success'); }
 
 // ── EXPORT ──
 const KAKAO_COLOR_MAP = {
-  'header-text':'myprofile_name_text_color','tab-inactive':'bottom_tab_normal_icon_color','tab-active':'bottom_tab_selected_icon_color',
-  'main-bg-color':'friends_bg_color','main-text-color':'friends_name_text_color','status-msg-color':'friends_status_message_text_color',
-  'last-msg-color':'chat_list_last_message_text_color','tabbar-bg-color':'bottom_tab_bg_color','tabbar-border-color':'bottom_tab_separator_color',
-  'badge-bg-color':'badge_bg_color','chat-bg-color':'chat_bg_color','my-bubble-bg':'chat_msg_right_bg_color',
-  'my-bubble-text':'chat_msg_right_text_color','other-bubble-bg':'chat_msg_left_bg_color','other-bubble-text':'chat_msg_left_text_color',
-  'unread-count-color':'chat_msg_right_unread_count_text_color','inputbar-bg':'chat_input_bg_color','passcode-bg-color':'passcode_bg_color',
-  'passcode-title-color':'passcode_title_text_color','keypad-bg':'passcode_key_bg_color','keypad-text':'passcode_key_text_color',
-  'dot-color':'passcode_indicator_active_color','header-bg-color':'actionbar_bg_color','list-bg-color':'chat_list_bg_color',
-  'divider-color':'list_divider_color','noti-bg-color':'notification_bg_color',
+  // 헤더
+  'header-text':'theme_header_color','header-cell-color':'theme_header_cell_color',
+  // 리스트/본문
+  'section-title-color':'theme_section_title_color',
+  'main-text-color':'theme_title_color','main-text-pressed-color':'theme_title_pressed_color',
+  'last-msg-color':'theme_paragraph_color','last-msg-pressed-color':'theme_paragraph_pressed_color',
+  'status-msg-color':'theme_description_color','status-msg-pressed-color':'theme_description_pressed_color',
+  'feature-primary-color':'theme_feature_primary_color','feature-primary-pressed-color':'theme_feature_primary_pressed_color',
+  // 탭바
+  'feature-browse-tab-color':'theme_feature_browse_tab_color','feature-browse-tab-focused-color':'theme_feature_browse_tab_focused_color',
+  'tabbar-bg-color':'theme_maintab_cell_color',
+  'badge-bg-color':'theme_tab_bannerbadge_background_color','tab-light-badge-color':'theme_tab_lightbannerbadge_background_color',
+  // 배경
+  'main-bg-color':'theme_background_color','chat-bg-color':'theme_chatroom_background_color',
+  'passcode-bg-color':'theme_passcode_background_color',
+  'body-cell-color':'theme_body_cell_color','body-cell-pressed-color':'theme_body_cell_pressed_color',
+  'body-cell-border-color':'theme_body_cell_border_color','body-secondary-cell-color':'theme_body_secondary_cell_color',
+  // 채팅방
+  'my-bubble-text':'theme_chatroom_bubble_me_color','other-bubble-text':'theme_chatroom_bubble_you_color',
+  'my-bubble-bg':'theme_chatroom_bubble_me_bg_color','other-bubble-bg':'theme_chatroom_bubble_you_bg_color',
+  'unread-count-color':'theme_chatroom_unread_count_color',
+  'inputbar-text':'theme_chatroom_input_bar_color','inputbar-bg':'theme_chatroom_input_bar_background_color',
+  'inputbar-menu-icon-color':'theme_chatroom_input_bar_menu_icon_color','inputbar-menu-button-color':'theme_chatroom_input_bar_menu_button_color',
+  'inputbar-send-icon-color':'theme_chatroom_input_bar_send_icon_color','inputbar-send-button-color':'theme_chatroom_input_bar_send_button_color',
+  // 알림/전달 (주의: HTML input id 'header-bg-color'는 라벨상 실제로 "전달완료 배경"임)
+  'direct-share-text-color':'theme_direct_share_color','direct-share-button-color':'theme_direct_share_button_color',
+  'header-bg-color':'theme_direct_share_background_color',
+  'noti-bg-color':'theme_notification_background_color',
+  // 잠금화면
+  'passcode-title-color':'theme_passcode_color',
+  'keypad-text':'theme_passcode_keypad_color','keypad-pressed-color':'theme_passcode_keypad_pressed_color',
+  'keypad-bg':'theme_passcode_keypad_background_color','keypad-pressed-bg':'theme_passcode_keypad_pressed_background_color',
+  'dot-color':'theme_passcode_pattern_line_color',
+  // 기타(리스트)
+  'list-bg-color':'theme_body_cell_color','divider-color':'theme_body_cell_border_color',
 };
 const KAKAO_IMAGE_MAP = {
-  'main-bg':'bg_main.png','chat-bg':'bg_chat_room.png','tabbar-bg':'bg_bottom_tab.9.png',
-  'passcode-bg':'bg_passcode.png','profile':'default_profile_image.png',
-  'ico-friends':'tab_home_nor.png','ico-friends-f':'tab_home_sel.png','ico-chats':'tab_chat_nor.png','ico-more':'tab_more_nor.png',
-  'bubble-me1':'chat_bubble_right_01.9.png','bubble-me2':'chat_bubble_right_02.9.png',
-  'bubble-you1':'chat_bubble_left_01.9.png','bubble-you2':'chat_bubble_left_02.9.png',
-  'pc-dot':'passcode_indicator_empty.png','pc-dot-checked':'passcode_indicator_active.png',
+  // APK 설정 이미지 (2종) - DPI 스케일링 대상 아님, xxhdpi에만 저장
+  'app-icon':'theme_app_icon.png',
+  'preview-image':'theme_preview_image.png',
+  // 배경 이미지 (4종)
+  'main-bg':'theme_background_image.png',
+  'chat-bg':'theme_chatroom_background_image.png',
+  'tabbar-bg':'theme_maintab_cell_image.9.png',
+  'passcode-bg':'theme_passcode_background_image.png',
+  'splash':'theme_splash_image.png',
+  // 프로필
+  'profile':'theme_profile_01_image.png',
+  // 탭 아이콘 (8탭 x 2상태)
+  'ico-friends':'theme_maintab_ico_friends_image.png','ico-friends-f':'theme_maintab_ico_friends_focused_image.png',
+  'ico-chats':'theme_maintab_ico_chats_image.png','ico-chats-f':'theme_maintab_ico_chats_focused_image.png',
+  'ico-shopping':'theme_maintab_ico_shopping_image.png','ico-shopping-f':'theme_maintab_ico_shopping_focused_image.png',
+  'ico-more':'theme_maintab_ico_more_image.png','ico-more-f':'theme_maintab_ico_more_focused_image.png',
+  'ico-call':'theme_maintab_ico_call_image.png','ico-call-f':'theme_maintab_ico_call_focused_image.png',
+  'ico-now':'theme_maintab_ico_now_image.png','ico-now-f':'theme_maintab_ico_now_focused_image.png',
+  'ico-piccoma':'theme_maintab_ico_piccoma_image.png','ico-piccoma-f':'theme_maintab_ico_piccoma_focused_image.png',
+  // 친구추가 버튼
+  'find-friend-btn':'theme_find_add_friend_button_image.png',
+  'find-friend-btn-p':'theme_find_add_friend_button_pressed_image.png',
+  // 말풍선
+  'bubble-me1':'theme_chatroom_bubble_me_01_image.9.png','bubble-me2':'theme_chatroom_bubble_me_02_image.9.png',
+  'bubble-you1':'theme_chatroom_bubble_you_01_image.9.png','bubble-you2':'theme_chatroom_bubble_you_02_image.9.png',
+  // 잠금 코드 (4자리 x 미입력/입력됨)
+  'pc-01':'theme_passcode_01_image.png','pc-01-c':'theme_passcode_01_checked_image.png',
+  'pc-02':'theme_passcode_02_image.png','pc-02-c':'theme_passcode_02_checked_image.png',
+  'pc-03':'theme_passcode_03_image.png','pc-03-c':'theme_passcode_03_checked_image.png',
+  'pc-04':'theme_passcode_04_image.png','pc-04-c':'theme_passcode_04_checked_image.png',
+};
+// 오픈채팅 아이콘은 카카오톡 버전에 따라 openchat/browse 두 이름 모두로 저장 (가이드라인 '오픈채팅 탭 별칭' 참고)
+const KAKAO_OPENCHAT_ALIASES = {
+  'ico-openchat': ['theme_maintab_ico_openchat_image.png','theme_maintab_ico_browse_image.png'],
+  'ico-openchat-f': ['theme_maintab_ico_openchat_focused_image.png','theme_maintab_ico_browse_focused_image.png'],
 };
 function hexToArgb(hex) {
   const h = hex.replace('#','');
@@ -1660,12 +1900,52 @@ async function exportAPK() {
   valuesFolder.file('strings.xml', buildStringsXml(themeName, author));
   const drawableFolder = root.folder('res/drawable-xxhdpi');
   let imgCount = 0;
-  Object.entries(uploads).forEach(([key, data]) => {
-    if (data && KAKAO_IMAGE_MAP[key]) {
+
+  // 가이드 기본값 (방법 2: 일반 PNG → .9.png 자동 변환)
+  const DEFAULT_BUBBLE_CAP = 15;                 // 좌측/상단 캡 기본값(px)
+  const BUBBLE_INSET = { top: 24, left: 30, bottom: 24, right: 30 }; // 8dp/10dp × 3
+  const radiusPx = parseInt(g('sl-radius'), 10) || 12;   // 말풍선 라운딩(자동 생성용)
+  const marginPx = parseInt(g('sl-margin'), 10) || 6;    // 가장자리 여백 → 자동 생성 말풍선 외곽 여유로 사용
+
+  for (const [key, data] of Object.entries(uploads)) {
+    if (!data || !KAKAO_IMAGE_MAP[key]) continue;
+    if (NINE_PATCH_KEYS.includes(key)) {
+      // 업로드된 일반 PNG를 캡/인셋 기반으로 실제 .9.png(1px 가이드라인 포함)로 변환
+      const srcCanvas = await dataUrlToCanvas(data);
+      const caps = ninePatchCaps[key] || { leftCap: DEFAULT_BUBBLE_CAP, topCap: DEFAULT_BUBBLE_CAP, rightCap: DEFAULT_BUBBLE_CAP, bottomCap: DEFAULT_BUBBLE_CAP };
+      const isTabbar = key === 'tabbar-bg';
+      const inset = isTabbar ? { top: 0, left: 0, bottom: 0, right: 0 } : BUBBLE_INSET;
+      const ninePatch = encodeNinePatch(srcCanvas, caps.leftCap, caps.topCap, caps.rightCap, caps.bottomCap, inset.top, inset.left, inset.bottom, inset.right);
+      drawableFolder.file(KAKAO_IMAGE_MAP[key], canvasToBase64(ninePatch), { base64: true });
+      imgCount++;
+    } else {
       const b64 = data.split(',')[1];
-      drawableFolder.file(KAKAO_IMAGE_MAP[key], b64, {base64: true});
+      drawableFolder.file(KAKAO_IMAGE_MAP[key], b64, { base64: true });
       imgCount++;
     }
+    if (KAKAO_OPENCHAT_ALIASES[key]) {
+      const b64 = data.split(',')[1];
+      KAKAO_OPENCHAT_ALIASES[key].forEach(filename => {
+        drawableFolder.file(filename, b64, { base64: true });
+      });
+      imgCount++;
+    }
+  }
+
+  // ── 가이드: "말풍선 이미지를 넣지 않으면 프로그램이 말풍선 배경색 + 라운딩 설정값으로 자동 생성" ──
+  const fallbackSpecs = [
+    { key: 'bubble-me1',  color: g('my-bubble-bg'),    withTail: true,  side: 'right' },
+    { key: 'bubble-me2',  color: g('my-bubble-bg'),    withTail: false, side: 'right' },
+    { key: 'bubble-you1', color: g('other-bubble-bg'), withTail: true,  side: 'left'  },
+    { key: 'bubble-you2', color: g('other-bubble-bg'), withTail: false, side: 'left'  },
+  ];
+  fallbackSpecs.forEach(spec => {
+    if (uploads[spec.key]) return; // 이미 업로드된 이미지가 있으면 건드리지 않음
+    const bubbleCanvas = generateFallbackBubbleCanvas(spec.color, radiusPx, spec.withTail, spec.side, marginPx);
+    const capPt = Math.max(6, Math.round(radiusPx) + 2);
+    const ninePatch = encodeNinePatch(bubbleCanvas, capPt, capPt, capPt, capPt, 6, 6, 6, 6);
+    drawableFolder.file(KAKAO_IMAGE_MAP[spec.key], canvasToBase64(ninePatch), { base64: true });
+    imgCount++;
   });
   root.file('BUILD_GUIDE.txt', buildGuide(pkgName, themeName));
   zip.file('colors.xml', buildColorsXml(colors));
