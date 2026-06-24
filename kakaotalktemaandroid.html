@@ -4297,9 +4297,13 @@ async function buildAndDownloadAPK() {
     openBuildProgressPanel();
     updateBuildProgress('서버에 업로드 중...');
 
+    const safeThemeName = themeName.trim().replace(/[\\/:*?"<>|]/g, '_') || 'kakao-theme';
     const buildRes = await workerRequest('/build', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/octet-stream' },
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'X-Theme-Name': encodeURIComponent(safeThemeName),
+      },
       body: blob,
     });
     const buildJson = await buildRes.json();
@@ -4395,9 +4399,9 @@ async function pollWorkflowAndShowResult(since) {
     const res = await workerRequest('/download', { _raw: true });
     if (!res.ok) throw new Error(`다운로드 실패 (${res.status})`);
     const blob = await res.blob();
-    const disposition = res.headers.get('Content-Disposition') || '';
-    const match = disposition.match(/filename="([^"]+)"/);
-    const filename = match ? match[1] : 'kakao-theme.apk';
+    const filename = (typeof safeThemeName === 'string' && safeThemeName.trim())
+      ? safeThemeName.trim() + '.apk'
+      : 'kakao-theme.apk';
 
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
