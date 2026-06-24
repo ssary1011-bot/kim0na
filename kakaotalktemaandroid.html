@@ -4288,6 +4288,17 @@ async function buildAndDownloadAPK() {
     suggestedPkgId
   ) || suggestedPkgId;
 
+  // APK 파일명 별도 입력 (테마 이름과 독립적으로 지정 가능)
+  const suggestedApkName = themeName.trim().replace(/[\\/:*?"<>|]/g, '_') || 'kakao-theme';
+  const apkNameInput = prompt(
+    'APK 파일 이름을 입력하세요 (.apk 제외).\n' +
+    '깃허브 릴리즈와 다운로드 파일명에 그대로 사용됩니다.\n' +
+    '그대로 두려면 확인만 누르세요.',
+    suggestedApkName
+  );
+  const safeApkName = (apkNameInput !== null ? apkNameInput : suggestedApkName)
+    .trim().replace(/[\\/:*?"<>|]/g, '_') || 'kakao-theme';
+
   showToast('테마 파일 생성 중...', '');
   const result = await buildThemeFiles(themeName, author, pkgIdInput);
   if (!result) return;
@@ -4297,12 +4308,11 @@ async function buildAndDownloadAPK() {
     openBuildProgressPanel();
     updateBuildProgress('서버에 업로드 중...');
 
-    const safeThemeName = themeName.trim().replace(/[\\/:*?"<>|]/g, '_') || 'kakao-theme';
     const buildRes = await workerRequest('/build', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/octet-stream',
-        'X-Theme-Name': encodeURIComponent(safeThemeName),
+        'X-Theme-Name': encodeURIComponent(safeApkName),
       },
       body: blob,
     });
@@ -4399,8 +4409,8 @@ async function pollWorkflowAndShowResult(since) {
     const res = await workerRequest('/download', { _raw: true });
     if (!res.ok) throw new Error(`다운로드 실패 (${res.status})`);
     const blob = await res.blob();
-    const filename = (typeof safeThemeName === 'string' && safeThemeName.trim())
-      ? safeThemeName.trim() + '.apk'
+    const filename = (typeof safeApkName === 'string' && safeApkName.trim())
+      ? safeApkName.trim() + '.apk'
       : 'kakao-theme.apk';
 
     const url = URL.createObjectURL(blob);
