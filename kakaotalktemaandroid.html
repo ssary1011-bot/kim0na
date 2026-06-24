@@ -4320,7 +4320,7 @@ async function buildAndDownloadAPK() {
     if (!buildJson.ok) throw new Error(buildJson.error || '업로드 실패');
 
     showToast(`✅ 업로드 완료! (이미지 ${imgCount}개) 빌드를 기다리는 중...`, 'success');
-    await pollWorkflowAndShowResult(buildJson.since);
+    await pollWorkflowAndShowResult(buildJson.since, safeApkName);
   } catch (err) {
     console.error(err);
     updateBuildProgress('빌드 요청에 실패했어요: ' + err.message, { stopSpinner: true });
@@ -4353,7 +4353,7 @@ function updateBuildProgress(text, opts = {}) {
   }
 }
 
-async function pollWorkflowAndShowResult(since) {
+async function pollWorkflowAndShowResult(since, safeApkName) {
   let run = null;
 
   // 1) 새로 생성된 run이 등록될 때까지 polling
