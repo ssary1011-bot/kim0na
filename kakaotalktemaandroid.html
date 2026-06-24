@@ -4372,6 +4372,9 @@ async function pollWorkflowAndShowResult(since) {
     return;
   }
 
+  // run을 찾은 시점에 runNumber 확보 → 다운로드 시 정확한 빌드 특정에 사용
+  const runNumber = run.runNumber;
+
   updateBuildProgress('빌드 진행 중... (보통 1~3분 소요)');
   showToast('빌드 진행 중... 진행상황 창에서 확인하세요', '');
 
@@ -4404,9 +4407,10 @@ async function pollWorkflowAndShowResult(since) {
   updateBuildProgress('✅ 빌드 성공! APK를 가져오는 중...');
   showToast('✅ 빌드 성공! APK를 가져오는 중...', 'success');
 
-  // 3) Worker를 통해 APK 바이너리 직접 다운로드 (github.com 미접속, 토큰 노출 없음)
+  // 3) Worker를 통해 APK 바이너리 직접 다운로드 (runNumber로 이번 빌드 APK를 정확히 특정)
   try {
-    const res = await workerRequest('/download', { _raw: true });
+    const downloadPath = runNumber ? `/download?runNumber=${runNumber}` : '/download';
+    const res = await workerRequest(downloadPath, { _raw: true });
     if (!res.ok) throw new Error(`다운로드 실패 (${res.status})`);
     const blob = await res.blob();
     const filename = (typeof safeApkName === 'string' && safeApkName.trim())
