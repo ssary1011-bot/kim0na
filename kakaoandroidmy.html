@@ -245,7 +245,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 #np-canvas{display:block;cursor:crosshair;width:100%;height:auto;}
 
 /* 토스트 */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);border-radius:20px;padding:9px 20px;font-size:12px;font-weight:600;color:#fff;box-shadow:0 6px 20px rgba(37,34,32,.3);transition:.3s cubic-bezier(.34,1.56,.64,1);z-index:999;white-space:nowrap;pointer-events:none;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);border-radius:20px;padding:9px 20px;font-size:12px;font-weight:600;color:#fff;box-shadow:0 6px 20px rgba(37,34,32,.3);transition:.3s cubic-bezier(.34,1.56,.64,1);z-index:999;max-width:min(560px,90vw);white-space:normal;word-break:break-word;text-align:center;line-height:1.5;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 .toast.success{background:var(--accent);}
 .toast.error{background:var(--red);}
@@ -327,12 +327,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <summary class="tb-btn">⋯ 더보기</summary>
       <div class="tb-more-menu">
         <button onclick="newProject()">✨ 새 프로젝트</button>
-        <button onclick="bulkUpload()">📁 이미지 일괄 교체</button>
+        <button onclick="bulkUpload()">📁 폴더로 이미지 일괄 교체</button>
+        <button onclick="loadThemeZipFile()">📦 ZIP 테마 불러오기</button>
         <button onclick="saveTemplate()">💾 템플릿 저장</button>
         <button onclick="loadTemplate()">📋 템플릿 불러오기</button>
       </div>
     </details>
     <input type="file" id="template-file-input" accept=".json,application/json" style="display:none" onchange="handleTemplateFileSelected(event)">
+    <input type="file" id="theme-zip-file-input" accept=".zip,application/zip" style="display:none" onchange="handleThemeZipFileSelected(event)">
   </div>
 </div>
 
@@ -1964,7 +1966,7 @@ function handleSlot(key, input, event) {
 // 업로드한 이미지가 어느 탭에서 보이는지 자동 이동할 때 쓰는 매핑.
 // handleSlot(단일 업로드)과 bulkUpload(일괄 업로드) 둘 다 이 표를 함께 쓴다.
 const SLOT_TO_TAB = {
-  'main-bg':'friends', 'profile':'friends',
+  'main-bg':'friends', 'profile':'friends', 'profile-2':'friends', 'profile-3':'friends',
   'find-friend-btn':'addfriend', 'find-friend-btn-p':'addfriend',
   'chat-bg':'chatroom', 'bubble-me1':'chatroom', 'bubble-me2':'chatroom',
   'bubble-you1':'chatroom', 'bubble-you2':'chatroom',
@@ -3924,7 +3926,14 @@ async function buildThemeFiles(themeName, author, pkgIdOverride) {
     // (캔버스 크기를 200x180으로 키운 것에 맞춰 기준값도 함께 수정)
     const actualCornerR = Math.max(0, Math.min(radiusPx * 2, 200/2 - 1, 180/2 - 1));
     const insetPt = Math.max(12, Math.round(actualCornerR * 0.7) + 6);
-    const ninePatch = encodeNinePatch(bubbleCanvas, capPt, capPt, capPt, capPt, insetPt, insetPt, insetPt, insetPt, [], []);
+    // 버그수정: 캡(늘어나지 않는 영역)을 좌우 똑같이 capPt로 잡으면, 꼬리(tail=26px+margin)가
+    // 통째로 "늘어나는 영역" 안에 포함돼서 말풍선이 가로로 늘어날 때 꼬리까지 같이 찌그러진다.
+    // 꼬리가 있는 쪽은 캡을 "꼬리 폭 + 여유"만큼 넉넉히 잡아서 꼬리 영역 전체를 고정시키고,
+    // 텍스트로 인한 늘어남은 본문(사각형 몸통) 쪽에서만 일어나게 한다.
+    const tailGuardPt = 26 + Math.max(0, marginPx || 0) * 2 + 6; // generateFallbackBubbleCanvas의 tail=26, margin*2와 동일 기준 + 여유 6px
+    const leftCap  = (spec.withTail && spec.side === 'left')  ? tailGuardPt : capPt;
+    const rightCap = (spec.withTail && spec.side === 'right') ? tailGuardPt : capPt;
+    const ninePatch = encodeNinePatch(bubbleCanvas, leftCap, capPt, rightCap, capPt, insetPt, insetPt, insetPt, insetPt, [], []);
     drawableFolder.file(KAKAO_IMAGE_MAP[spec.key], canvasToBase64(ninePatch), { base64: true });
     imgCount++;
     addedFilenames.add(KAKAO_IMAGE_MAP[spec.key]);
@@ -4530,6 +4539,116 @@ function loadTemplate() {
   document.getElementById('template-file-input').click();
 }
 
+// 📦 ZIP 테마 파일 불러오기: exportAPK()/buildAndDownloadAPK()로 내보낸 ZIP을 다시 열어
+// colors.xml(색상)과 drawable-xxhdpi(이미지)를 읽어 들여 현재 작업 화면에 복원한다.
+// 내부적으로는 ZIP 내용을 템플릿(.json)과 같은 모양의 객체로 변환한 뒤 applyTemplateData()를 그대로 재사용한다.
+function loadThemeZipFile() {
+  if (Object.values(uploads).some(v => v) && !confirm('ZIP을 불러오면 현재 작업 중인 색상/이미지가 모두 덮어써집니다. 계속할까요?')) {
+    return;
+  }
+  document.getElementById('theme-zip-file-input').value = '';
+  document.getElementById('theme-zip-file-input').click();
+}
+
+async function handleThemeZipFileSelected(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (typeof JSZip === 'undefined') { showToast('JSZip 로딩 중... 잠시 후 다시 시도해주세요', 'error'); return; }
+
+  try {
+    const zip = await JSZip.loadAsync(file);
+
+    // exportAPK()가 만드는 구조: src/main/theme/{values, values-night, drawable-xxhdpi}/...
+    // 사용자가 폴더 구조를 바꿔서 다시 압축했을 수도 있으니, 파일 경로 끝부분(파일명)을 기준으로 찾는다.
+    const entries = Object.values(zip.files).filter(f => !f.dir);
+    const colorsXmlEntry = entries.find(f => /values\/colors\.xml$/.test(f.name) || /(^|\/)colors\.xml$/.test(f.name));
+    if (!colorsXmlEntry) {
+      showToast('이 ZIP에서 colors.xml을 찾지 못했어요 — 테마 메이커로 내보낸 ZIP이 맞는지 확인해주세요', 'error');
+      return;
+    }
+
+    // 1) colors.xml 파싱: <color name="xmlKey">#AARRGGBB</color> → uiKey(input id)로 역매핑
+    const colorsXmlText = await colorsXmlEntry.async('text');
+    const xmlKeyToArgb = {};
+    const colorTagRe = /<color\s+name="([^"]+)">\s*(#[0-9A-Fa-f]{6,8})\s*<\/color>/g;
+    let m;
+    while ((m = colorTagRe.exec(colorsXmlText))) {
+      xmlKeyToArgb[m[1]] = m[2];
+    }
+    // KAKAO_COLOR_MAP은 uiKey → xmlKey 이므로 반대로 뒤집는다.
+    // (같은 xmlKey를 공유하는 uiKey가 여러 개일 수 있으니 — 그런 경우 전부 같은 값으로 채운다)
+    const colors = {};
+    const alphas = {};
+    Object.entries(KAKAO_COLOR_MAP).forEach(([uiKey, xmlKey]) => {
+      const argb = xmlKeyToArgb[xmlKey];
+      if (!argb) return; // 이 ZIP에 해당 색상이 없으면 건드리지 않음(기본값 유지)
+      const hex = argb.replace('#', '');
+      if (hex.length === 8) {
+        // #AARRGGBB → 색(#RRGGBB) + 알파(0~100%)
+        const a = parseInt(hex.slice(0, 2), 16);
+        colors[uiKey] = '#' + hex.slice(2);
+        alphas['alpha-' + uiKey] = Math.round((a / 255) * 100);
+      } else {
+        colors[uiKey] = '#' + hex;
+      }
+    });
+
+    // 2) drawable-xxhdpi 안의 이미지들을 KAKAO_IMAGE_MAP(+오픈채팅 별칭)으로 역매핑해서 uploads에 채워 넣는다.
+    // 파일명 → 업로드 슬롯 키. KAKAO_IMAGE_MAP은 key → filename이므로 반대로 뒤집는다.
+    const filenameToKey = {};
+    Object.entries(KAKAO_IMAGE_MAP).forEach(([key, filename]) => { filenameToKey[filename] = key; });
+    Object.entries(KAKAO_OPENCHAT_ALIASES).forEach(([key, filenames]) => {
+      filenames.forEach(filename => { filenameToKey[filename] = key; });
+    });
+
+    const drawableEntries = entries.filter(f => /drawable-xxhdpi\//.test(f.name));
+    const uploadsOut = {};
+    const ninePatchCapsOut = {};
+    let imgFoundCount = 0;
+
+    for (const entry of drawableEntries) {
+      const baseName = entry.name.split('/').pop();
+      const key = filenameToKey[baseName];
+      if (!key) continue; // 테마 아이콘(ic_launcher 등) 등 우리가 관리하지 않는 파일은 건너뜀
+      const base64 = await entry.async('base64');
+      const isNinePatch = /\.9\.png$/i.test(baseName);
+      const mime = 'image/png';
+      const dataUrl = `data:${mime};base64,${base64}`;
+      uploadsOut[key] = dataUrl;
+      imgFoundCount++;
+
+      if (NINE_PATCH_KEYS.includes(key)) {
+        // 9-patch는 가이드라인(1px 검은 선)이 포함된 상태로 저장되어 있으므로,
+        // detectNinePatchCaps로 다시 분석해서 캡/인셋 정보를 복원한다.
+        try {
+          const caps = await detectNinePatchCaps(dataUrl);
+          ninePatchCapsOut[key] = caps;
+        } catch (err) {
+          // 분석 실패해도 이미지 자체는 적용하고, 캡은 기본값(빌드 시 자동 추정)에 맡긴다.
+        }
+      }
+    }
+
+    if (imgFoundCount === 0 && Object.keys(colors).length === 0) {
+      showToast('이 ZIP에서 알아볼 수 있는 색상/이미지를 찾지 못했어요', 'error');
+      return;
+    }
+
+    // 3) 템플릿 불러오기와 동일한 형태로 데이터를 구성해서 적용 로직을 재사용한다.
+    applyTemplateData({
+      colors,
+      alphas,
+      uploads: uploadsOut,
+      ninePatchCaps: ninePatchCapsOut,
+      settings: {},
+    }, { clearMissingUploads: false, showOwnToast: false });
+    showToast(`ZIP 테마를 불러왔습니다 ✓ (이미지 ${imgFoundCount}개, 색상 ${Object.keys(colors).length}개 포함)`, 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('ZIP을 읽는 중 오류가 발생했어요: ' + err.message, 'error');
+  }
+}
+
 function handleTemplateFileSelected(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -4552,7 +4671,14 @@ function handleTemplateFileSelected(event) {
   reader.readAsText(file);
 }
 
-function applyTemplateData(data) {
+function applyTemplateData(data, opts) {
+  opts = opts || {};
+  // clearMissingUploads: JSON 템플릿 불러오기는 "그 시점의 전체 상태"를 담고 있으므로
+  // 템플릿에 없는 슬롯은 비우는 게 맞다(기본값 true). 반면 ZIP 불러오기는 ZIP 안에서
+  // 찾은 이미지만 알 수 있을 뿐 "원래 비어있었는지"는 알 수 없으므로, 찾지 못한 슬롯은
+  // 건드리지 않고 현재 상태를 그대로 둔다(loadThemeZipFile에서 false로 호출).
+  const clearMissingUploads = opts.clearMissingUploads !== false;
+
   // 1) 색상 + 투명도 슬라이더 복원
   const colors = data.colors || {};
   Object.keys(colors).forEach(id => {
@@ -4565,17 +4691,21 @@ function applyTemplateData(data) {
     if (inp) inp.value = alphas[id];
   });
 
-  // 2) 업로드 이미지 전체를 템플릿 내용으로 교체 (저장 당시 없던 슬롯은 비움)
+  // 2) 업로드 이미지를 템플릿/ZIP 내용으로 교체
   const savedUploads = data.uploads || {};
-  const allUploadKeys = new Set([...Object.keys(uploads), ...Object.keys(savedUploads)]);
-  allUploadKeys.forEach(key => {
-    const dataUrl = savedUploads[key] || null;
+  const targetKeys = clearMissingUploads
+    ? new Set([...Object.keys(uploads), ...Object.keys(savedUploads)]) // 저장 당시 없던 슬롯도 비움
+    : new Set(Object.keys(savedUploads)); // ZIP에서 실제로 찾은 슬롯만 갱신, 나머지는 그대로 둠
+  targetKeys.forEach(key => {
+    const dataUrl = savedUploads[key] || (clearMissingUploads ? null : uploads[key]);
     uploads[key] = dataUrl;
     setUploadSlotUI(key, dataUrl);
   });
 
   // 3) 9-patch 캡 정보 복원
-  Object.keys(ninePatchCaps).forEach(k => delete ninePatchCaps[k]);
+  if (clearMissingUploads) {
+    Object.keys(ninePatchCaps).forEach(k => delete ninePatchCaps[k]);
+  }
   Object.assign(ninePatchCaps, data.ninePatchCaps || {});
 
   // 4) 부가 설정 복원
@@ -4589,8 +4719,10 @@ function applyTemplateData(data) {
   // 5) 화면 갱신
   initColors();
   renderPreview();
-  const imgCount = Object.keys(savedUploads).length;
-  showToast(`템플릿을 불러왔습니다 ✓ (이미지 ${imgCount}개 포함)`, 'success');
+  if (opts.showOwnToast !== false) {
+    const imgCount = Object.keys(savedUploads).length;
+    showToast(`템플릿을 불러왔습니다 ✓ (이미지 ${imgCount}개 포함)`, 'success');
+  }
 }
 // 파일명 → 업로드 슬롯 키 매칭용 키워드 표.
 // 같은 슬롯에 여러 키워드를 등록할 수 있고, 배열 안에서 더 구체적인(긴) 키워드를 앞에 둔다.
@@ -4631,44 +4763,98 @@ function matchSlotByFilename(filename) {
   return null;
 }
 
-// 📁 이미지 일괄 교체: 파일을 여러 개 선택하면 파일명의 키워드를 보고 각 슬롯에 자동으로 채워넣는다.
+// 📁 이미지 일괄 교체: 폴더를 통째로 선택하면(폴더 안 이미지가 자동으로 다 포함됨)
+// 파일명의 키워드를 보고 각 슬롯에 자동으로 채워넣는다.
 // (예: "나영님메인배경.png" → 메인 배경 슬롯, "나영님채팅배경.png" → 채팅방 배경 슬롯)
 function bulkUpload() {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = 'image/png,image/jpeg,image/webp';
+  // webkitdirectory를 지원하지 않는 환경(특히 일부 모바일 브라우저)에서는
+  // 폴더 선택 자체가 안 먹거나 클릭이 막힐 수 있어서, 지원 여부를 먼저 확인하고
+  // 지원하지 않으면 "여러 이미지 파일 선택" 모드로 자동 폴백한다.
+  const supportsDirectory = 'webkitdirectory' in HTMLInputElement.prototype;
+  if (supportsDirectory) {
+    // 폴더 통째로 선택하게 해서, 폴더 안의 모든 파일이 한 번에 들어오게 한다.
+    // (이전엔 multiple만 있어서 이미지를 하나하나 또는 Ctrl/Shift로 일일이 골라야 했음)
+    input.webkitdirectory = true;
+    input.directory = true; // 일부 구형 브라우저 호환용 (Firefox 등)
+  } else {
+    input.accept = 'image/png,image/jpeg,image/webp';
+    showToast('이 브라우저는 폴더 선택을 지원하지 않아요 — 이미지 파일들을 여러 개 선택해 주세요 (Ctrl/Shift로 다중 선택 가능)', '');
+  }
   input.multiple = true;
   input.onchange = async () => {
-    const files = Array.from(input.files || []);
-    if (!files.length) return;
+    const allFiles = Array.from(input.files || []);
+    if (!allFiles.length) return;
+
+    // 폴더 선택은 accept 필터가 적용되지 않아 폴더 안의 모든 파일(이미지가 아닌 것 포함)이 들어온다.
+    // 확장자로 이미지 파일만 골라낸다. webkitRelativePath에 하위 폴더 경로가 섞여 들어올 수 있으므로
+    // 매칭에는 파일명(마지막 / 뒤)만 사용한다.
+    const IMAGE_EXT = /\.(png|jpe?g|webp)$/i;
+    const files = allFiles
+      .filter(f => IMAGE_EXT.test(f.name))
+      .map(f => {
+        const relPath = f.webkitRelativePath || f.name;
+        const baseName = relPath.split('/').pop();
+        return { file: f, name: baseName };
+      });
+
+    if (!files.length) {
+      showToast('선택한 폴더 안에 이미지 파일(png/jpg/webp)이 없어요.', 'error');
+      return;
+    }
 
     const matched = [];   // {file, slotKey}
     const unmatched = []; // filename
 
-    files.forEach(file => {
-      const slotKey = matchSlotByFilename(file.name);
+    files.forEach(({ file, name }) => {
+      const slotKey = matchSlotByFilename(name);
       if (slotKey) matched.push({ file, slotKey });
-      else unmatched.push(file.name);
+      else unmatched.push(name);
     });
 
     if (!matched.length) {
-      showToast('파일명에서 일치하는 슬롯을 찾지 못했어요. 파일명에 "메인배경", "채팅배경", "프로필1" 같은 키워드를 포함해 주세요.', 'error');
+      showToast('선택한 폴더 안 파일명에서 일치하는 슬롯을 찾지 못했어요. 파일명에 "메인배경", "채팅배경", "프로필1" 같은 키워드를 포함해 주세요.', 'error');
       return;
     }
 
+    // 버그수정: 같은 슬롯에 파일이 두 개 이상 매칭되면(예: "메인배경1.png"와 "메인배경2.png" 둘 다 업로드),
+    // 마지막 파일이 조용히 앞 파일을 덮어쓰게 된다. 결과 요약에서 이 사실을 알 수 있도록 슬롯별 매칭 개수를 센다.
+    const slotCounts = {};
+    matched.forEach(({ slotKey }) => { slotCounts[slotKey] = (slotCounts[slotKey] || 0) + 1; });
+    const overwritten = Object.entries(slotCounts).filter(([, n]) => n > 1);
+
     // 모든 파일을 dataURL로 읽은 뒤, 한 번에 슬롯에 적용한다 (탭 전환 없이 조용히 채움).
+    let failedCount = 0;
     for (const { file, slotKey } of matched) {
-      const dataUrl = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => resolve(e.target.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-      await applyImageToSlot(slotKey, dataUrl, { showOwnToast: false, switchTabOnUpload: false });
+      try {
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        await applyImageToSlot(slotKey, dataUrl, { showOwnToast: false, switchTabOnUpload: false });
+      } catch (err) {
+        failedCount++;
+        unmatched.push(file.name + ' (읽기 실패)');
+      }
     }
 
-    let msg = `${matched.length}개 매칭 완료 ✓`;
-    if (unmatched.length) msg += ` · ${unmatched.length}개 실패: ${unmatched.join(', ')}`;
+    const appliedCount = matched.length - failedCount;
+    let msg = `${appliedCount}개 매칭 완료 ✓`;
+    if (overwritten.length) {
+      msg += ` (같은 슬롯에 여러 파일이 매칭돼 마지막 파일만 적용됨: ${overwritten.map(([k]) => k).join(', ')})`;
+    }
+    if (unmatched.length) {
+      // 매칭 실패 파일이 많으면(예: 카카오톡 정식 테마 폴더를 통째로 올린 경우) 토스트 한 줄이
+      // 화면 가로 전체를 가로지르도록 끝없이 길어지는 문제가 있었다. 최대 5개까지만 보여주고
+      // 나머지는 "외 N개"로 요약한다.
+      const SHOW_MAX = 5;
+      const shown = unmatched.slice(0, SHOW_MAX).join(', ');
+      const restCount = unmatched.length - SHOW_MAX;
+      msg += ` · ${unmatched.length}개 실패: ${shown}${restCount > 0 ? ` 외 ${restCount}개` : ''}`;
+    }
     showToast(msg, unmatched.length ? 'error' : 'success');
   };
   input.click();
