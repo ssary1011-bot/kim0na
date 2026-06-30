@@ -534,9 +534,6 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
 <!-- MENUBAR -->
 <div class="menubar">
   <div class="menubar-logo"><span class="dot"></span>테마 메이커</div>
-  <button class="menubar-item" onclick="newProject()">파일</button>
-  <button class="menubar-item" onclick="showTemplates()">템플릿</button>
-  <button class="menubar-item" onclick="showThemeInfo()">테마 정보</button>
 </div>
 
 <!-- TOOLBAR -->
@@ -548,7 +545,9 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
   <div class="toolbar-sep"></div>
   <button class="toolbar-btn" onclick="saveTemplate()" title="현재 색상/이미지를 .json 파일로 내보냅니다"><span class="icon">💾</span> 템플릿 저장</button>
   <button class="toolbar-btn" onclick="loadTemplate()" title="저장해둔 .json 템플릿 파일을 불러옵니다"><span class="icon">📋</span> 템플릿 불러오기</button>
+  <button class="toolbar-btn" onclick="loadThemeZipFile()" title="내보내기로 만든 ZIP을 다시 불러와 색상/이미지를 복원합니다"><span class="icon">📦</span> ZIP 테마 불러오기</button>
   <input type="file" id="template-file-input" accept=".json,application/json" style="display:none" onchange="handleTemplateFileSelected(event)">
+  <input type="file" id="theme-zip-file-input" accept=".zip,application/zip" style="display:none" onchange="handleThemeZipFileSelected(event)">
 </div>
 
 <!-- STEP BAR -->
@@ -4612,6 +4611,116 @@ function loadTemplate() {
   document.getElementById('template-file-input').click();
 }
 
+// 📦 ZIP 테마 파일 불러오기: exportAPK()/buildAndDownloadAPK()로 내보낸 ZIP을 다시 열어
+// colors.xml(색상)과 drawable-xxhdpi(이미지)를 읽어 들여 현재 작업 화면에 복원한다.
+// 내부적으로는 ZIP 내용을 템플릿(.json)과 같은 모양의 객체로 변환한 뒤 applyTemplateData()를 그대로 재사용한다.
+function loadThemeZipFile() {
+  if (Object.values(uploads).some(v => v) && !confirm('ZIP을 불러오면 현재 작업 중인 색상/이미지가 모두 덮어써집니다. 계속할까요?')) {
+    return;
+  }
+  document.getElementById('theme-zip-file-input').value = '';
+  document.getElementById('theme-zip-file-input').click();
+}
+
+async function handleThemeZipFileSelected(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (typeof JSZip === 'undefined') { showToast('JSZip 로딩 중... 잠시 후 다시 시도해주세요', 'error'); return; }
+
+  try {
+    const zip = await JSZip.loadAsync(file);
+
+    // exportAPK()가 만드는 구조: src/main/theme/{values, values-night, drawable-xxhdpi}/...
+    // 사용자가 폴더 구조를 바꿔서 다시 압축했을 수도 있으니, 파일 경로 끝부분(파일명)을 기준으로 찾는다.
+    const entries = Object.values(zip.files).filter(f => !f.dir);
+    const colorsXmlEntry = entries.find(f => /values\/colors\.xml$/.test(f.name) || /(^|\/)colors\.xml$/.test(f.name));
+    if (!colorsXmlEntry) {
+      showToast('이 ZIP에서 colors.xml을 찾지 못했어요 — 테마 메이커로 내보낸 ZIP이 맞는지 확인해주세요', 'error');
+      return;
+    }
+
+    // 1) colors.xml 파싱: <color name="xmlKey">#AARRGGBB</color> → uiKey(input id)로 역매핑
+    const colorsXmlText = await colorsXmlEntry.async('text');
+    const xmlKeyToArgb = {};
+    const colorTagRe = /<color\s+name="([^"]+)">\s*(#[0-9A-Fa-f]{6,8})\s*<\/color>/g;
+    let m;
+    while ((m = colorTagRe.exec(colorsXmlText))) {
+      xmlKeyToArgb[m[1]] = m[2];
+    }
+    // KAKAO_COLOR_MAP은 uiKey → xmlKey 이므로 반대로 뒤집는다.
+    // (같은 xmlKey를 공유하는 uiKey가 여러 개일 수 있으니 — 그런 경우 전부 같은 값으로 채운다)
+    const colors = {};
+    const alphas = {};
+    Object.entries(KAKAO_COLOR_MAP).forEach(([uiKey, xmlKey]) => {
+      const argb = xmlKeyToArgb[xmlKey];
+      if (!argb) return; // 이 ZIP에 해당 색상이 없으면 건드리지 않음(기본값 유지)
+      const hex = argb.replace('#', '');
+      if (hex.length === 8) {
+        // #AARRGGBB → 색(#RRGGBB) + 알파(0~100%)
+        const a = parseInt(hex.slice(0, 2), 16);
+        colors[uiKey] = '#' + hex.slice(2);
+        alphas['alpha-' + uiKey] = Math.round((a / 255) * 100);
+      } else {
+        colors[uiKey] = '#' + hex;
+      }
+    });
+
+    // 2) drawable-xxhdpi 안의 이미지들을 KAKAO_IMAGE_MAP(+오픈채팅 별칭)으로 역매핑해서 uploads에 채워 넣는다.
+    // 파일명 → 업로드 슬롯 키. KAKAO_IMAGE_MAP은 key → filename이므로 반대로 뒤집는다.
+    const filenameToKey = {};
+    Object.entries(KAKAO_IMAGE_MAP).forEach(([key, filename]) => { filenameToKey[filename] = key; });
+    Object.entries(KAKAO_OPENCHAT_ALIASES).forEach(([key, filenames]) => {
+      filenames.forEach(filename => { filenameToKey[filename] = key; });
+    });
+
+    const drawableEntries = entries.filter(f => /drawable-xxhdpi\//.test(f.name));
+    const uploadsOut = {};
+    const ninePatchCapsOut = {};
+    let imgFoundCount = 0;
+
+    for (const entry of drawableEntries) {
+      const baseName = entry.name.split('/').pop();
+      const key = filenameToKey[baseName];
+      if (!key) continue; // 테마 아이콘(ic_launcher 등) 등 우리가 관리하지 않는 파일은 건너뜀
+      const base64 = await entry.async('base64');
+      const isNinePatch = /\.9\.png$/i.test(baseName);
+      const mime = 'image/png';
+      const dataUrl = `data:${mime};base64,${base64}`;
+      uploadsOut[key] = dataUrl;
+      imgFoundCount++;
+
+      if (NINE_PATCH_KEYS.includes(key)) {
+        // 9-patch는 가이드라인(1px 검은 선)이 포함된 상태로 저장되어 있으므로,
+        // detectNinePatchCaps로 다시 분석해서 캡/인셋 정보를 복원한다.
+        try {
+          const caps = await detectNinePatchCaps(dataUrl);
+          ninePatchCapsOut[key] = caps;
+        } catch (err) {
+          // 분석 실패해도 이미지 자체는 적용하고, 캡은 기본값(빌드 시 자동 추정)에 맡긴다.
+        }
+      }
+    }
+
+    if (imgFoundCount === 0 && Object.keys(colors).length === 0) {
+      showToast('이 ZIP에서 알아볼 수 있는 색상/이미지를 찾지 못했어요', 'error');
+      return;
+    }
+
+    // 3) 템플릿 불러오기와 동일한 형태로 데이터를 구성해서 적용 로직을 재사용한다.
+    applyTemplateData({
+      colors,
+      alphas,
+      uploads: uploadsOut,
+      ninePatchCaps: ninePatchCapsOut,
+      settings: {},
+    }, { clearMissingUploads: false, showOwnToast: false });
+    showToast(`ZIP 테마를 불러왔습니다 ✓ (이미지 ${imgFoundCount}개, 색상 ${Object.keys(colors).length}개 포함)`, 'success');
+  } catch (err) {
+    console.error(err);
+    showToast('ZIP을 읽는 중 오류가 발생했어요: ' + err.message, 'error');
+  }
+}
+
 function handleTemplateFileSelected(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -4634,7 +4743,14 @@ function handleTemplateFileSelected(event) {
   reader.readAsText(file);
 }
 
-function applyTemplateData(data) {
+function applyTemplateData(data, opts) {
+  opts = opts || {};
+  // clearMissingUploads: JSON 템플릿 불러오기는 "그 시점의 전체 상태"를 담고 있으므로
+  // 템플릿에 없는 슬롯은 비우는 게 맞다(기본값 true). 반면 ZIP 불러오기는 ZIP 안에서
+  // 찾은 이미지만 알 수 있을 뿐 "원래 비어있었는지"는 알 수 없으므로, 찾지 못한 슬롯은
+  // 건드리지 않고 현재 상태를 그대로 둔다(loadThemeZipFile에서 false로 호출).
+  const clearMissingUploads = opts.clearMissingUploads !== false;
+
   // 1) 색상 + 투명도 슬라이더 복원
   const colors = data.colors || {};
   Object.keys(colors).forEach(id => {
@@ -4647,17 +4763,21 @@ function applyTemplateData(data) {
     if (inp) inp.value = alphas[id];
   });
 
-  // 2) 업로드 이미지 전체를 템플릿 내용으로 교체 (저장 당시 없던 슬롯은 비움)
+  // 2) 업로드 이미지를 템플릿/ZIP 내용으로 교체
   const savedUploads = data.uploads || {};
-  const allUploadKeys = new Set([...Object.keys(uploads), ...Object.keys(savedUploads)]);
-  allUploadKeys.forEach(key => {
-    const dataUrl = savedUploads[key] || null;
+  const targetKeys = clearMissingUploads
+    ? new Set([...Object.keys(uploads), ...Object.keys(savedUploads)]) // 저장 당시 없던 슬롯도 비움
+    : new Set(Object.keys(savedUploads)); // ZIP에서 실제로 찾은 슬롯만 갱신, 나머지는 그대로 둠
+  targetKeys.forEach(key => {
+    const dataUrl = savedUploads[key] || (clearMissingUploads ? null : uploads[key]);
     uploads[key] = dataUrl;
     setUploadSlotUI(key, dataUrl);
   });
 
   // 3) 9-patch 캡 정보 복원
-  Object.keys(ninePatchCaps).forEach(k => delete ninePatchCaps[k]);
+  if (clearMissingUploads) {
+    Object.keys(ninePatchCaps).forEach(k => delete ninePatchCaps[k]);
+  }
   Object.assign(ninePatchCaps, data.ninePatchCaps || {});
 
   // 4) 부가 설정 복원
@@ -4671,8 +4791,10 @@ function applyTemplateData(data) {
   // 5) 화면 갱신
   initColors();
   renderPreview();
-  const imgCount = Object.keys(savedUploads).length;
-  showToast(`템플릿을 불러왔습니다 ✓ (이미지 ${imgCount}개 포함)`, 'success');
+  if (opts.showOwnToast !== false) {
+    const imgCount = Object.keys(savedUploads).length;
+    showToast(`템플릿을 불러왔습니다 ✓ (이미지 ${imgCount}개 포함)`, 'success');
+  }
 }
 // 파일명 → 업로드 슬롯 키 매칭용 키워드 표.
 // 같은 슬롯에 여러 키워드를 등록할 수 있고, 매칭 시에는 모든 키워드를 통틀어
@@ -4800,8 +4922,6 @@ function bulkUpload() {
   };
   input.click();
 }
-function showTemplates() { showToast('템플릿 목록'); }
-function showThemeInfo() { showToast('테마 정보'); }
 function updateFont() {
   const font = document.getElementById('preview-font-select').value;
   const size = document.getElementById('preview-font-size').value;
