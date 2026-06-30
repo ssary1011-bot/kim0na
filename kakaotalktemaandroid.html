@@ -4295,14 +4295,14 @@ async function buildThemeFiles(themeName, author, pkgIdOverride) {
   themeAdvDrawable.file('theme_tab_more_icon.xml',
     `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_more_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_more_image"/>\n</selector>`);
 
-  themeAdvDrawable.file('theme_tab_call_icon.xml',
-    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_call_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_call_image"/>\n</selector>`);
+  // theme_tab_call_icon.xml / theme_tab_piccoma_icon.xml은 생성하지 않음.
+  // (전화/피코마 탭 아이콘용 png를 업로드 슬롯/placeholder로 만들지 않기 때문에,
+  //  이 selector들이 참조하던 theme_maintab_ico_call(_focused)_image / theme_maintab_ico_piccoma(_focused)_image
+  //  drawable이 zip에 존재하지 않아 AAPT 리소스 링크 단계에서 빌드가 실패했음.
+  //  → selector 자체를 안 만들면 해당 탭은 기본 카카오 테마 리소스를 그대로 사용하게 되어 빌드가 통과됨.)
 
   themeAdvDrawable.file('theme_tab_now_icon.xml',
     `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@drawable/theme_maintab_ico_now_focused_image" android:state_selected="true" />\n    <item android:drawable="@drawable/theme_maintab_ico_now_image" />\n</selector>`);
-
-  themeAdvDrawable.file('theme_tab_piccoma_icon.xml',
-    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@drawable/theme_maintab_ico_piccoma_focused_image" android:state_selected="true" />\n    <item android:drawable="@drawable/theme_maintab_ico_piccoma_image" />\n</selector>`);
 
   zip.file('BUILD_GUIDE.txt', buildGuide(pkgName, themeName, author));
 
