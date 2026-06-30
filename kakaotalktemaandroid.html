@@ -116,7 +116,7 @@ body{
 /* WORKSPACE */
 .workspace{
   display:grid;
-  grid-template-columns:295px 1fr 315px;
+  grid-template-columns:295px minmax(0,1fr) 315px;
   min-height:calc(100vh - 124px);
   margin-top:124px;
 }
@@ -373,6 +373,8 @@ body{
 .msg-bubble{padding:5px 8px;font-size:10px;line-height:1.45;word-break:break-word}
 .msg-time{font-size:7px;color:#aaa;flex-shrink:0;align-self:flex-end;padding-bottom:2px}
 .unread-cnt{font-size:7px;color:#FAE100;text-align:right;padding:0 2px 1px}
+.chat-right-col{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.chat-badge{min-width:14px;height:14px;border-radius:7px;background:#ff3b30;color:#fff;font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 3px;box-sizing:border-box}
 .friend-header{height:44px;display:flex;align-items:center;padding:0 12px;font-size:14px;font-weight:700;flex-shrink:0}
 .friend-item{display:flex;align-items:center;gap:9px;padding:7px 12px;cursor:pointer;transition:background .08s}
 .friend-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;overflow:hidden}
@@ -540,12 +542,9 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
 <!-- TOOLBAR -->
 <div class="toolbar">
   <button class="toolbar-btn" onclick="newProject()"><span class="icon">✨</span> 새 프로젝트</button>
-  <button class="toolbar-btn" onclick="openProject()"><span class="icon">📂</span> 열기</button>
   <button class="toolbar-btn primary" onclick="exportAPK()"><span class="icon">📦</span> ZIP + 빌드 가이드 내보내기</button>
   <button class="toolbar-btn primary" id="apk-build-btn" onclick="buildAndDownloadAPK()" style="background:linear-gradient(135deg,#7bc8a4,#4a9d72);box-shadow:0 3px 10px rgba(74,157,114,.35)"><span class="icon">🤖</span> APK 자동 빌드</button>
   <div class="toolbar-sep"></div>
-  <button class="toolbar-btn" onclick="exportBgVariation()"><span class="icon">🖼</span> 배경 바리에이션</button>
-  <button class="toolbar-btn" onclick="exportPromo()"><span class="icon">📣</span> 홍보 이미지</button>
   <div class="toolbar-sep"></div>
   <button class="toolbar-btn" onclick="saveTemplate()" title="현재 색상/이미지를 .json 파일로 내보냅니다"><span class="icon">💾</span> 템플릿 저장</button>
   <button class="toolbar-btn" onclick="loadTemplate()" title="저장해둔 .json 템플릿 파일을 불러옵니다"><span class="icon">📋</span> 템플릿 불러오기</button>
@@ -574,7 +573,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         <div class="circles"><span></span><span></span><span></span></div>
         &nbsp;이미지 리소스
       </div>
-      <button class="bulk-btn" onclick="bulkUpload()">📁 일괄 교체</button>
+      <button class="bulk-btn" onclick="bulkUpload()">📁 폴더로 일괄 교체</button>
     </div>
 
     <div class="quickjump">
@@ -661,15 +660,15 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_chats_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-chats-f">비어있음</span>
         </label>
-        <label class="img-slot" id="slot-ico-now" oncontextmenu="clearSlot('ico-now',event)" title="theme_maintab_ico_now_image.png" data-label="NOW">
+        <label class="img-slot" id="slot-ico-now" oncontextmenu="clearSlot('ico-now',event)" title="theme_maintab_ico_now_image.png" data-label="오픈채팅(NOW)">
           <input type="file" accept="image/*" onchange="handleSlot('ico-now',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-now"><span id="thumb-icon-ico-now">#️⃣</span><img id="thumb-img-ico-now"></div>
+          <div class="img-slot-thumb" id="thumb-ico-now"><span id="thumb-icon-ico-now">🌐</span><img id="thumb-img-ico-now"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_now_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-now">비어있음</span>
         </label>
-        <label class="img-slot" id="slot-ico-now-f" oncontextmenu="clearSlot('ico-now-f',event)" title="theme_maintab_ico_now_focused_image.png" data-label="NOW(활성)">
+        <label class="img-slot" id="slot-ico-now-f" oncontextmenu="clearSlot('ico-now-f',event)" title="theme_maintab_ico_now_focused_image.png" data-label="오픈채팅(NOW) 활성">
           <input type="file" accept="image/*" onchange="handleSlot('ico-now-f',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-now-f"><span id="thumb-icon-ico-now-f">#️⃣</span><img id="thumb-img-ico-now-f"></div>
+          <div class="img-slot-thumb" id="thumb-ico-now-f"><span id="thumb-icon-ico-now-f">🌐</span><img id="thumb-img-ico-now-f"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_now_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-now-f">비어있음</span>
         </label>
@@ -696,42 +695,6 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="img-slot-thumb" id="thumb-ico-more-f"><span id="thumb-icon-ico-more-f">⋯</span><img id="thumb-img-ico-more-f"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_more_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
           <span class="img-slot-badge" id="badge-ico-more-f">비어있음</span>
-        </label>
-        <label class="img-slot" id="slot-ico-call" oncontextmenu="clearSlot('ico-call',event)" title="theme_maintab_ico_call_image.png" data-label="통화">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-call',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-call"><span id="thumb-icon-ico-call">📞</span><img id="thumb-img-ico-call"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_call_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-call">선택사항</span>
-        </label>
-        <label class="img-slot" id="slot-ico-call-f" oncontextmenu="clearSlot('ico-call-f',event)" title="theme_maintab_ico_call_focused_image.png" data-label="통화(활성)">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-call-f',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-call-f"><span id="thumb-icon-ico-call-f">📞</span><img id="thumb-img-ico-call-f"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_call_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-call-f">선택사항</span>
-        </label>
-        <label class="img-slot" id="slot-ico-openchat" oncontextmenu="clearSlot('ico-openchat',event)" title="theme_maintab_ico_openchat_image.png" data-label="오픈채팅">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-openchat',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-openchat"><span id="thumb-icon-ico-openchat">🌐</span><img id="thumb-img-ico-openchat"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_openchat_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-openchat">선택사항</span>
-        </label>
-        <label class="img-slot" id="slot-ico-openchat-f" oncontextmenu="clearSlot('ico-openchat-f',event)" title="theme_maintab_ico_openchat_focused_image.png" data-label="오픈채팅(활성)">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-openchat-f',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-openchat-f"><span id="thumb-icon-ico-openchat-f">🌐</span><img id="thumb-img-ico-openchat-f"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_openchat_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-openchat-f">선택사항</span>
-        </label>
-        <label class="img-slot" id="slot-ico-piccoma" oncontextmenu="clearSlot('ico-piccoma',event)" title="theme_maintab_ico_piccoma_image.png" data-label="피코마">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-piccoma',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-piccoma"><span id="thumb-icon-ico-piccoma">📖</span><img id="thumb-img-ico-piccoma"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_piccoma_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-piccoma">선택사항</span>
-        </label>
-        <label class="img-slot" id="slot-ico-piccoma-f" oncontextmenu="clearSlot('ico-piccoma-f',event)" title="theme_maintab_ico_piccoma_focused_image.png" data-label="피코마(활성)">
-          <input type="file" accept="image/*" onchange="handleSlot('ico-piccoma-f',this,event)">
-          <div class="img-slot-thumb" id="thumb-ico-piccoma-f"><span id="thumb-icon-ico-piccoma-f">📖</span><img id="thumb-img-ico-piccoma-f"></div>
-          <div class="img-slot-info"><div class="img-slot-name">theme_maintab_ico_piccoma_focused_image.png</div><div class="img-slot-size">114×114 · PNG</div></div>
-          <span class="img-slot-badge" id="badge-ico-piccoma-f">선택사항</span>
         </label>
       </div>
     </div>
@@ -827,7 +790,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="img-slot-info"><div class="img-slot-name">theme_find_add_friend_button_image.png</div><div class="img-slot-size">126×102 · PNG</div></div>
           <span class="img-slot-badge" id="badge-find-friend-btn">선택사항</span>
         </label>
-        <label class="img-slot" id="slot-find-friend-btn-p" oncontextmenu="clearSlot('find-friend-btn-p',event)" data-label="친구추가(프레스)">
+        <label class="img-slot" id="slot-find-friend-btn-p" oncontextmenu="clearSlot('find-friend-btn-p',event)" data-label="친구추가(누르는 동안)">
           <input type="file" accept="image/*" onchange="handleSlot('find-friend-btn-p',this,event)">
           <div class="img-slot-thumb" id="thumb-find-friend-btn-p"><span id="thumb-icon-find-friend-btn-p">➕</span><img id="thumb-img-find-friend-btn-p"></div>
           <div class="img-slot-info"><div class="img-slot-name">theme_find_add_friend_button_pressed_image.png</div><div class="img-slot-size">126×102 · PNG</div></div>
@@ -917,7 +880,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         <button class="ptab" id="pt-notice" onclick="switchTab('notice')">알림·공유</button>
         <button class="ptab" id="pt-ninepatch" onclick="switchTab('ninepatch')">🔧 나인패치</button>
       </div>
-      <button class="press-badge" id="press-toggle" onclick="togglePress()">👆 프레스</button>
+      <button class="press-badge" id="press-toggle" onclick="togglePress()">👆 누르는 동안 효과</button>
     </div>
 
     <!-- 폰 크기 조절 -->
@@ -948,50 +911,58 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="tabbar" id="tabbar-friends">
             <div class="tab-item active" id="tab-f-1" onclick="switchTab('friends')" style="cursor:pointer"><div class="tab-icon">👤</div><div>친구</div></div>
             <div class="tab-item" id="tab-f-2" onclick="switchTab('chat')" style="cursor:pointer"><div class="tab-icon">💬</div><div>채팅</div></div>
-            <div class="tab-item" id="tab-f-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">#️⃣</div><div>오픈채팅</div></div>
+            <div class="tab-item" id="tab-f-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">🌐</div><div>오픈채팅</div></div>
             <div class="tab-item" id="tab-f-4" onclick="switchTab('shopping')" style="cursor:pointer"><div class="tab-icon">🛒</div><div>쇼핑</div></div>
             <div class="tab-item" id="tab-f-5" onclick="switchTab('more')" style="cursor:pointer"><div class="tab-icon">⋯</div><div>더보기</div></div>
           </div>
           <div class="android-navbar"><span></span><span></span><span></span></div>
         </div>
-        <!-- 선택적 탭 아이콘 미리보기 (통화/NOW/피코마/오픈채팅) -->
+        <!-- 선택적 탭 아이콘 미리보기 (오픈채팅(NOW)) -->
         <div id="optional-icons-preview" style="margin-top:8px;padding:8px 10px;background:var(--card);border-radius:10px;border:1px solid var(--border)">
           <div style="font-size:9px;color:var(--text3);margin-bottom:6px;text-align:center">선택적 탭 아이콘 미리보기 (이미지 업로드 시 반영)</div>
           <div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap" id="optional-icons-row">
-            <div class="opt-icon-item" id="opt-call" style="display:none">
-              <div class="opt-icon-thumb" id="opt-call-img"><span>📞</span></div>
-              <div class="opt-icon-label">통화</div>
+            <div class="opt-icon-item" id="opt-ico-friends" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-friends-img"><span>👤</span></div>
+              <div class="opt-icon-label">친구</div>
             </div>
-            <div class="opt-icon-item" id="opt-call-f" style="display:none">
-              <div class="opt-icon-thumb" id="opt-call-f-img"><span>📞</span></div>
-              <div class="opt-icon-label">통화(활성)</div>
+            <div class="opt-icon-item" id="opt-ico-friends-f" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-friends-f-img"><span>👤</span></div>
+              <div class="opt-icon-label">친구 활성</div>
+            </div>
+            <div class="opt-icon-item" id="opt-ico-chats" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-chats-img"><span>💬</span></div>
+              <div class="opt-icon-label">채팅</div>
+            </div>
+            <div class="opt-icon-item" id="opt-ico-chats-f" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-chats-f-img"><span>💬</span></div>
+              <div class="opt-icon-label">채팅 활성</div>
             </div>
             <div class="opt-icon-item" id="opt-now" style="display:none">
-              <div class="opt-icon-thumb" id="opt-now-img"><span>#️⃣</span></div>
-              <div class="opt-icon-label">NOW</div>
+              <div class="opt-icon-thumb" id="opt-now-img"><span>🌐</span></div>
+              <div class="opt-icon-label">오픈채팅(NOW)</div>
             </div>
             <div class="opt-icon-item" id="opt-now-f" style="display:none">
-              <div class="opt-icon-thumb" id="opt-now-f-img"><span>#️⃣</span></div>
-              <div class="opt-icon-label">NOW(활성)</div>
+              <div class="opt-icon-thumb" id="opt-now-f-img"><span>🌐</span></div>
+              <div class="opt-icon-label">오픈채팅(NOW) 활성</div>
             </div>
-            <div class="opt-icon-item" id="opt-piccoma" style="display:none">
-              <div class="opt-icon-thumb" id="opt-piccoma-img"><span>📖</span></div>
-              <div class="opt-icon-label">피코마</div>
+            <div class="opt-icon-item" id="opt-ico-shopping" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-shopping-img"><span>🛒</span></div>
+              <div class="opt-icon-label">쇼핑</div>
             </div>
-            <div class="opt-icon-item" id="opt-piccoma-f" style="display:none">
-              <div class="opt-icon-thumb" id="opt-piccoma-f-img"><span>📖</span></div>
-              <div class="opt-icon-label">피코마(활성)</div>
+            <div class="opt-icon-item" id="opt-ico-shopping-f" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-shopping-f-img"><span>🛒</span></div>
+              <div class="opt-icon-label">쇼핑 활성</div>
             </div>
-            <div class="opt-icon-item" id="opt-openchat" style="display:none">
-              <div class="opt-icon-thumb" id="opt-openchat-img"><span>🌐</span></div>
-              <div class="opt-icon-label">오픈채팅</div>
+            <div class="opt-icon-item" id="opt-ico-more" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-more-img"><span>⋯</span></div>
+              <div class="opt-icon-label">더보기</div>
             </div>
-            <div class="opt-icon-item" id="opt-openchat-f" style="display:none">
-              <div class="opt-icon-thumb" id="opt-openchat-f-img"><span>🌐</span></div>
-              <div class="opt-icon-label">오픈채팅(활성)</div>
+            <div class="opt-icon-item" id="opt-ico-more-f" style="display:none">
+              <div class="opt-icon-thumb" id="opt-ico-more-f-img"><span>⋯</span></div>
+              <div class="opt-icon-label">더보기 활성</div>
             </div>
           </div>
-          <div id="opt-icons-empty" style="font-size:9px;color:var(--text3);text-align:center;padding:4px 0">통화·NOW·피코마·오픈채팅 이미지를 업로드하면 여기서 미리 확인할 수 있어요</div>
+          <div id="opt-icons-empty" style="font-size:9px;color:var(--text3);text-align:center;padding:4px 0">탭 아이콘 이미지를 업로드하면 여기서 미리 확인할 수 있어요</div>
         </div>
       </div>
 
@@ -1001,13 +972,13 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="phone-status" id="ps-chat" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
           <div class="friend-header" id="ph-chat-header">채팅</div>
           <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;background:#fff" id="chat-list-body">
-            <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="cl-av1" style="background:#ddd;font-size:10px">👥</div><div class="friend-info"><div class="friend-name" id="cl-n1">가족방</div><div class="friend-status" id="cl-s1">오늘 저녁 뭐 먹을까요?</div></div><span style="font-size:9px;color:#aaa">오후 3:00</span></div>
-            <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="cl-av2" style="background:#d0eeff;font-size:13px">😊</div><div class="friend-info"><div class="friend-name" id="cl-n2">지1</div><div class="friend-status" id="cl-s2">ㅋㅋ 지금 너무 잘 나와 ✨</div></div><span style="font-size:9px;color:#aaa">오전 10:22</span></div>
+            <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="cl-av1" style="background:#ddd;font-size:10px">👥</div><div class="friend-info"><div class="friend-name" id="cl-n1">가족방</div><div class="friend-status" id="cl-s1">탭 배지(밝은 배경용) →</div></div><div class="chat-right-col"><span style="font-size:9px;color:#aaa">오후 3:00</span><span class="chat-badge" id="cl-badge1">5</span></div></div>
+            <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="cl-av2" style="background:#d0eeff;font-size:13px">😊</div><div class="friend-info"><div class="friend-name" id="cl-n2">지1</div><div class="friend-status" id="cl-s2">탭 배너 배지 배경 →</div></div><div class="chat-right-col"><span style="font-size:9px;color:#aaa">오전 10:22</span><span class="chat-badge" id="cl-badge2">3</span></div></div>
           </div>
           <div class="tabbar" id="tabbar-chat">
             <div class="tab-item" id="tab-c-1" onclick="switchTab('friends')" style="cursor:pointer"><div class="tab-icon">👤</div><div>친구</div></div>
             <div class="tab-item active" id="tab-c-2" onclick="switchTab('chat')" style="cursor:pointer"><div class="tab-icon">💬</div><div>채팅</div></div>
-            <div class="tab-item" id="tab-c-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">#️⃣</div><div>오픈채팅</div></div>
+            <div class="tab-item" id="tab-c-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">🌐</div><div>오픈채팅</div></div>
             <div class="tab-item" id="tab-c-4" onclick="switchTab('shopping')" style="cursor:pointer"><div class="tab-icon">🛒</div><div>쇼핑</div></div>
             <div class="tab-item" id="tab-c-5" onclick="switchTab('more')" style="cursor:pointer"><div class="tab-icon">⋯</div><div>더보기</div></div>
           </div>
@@ -1065,13 +1036,27 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="phone-status" id="ps-openchat" style="background:#fff;color:#333"><span>15:02</span><span>5G 🔋</span></div>
           <div class="friend-header" id="ph-openchat-header">오픈채팅</div>
           <div style="flex:1;overflow:hidden;display:flex;flex-direction:column" id="openchat-list-body">
+            <!-- 추천 오픈채팅 (발견 영역 카드) -->
+            <div style="padding:8px 12px 4px">
+              <div style="font-size:9px;font-weight:700;color:#aaa;margin-bottom:6px">🔭 추천 오픈채팅</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div id="oc-discover-1" style="border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,.08);padding:8px">
+                  <div style="font-size:9px;font-weight:600;color:#1a1a1a">맛집 탐방대</div>
+                  <div style="font-size:8px;color:#aaa;margin-top:2px">참여 342명</div>
+                </div>
+                <div id="oc-discover-2" style="border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,.08);padding:8px">
+                  <div style="font-size:9px;font-weight:600;color:#1a1a1a">운동 모임</div>
+                  <div style="font-size:8px;color:#aaa;margin-top:2px">참여 89명</div>
+                </div>
+              </div>
+            </div>
             <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="oc-av1" style="background:#ffe0b2;font-size:13px">🎨</div><div class="friend-info"><div class="friend-name" id="oc-n1">테마 만들기 모임</div><div class="friend-status" id="oc-s1">참여인원 128명</div></div></div>
             <div class="friend-item" onmousedown="setItemPressed(this,true)" onmouseup="setItemPressed(this,false)" onmouseleave="setItemPressed(this,false)" ontouchstart="setItemPressed(this,true)" ontouchend="setItemPressed(this,false)"><div class="friend-av" id="oc-av2" style="background:#c8e6c9;font-size:13px">📚</div><div class="friend-info"><div class="friend-name" id="oc-n2">같이 공부해요</div><div class="friend-status" id="oc-s2">참여인원 56명</div></div></div>
           </div>
           <div class="tabbar" id="tabbar-openchat">
             <div class="tab-item" id="tab-o-1" onclick="switchTab('friends')" style="cursor:pointer"><div class="tab-icon">👤</div><div>친구</div></div>
             <div class="tab-item" id="tab-o-2" onclick="switchTab('chat')" style="cursor:pointer"><div class="tab-icon">💬</div><div>채팅</div></div>
-            <div class="tab-item active" id="tab-o-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">#️⃣</div><div>오픈채팅</div></div>
+            <div class="tab-item active" id="tab-o-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">🌐</div><div>오픈채팅</div></div>
             <div class="tab-item" id="tab-o-4" onclick="switchTab('shopping')" style="cursor:pointer"><div class="tab-icon">🛒</div><div>쇼핑</div></div>
             <div class="tab-item" id="tab-o-5" onclick="switchTab('more')" style="cursor:pointer"><div class="tab-icon">⋯</div><div>더보기</div></div>
           </div>
@@ -1224,7 +1209,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           <div class="tabbar" id="tabbar-shopping">
             <div class="tab-item" id="tab-sh-1" onclick="switchTab('friends')" style="cursor:pointer"><div class="tab-icon">👤</div><div>친구</div></div>
             <div class="tab-item" id="tab-sh-2" onclick="switchTab('chat')" style="cursor:pointer"><div class="tab-icon">💬</div><div>채팅</div></div>
-            <div class="tab-item" id="tab-sh-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">#️⃣</div><div>오픈채팅</div></div>
+            <div class="tab-item" id="tab-sh-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">🌐</div><div>오픈채팅</div></div>
             <div class="tab-item active" id="tab-sh-4" onclick="switchTab('shopping')" style="cursor:pointer"><div class="tab-icon">🛒</div><div>쇼핑</div></div>
             <div class="tab-item" id="tab-sh-5" onclick="switchTab('more')" style="cursor:pointer"><div class="tab-icon">⋯</div><div>더보기</div></div>
           </div>
@@ -1268,11 +1253,25 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
                 <span style="display:flex;align-items:center;gap:7px">⚙️ <span>설정</span></span><span style="color:#aaa">›</span>
               </div>
             </div>
+            <!-- 발견 영역 (보조 셀 배경) -->
+            <div style="padding:10px 12px 4px">
+              <div style="font-size:9px;font-weight:700;color:#aaa;margin-bottom:6px">🔭 발견</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div id="more-discover-1" style="border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,.08);padding:10px;text-align:center">
+                  <div style="font-size:16px">🎮</div>
+                  <div style="font-size:9px;font-weight:600;color:#1a1a1a;margin-top:4px">카카오게임</div>
+                </div>
+                <div id="more-discover-2" style="border-radius:8px;overflow:hidden;border:1px solid rgba(0,0,0,.08);padding:10px;text-align:center">
+                  <div style="font-size:16px">📺</div>
+                  <div style="font-size:9px;font-weight:600;color:#1a1a1a;margin-top:4px">카카오TV</div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="tabbar" id="tabbar-more">
             <div class="tab-item" id="tab-mo-1" onclick="switchTab('friends')" style="cursor:pointer"><div class="tab-icon">👤</div><div>친구</div></div>
             <div class="tab-item" id="tab-mo-2" onclick="switchTab('chat')" style="cursor:pointer"><div class="tab-icon">💬</div><div>채팅</div></div>
-            <div class="tab-item" id="tab-mo-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">#️⃣</div><div>오픈채팅</div></div>
+            <div class="tab-item" id="tab-mo-3" onclick="switchTab('openchat')" style="cursor:pointer"><div class="tab-icon">🌐</div><div>오픈채팅</div></div>
             <div class="tab-item" id="tab-mo-4" onclick="switchTab('shopping')" style="cursor:pointer"><div class="tab-icon">🛒</div><div>쇼핑</div></div>
             <div class="tab-item active" id="tab-mo-5" onclick="switchTab('more')" style="cursor:pointer"><div class="tab-icon">⋯</div><div>더보기</div></div>
           </div>
@@ -1350,7 +1349,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
             <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
               <div>
                 <div style="font-size:10px;font-weight:700;color:var(--text2);margin-bottom:6px">📐 나인패치 미리보기</div>
-                <div id="np-canvas-wrap" style="position:relative;display:inline-block;border:2px solid var(--border2);border-radius:8px;overflow:visible;background:repeating-conic-gradient(#f0f0f0 0% 25%,#fff 0% 50%) 0 0/14px 14px">
+                <div id="np-canvas-wrap" style="position:relative;display:block;width:100%;border:2px solid var(--border2);border-radius:8px;overflow:hidden;background:repeating-conic-gradient(#f0f0f0 0% 25%,#fff 0% 50%) 0 0/14px 14px">
                   <canvas id="np-canvas" style="display:block;image-rendering:pixelated"></canvas>
                   <!-- 드래그 핸들: stretch (핑크) -->
                   <div id="np-line-left"   class="np-handle np-h-v"   title="왼쪽 캡 (늘어남 시작)" style="position:absolute;top:0;left:0;width:2px;height:100%;background:#d4659a;cursor:ew-resize;z-index:10"></div>
@@ -1532,16 +1531,16 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
               <!-- 미리보기 캔버스 -->
               <!-- 실제 px 크기 표시 -->
               <div id="np-sim-size-info" style="font-size:9px;color:var(--text3);margin-bottom:4px"></div>
-              <div id="np-sim-canvas-wrap" style="display:flex;flex-direction:column;gap:10px;width:100%;overflow:hidden">
+              <div id="np-sim-canvas-wrap" style="display:flex;flex-direction:column;gap:10px;width:100%;min-width:0;overflow:hidden">
                 <!-- 받은 말풍선 -->
-                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px">
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;width:100%">
                   <div style="font-size:9px;color:var(--text3)">받은 말풍선</div>
                   <div id="np-sim-scale-wrap-you" style="width:100%;overflow:hidden">
                     <canvas id="np-sim-canvas-you" style="image-rendering:pixelated;border-radius:4px;display:block;border:1px dashed var(--border2);transform-origin:top left"></canvas>
                   </div>
                 </div>
                 <!-- 보낸 말풍선 -->
-                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px">
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;width:100%">
                   <div style="font-size:9px;color:var(--text3)">보낸 말풍선</div>
                   <div id="np-sim-scale-wrap-me" style="width:100%;overflow:hidden">
                     <canvas id="np-sim-canvas-me" style="image-rendering:pixelated;border-radius:4px;display:block;border:1px dashed var(--border2);transform-origin:top left"></canvas>
@@ -1630,7 +1629,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('main-text-pressed-color')">
           <div class="color-swatch" id="sw-main-text-pressed-color"></div>
-          <span class="color-label">이름(타이틀) 프레스</span>
+          <span class="color-label">이름(타이틀) 누르는 동안</span>
           <span class="color-hex" id="hex-main-text-pressed-color" contenteditable="true" onblur="hexInput('main-text-pressed-color',this)">#B06B6B</span>
           <input type="color" id="main-text-pressed-color" value="#1a1a1a" oninput="updateColor('main-text-pressed-color')">
         </div>
@@ -1642,7 +1641,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('last-msg-pressed-color')">
           <div class="color-swatch" id="sw-last-msg-pressed-color"></div>
-          <span class="color-label">마지막 메시지 프레스</span>
+          <span class="color-label">마지막 메시지 누르는 동안</span>
           <span class="color-hex" id="hex-last-msg-pressed-color" contenteditable="true" onblur="hexInput('last-msg-pressed-color',this)">#B06B6B</span>
           <input type="color" id="last-msg-pressed-color" value="#999999" oninput="updateColor('last-msg-pressed-color')">
         </div>
@@ -1654,7 +1653,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('status-msg-pressed-color')">
           <div class="color-swatch" id="sw-status-msg-pressed-color"></div>
-          <span class="color-label">상태메시지 프레스</span>
+          <span class="color-label">상태메시지 누르는 동안</span>
           <span class="color-hex" id="hex-status-msg-pressed-color" contenteditable="true" onblur="hexInput('status-msg-pressed-color',this)">#B06B6B</span>
           <input type="color" id="status-msg-pressed-color" value="#999999" oninput="updateColor('status-msg-pressed-color')">
         </div>
@@ -1689,7 +1688,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('body-cell-pressed-color')">
           <div class="color-swatch" id="sw-body-cell-pressed-color"></div>
-          <span class="color-label">리스트 셀 프레스</span>
+          <span class="color-label">리스트 셀 누르는 동안</span>
           <span class="color-hex" id="hex-body-cell-pressed-color" contenteditable="true" onblur="hexInput('body-cell-pressed-color',this)">#FFB3B3</span>
           <input type="range" class="alpha-slider" id="alpha-body-cell-pressed-color" min="0" max="100" value="100" title="투명도" oninput="updateAlpha('body-cell-pressed-color')" onclick="event.stopPropagation()">
           <input type="color" id="body-cell-pressed-color" value="#f2f2f2" oninput="updateColor('body-cell-pressed-color')" onclick="event.stopPropagation()">
@@ -1722,7 +1721,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('feature-primary-pressed-color')">
           <div class="color-swatch" id="sw-feature-primary-pressed-color"></div>
-          <span class="color-label">버튼 텍스트 프레스</span>
+          <span class="color-label">버튼 텍스트 누르는 동안</span>
           <span class="color-hex" id="hex-feature-primary-pressed-color" contenteditable="true" onblur="hexInput('feature-primary-pressed-color',this)">#B06B6B</span>
           <input type="color" id="feature-primary-pressed-color" value="#666666" oninput="updateColor('feature-primary-pressed-color')">
         </div>
@@ -1883,7 +1882,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('keypad-pressed-color')">
           <div class="color-swatch" id="sw-keypad-pressed-color"></div>
-          <span class="color-label">키패드 프레스 셀렉터</span>
+          <span class="color-label">키패드 누르는 동안 셀렉터</span>
           <span class="color-hex" id="hex-keypad-pressed-color" contenteditable="true" onblur="hexInput('keypad-pressed-color',this)">#CCB8B8</span>
           <input type="color" id="keypad-pressed-color" value="#999999" oninput="updateColor('keypad-pressed-color')">
         </div>
@@ -1896,7 +1895,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
         </div>
         <div class="color-item" onclick="pickColor('keypad-pressed-bg')">
           <div class="color-swatch" id="sw-keypad-pressed-bg"></div>
-          <span class="color-label">키패드 프레스 배경</span>
+          <span class="color-label">키패드 누르는 동안 배경</span>
           <span class="color-hex" id="hex-keypad-pressed-bg" contenteditable="true" onblur="hexInput('keypad-pressed-bg',this)">#FFDEDE</span>
           <input type="range" class="alpha-slider" id="alpha-keypad-pressed-bg" min="0" max="100" value="60" title="투명도" oninput="updateAlpha('keypad-pressed-bg')" onclick="event.stopPropagation()">
           <input type="color" id="keypad-pressed-bg" value="#ffdede" oninput="updateColor('keypad-pressed-bg')" onclick="event.stopPropagation()">
@@ -1950,7 +1949,7 @@ input[type=color]{position:absolute;opacity:0;width:1px;height:1px;pointer-event
           </div>
           <div class="color-item" onclick="pickColor('noti-bg-pressed-color')">
             <div class="color-swatch" id="sw-noti-bg-pressed-color"></div>
-            <span class="color-label">알림 배경 프레스</span>
+            <span class="color-label">알림 배경 누르는 동안</span>
             <span class="color-hex" id="hex-noti-bg-pressed-color" contenteditable="true" onblur="hexInput('noti-bg-pressed-color',this)">#FFB3B3</span>
             <input type="range" class="alpha-slider" id="alpha-noti-bg-pressed-color" min="0" max="100" value="100" title="투명도" oninput="updateAlpha('noti-bg-pressed-color')" onclick="event.stopPropagation()">
             <input type="color" id="noti-bg-pressed-color" value="#f2f2f2" oninput="updateColor('noti-bg-pressed-color')" onclick="event.stopPropagation()">
@@ -2013,6 +2012,15 @@ function charGetSelectedLayer(bubbleSlot) {
 }
 function charSetSelectedLayer(bubbleSlot, id) { npSelectedLayerId[bubbleSlot] = id; }
 let currentTab = 'friends';
+// 나인패치 패널이 실제로 화면에 보이는 상태인지 판단.
+// (예전 UI는 'ninepatch'가 독립된 switchTab 화면이었지만, 새 UI에서는
+//  chatroom 탭 안에 ninepatch-panel이 항상 같이 들어있는 구조로 바뀌었음 —
+//  그래서 currentTab === 'ninepatch' 비교로는 절대 true가 될 수 없어 편집기가 갱신되지 않는 버그가 있었음)
+function isNinePatchPanelVisible() {
+  const panel = document.getElementById('ninepatch-panel');
+  if (!panel) return currentTab === 'ninepatch'; // 옛 구조로 되돌아간 경우를 위한 폴백
+  return panel.offsetParent !== null && getComputedStyle(panel).display !== 'none';
+}
 let currentStep = 1;
 let pressMode = false;
 let passcodeEntered = 0; // 잠금화면 시뮬레이터: 현재까지 입력된 자릿수(0~4)
@@ -2082,59 +2090,71 @@ function handleSlot(key, input, event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    uploads[key] = e.target.result;
-    setUploadSlotUI(key, e.target.result);
-    renderPreview(); // 모든 슬롯이 업로드 즉시 가운데 폰 미리보기에 반영되도록 (이전엔 chat-bg/profile만 갱신되던 버그)
-    updateOptionalIconsPreview(); // 선택적 탭 아이콘(통화/NOW/피코마/오픈채팅) 미리보기 영역 갱신
+  reader.onload = e => applyImageToSlot(key, e.target.result, { showOwnToast: true, switchTabOnUpload: true });
+  reader.readAsDataURL(file);
+}
 
-    // 업로드한 이미지가 어느 탭에서 보이는지 자동 이동
-    const SLOT_TO_TAB = {
-      'main-bg':'friends', 'profile':'friends',
-      'find-friend-btn':'addfriend', 'find-friend-btn-p':'addfriend',
-      'chat-bg':'chatroom', 'bubble-me1':'chatroom', 'bubble-me2':'chatroom',
-      'bubble-you1':'chatroom', 'bubble-you2':'chatroom',
-      'char-me1':'chatroom', 'char-me2':'chatroom', 'char-you1':'chatroom', 'char-you2':'chatroom',
-      'tabbar-bg':'friends',
-      'ico-friends':'friends', 'ico-friends-f':'friends',
-      'ico-chats':'chat', 'ico-chats-f':'chat',
-      'ico-shopping':'friends', 'ico-shopping-f':'friends',
-      'ico-more':'friends', 'ico-more-f':'friends',
-      'ico-call':'friends', 'ico-call-f':'friends',
-      'ico-now':'friends', 'ico-now-f':'friends',
-      'ico-piccoma':'friends', 'ico-piccoma-f':'friends',
-      'ico-openchat':'openchat', 'ico-openchat-f':'openchat',
-      'passcode-bg':'passcode', 'pc-01':'passcode', 'pc-01-c':'passcode',
-      'pc-02':'passcode', 'pc-02-c':'passcode',
-      'pc-03':'passcode', 'pc-03-c':'passcode',
-      'pc-04':'passcode', 'pc-04-c':'passcode',
-      'splash':'splash',
-    };
+// 업로드한 이미지가 어느 탭에서 보이는지 자동 이동할 때 쓰는 매핑.
+// handleSlot(단일 업로드)과 bulkUpload(일괄 업로드) 둘 다 이 표를 함께 쓴다.
+const SLOT_TO_TAB = {
+  'main-bg':'friends', 'profile':'friends', 'profile-2':'friends', 'profile-3':'friends',
+  'find-friend-btn':'addfriend', 'find-friend-btn-p':'addfriend',
+  'chat-bg':'chatroom', 'bubble-me1':'chatroom', 'bubble-me2':'chatroom',
+  'bubble-you1':'chatroom', 'bubble-you2':'chatroom',
+  'char-me1':'chatroom', 'char-me2':'chatroom', 'char-you1':'chatroom', 'char-you2':'chatroom',
+  'tabbar-bg':'friends',
+  'ico-friends':'friends', 'ico-friends-f':'friends',
+  'ico-chats':'chat', 'ico-chats-f':'chat',
+  'ico-shopping':'friends', 'ico-shopping-f':'friends',
+  'ico-more':'friends', 'ico-more-f':'friends',
+  'ico-now':'friends', 'ico-now-f':'friends',
+  'passcode-bg':'passcode', 'pc-01':'passcode', 'pc-01-c':'passcode',
+  'pc-02':'passcode', 'pc-02-c':'passcode',
+  'pc-03':'passcode', 'pc-03-c':'passcode',
+  'pc-04':'passcode', 'pc-04-c':'passcode',
+  'splash':'splash',
+};
+
+// 파일을 읽어 이미 dataURL로 변환된 이미지를 지정한 슬롯(key)에 채워넣는 공통 처리.
+// handleSlot(단일 파일 입력)과 bulkUpload(폴더/여러 파일 일괄 업로드) 양쪽에서 재사용한다.
+// opts.switchTabOnUpload: 업로드 즉시 해당 슬롯이 보이는 탭으로 화면을 전환할지 여부.
+//   (일괄 업로드 때는 여러 슬롯을 연달아 채우는 동안 화면이 계속 깜빡이며 전환되는 것을 막기 위해 false로 둔다)
+// opts.showOwnToast: 이 함수가 자체적으로 토스트를 띄울지 여부.
+//   (일괄 업로드는 끝나고 "N개 매칭 완료" 같은 요약 토스트를 한 번만 띄우므로 false로 둔다)
+function applyImageToSlot(key, dataUrl, opts) {
+  opts = opts || {};
+  uploads[key] = dataUrl;
+  setUploadSlotUI(key, dataUrl);
+  renderPreview(); // 모든 슬롯이 업로드 즉시 가운데 폰 미리보기에 반영되도록 (이전엔 chat-bg/profile만 갱신되던 버그)
+  updateOptionalIconsPreview(); // 선택적 탭 아이콘(전체) 미리보기 영역 갱신
+
+  if (opts.switchTabOnUpload) {
     const destTab = SLOT_TO_TAB[key];
     if (destTab) switchTab(destTab);
+  }
 
-    if (NINE_PATCH_KEYS.includes(key)) {
-      // 가이드: "프로그램이 말풍선 이미지를 분석하여 캡/인셋을 자동 감지" — 업로드된 일반 PNG에서 cap 추정
-      // 1) 원본 그대로 먼저 분석해서 "실제 .9.png(가이드라인 포함)"인지 판별
-      detectNinePatchCaps(e.target.result).then(caps => {
-        // 자동 리사이즈 제거: 업로드한 원본 크기를 그대로 사용한다.
-        ninePatchCaps[key] = caps;
-        renderPreview();
-        // 나인패치 탭이 열려 있으면 편집기도 즉시 갱신
-        if (currentTab === 'ninepatch') {
-          if (['bubble-me1','bubble-me2','bubble-you1','bubble-you2'].includes(key)) {
-            npCurrentSlot = key;
-            npSelectSlot(key);
-          }
-          npRefreshEditor();
+  if (NINE_PATCH_KEYS.includes(key)) {
+    // 가이드: "프로그램이 말풍선 이미지를 분석하여 캡/인셋을 자동 감지" — 업로드된 일반 PNG에서 cap 추정
+    // 1) 원본 그대로 먼저 분석해서 "실제 .9.png(가이드라인 포함)"인지 판별
+    return detectNinePatchCaps(dataUrl).then(caps => {
+      // 자동 리사이즈 제거: 업로드한 원본 크기를 그대로 사용한다.
+      ninePatchCaps[key] = caps;
+      renderPreview();
+      // 나인패치 탭이 열려 있으면 편집기도 즉시 갱신
+      // (이 파일은 나인패치가 독립 switchTab('ninepatch') 화면 구조라, currentTab 비교가 정상 동작함)
+      if (currentTab === 'ninepatch') {
+        if (['bubble-me1','bubble-me2','bubble-you1','bubble-you2'].includes(key)) {
+          npCurrentSlot = key;
+          npSelectSlot(key);
         }
-        showToast(`이미지 업로드 완료 ✓ — 나인패치 편집기에서 캡 라인을 직접 조정하세요`, 'success');
-      }).catch(() => showToast('이미지 업로드 완료 ✓', 'success'));
-    } else {
-      showToast('이미지 업로드 완료 ✓', 'success');
-    }
-  };
-  reader.readAsDataURL(file);
+        npRefreshEditor();
+      }
+      if (opts.showOwnToast) showToast(`이미지 업로드 완료 ✓ — 나인패치 편집기에서 캡 라인을 직접 조정하세요`, 'success');
+    }).catch(() => { if (opts.showOwnToast) showToast('이미지 업로드 완료 ✓', 'success'); });
+  } else {
+    if (opts.showOwnToast) showToast('이미지 업로드 완료 ✓', 'success');
+    return Promise.resolve();
+  }
 }
 
 // ── 친구목록 · 채팅목록 항목 누름(pressed) 시뮬레이터 ──
@@ -2149,7 +2169,7 @@ function setItemPressed(el, isPressed) {
   const statusMsg = g('status-msg-color');
   const statusMsgPressed = g('status-msg-pressed-color') || statusMsg;
 
-  el.style.background = isPressed ? bodyCellPressed : '';
+  el.style.background = isPressed ? bodyCellPressed : bodyCellColor;
   const nameEl = el.querySelector('.friend-name');
   const statusEl = el.querySelector('.friend-status');
   if (nameEl) nameEl.style.color = isPressed ? mainTextPressed : mainText;
@@ -2218,7 +2238,7 @@ function applyPasscodeDots(dotColor) {
 }
 
 function pressPasscodeKey(key, ev) {
-  // 사용자가 고른 "키패드 프레스" 색을 눌리는 순간 잠깐 보여줌 (기존엔 변수만 읽고 화면에 전혀 적용 안 되던 버그)
+  // 사용자가 고른 "키패드 누르는 동안" 색을 눌리는 순간 잠깐 보여줌 (기존엔 변수만 읽고 화면에 전혀 적용 안 되던 버그)
   const keyEl = ev?.currentTarget || (ev?.target ? ev.target.closest('.pc-key') : null);
   if (keyEl) {
     const pressedBg = g('keypad-pressed-bg') || g('keypad-bg');
@@ -2305,8 +2325,18 @@ function editBubble(el) {
 }
 
 // ── 선택적 탭 아이콘 미리보기 업데이트 ──
-const OPTIONAL_ICON_KEYS = ['ico-call','ico-call-f','ico-now','ico-now-f','ico-piccoma','ico-piccoma-f','ico-openchat','ico-openchat-f'];
-const OPTIONAL_ICON_OPT_IDS = {'ico-call':'opt-call','ico-call-f':'opt-call-f','ico-now':'opt-now','ico-now-f':'opt-now-f','ico-piccoma':'opt-piccoma','ico-piccoma-f':'opt-piccoma-f','ico-openchat':'opt-openchat','ico-openchat-f':'opt-openchat-f'};
+const OPTIONAL_ICON_KEYS = [
+  'ico-friends','ico-friends-f','ico-chats','ico-chats-f',
+  'ico-now','ico-now-f',
+  'ico-shopping','ico-shopping-f','ico-more','ico-more-f',
+];
+const OPTIONAL_ICON_OPT_IDS = {
+  'ico-friends':'opt-ico-friends', 'ico-friends-f':'opt-ico-friends-f',
+  'ico-chats':'opt-ico-chats', 'ico-chats-f':'opt-ico-chats-f',
+  'ico-now':'opt-now', 'ico-now-f':'opt-now-f',
+  'ico-shopping':'opt-ico-shopping', 'ico-shopping-f':'opt-ico-shopping-f',
+  'ico-more':'opt-ico-more', 'ico-more-f':'opt-ico-more-f',
+};
 function updateOptionalIconsPreview() {
   let anyVisible = false;
   OPTIONAL_ICON_KEYS.forEach(key => {
@@ -2708,10 +2738,12 @@ function dataUrlToCanvas(dataUrl) {
   });
 }
 // 가이드: "방법 1: 이미지 없이 — 색상 + 라운딩" 자동 생성 말풍선
-// 실제 apeach 말풍선 리소스 규격은 124×114(.9.png 전체, 가이드라인 2px 포함)이므로
-// 본문 콘텐츠는 122×112로 만들어야 한다 (이전 버전은 62×57이라 실제 규격의 절반밖에 안 됐음 → 폰에서 깨지거나 default로 보이는 원인).
+// 실제 apeach 말풍선 리소스 규격은 124×114(.9.png 전체, 가이드라인 2px 포함)이지만,
+// 9-patch를 그 크기로 만들면 실제 폰에서 늘어날 때(특히 글자가 많을 때) 비율상 너무 작아
+// 픽셀이 뭉개지고 구겨져 보이는 문제가 있었다. 그래서 본문 콘텐츠 캔버스를 200×180으로
+// 넉넉하게 키워서(같은 비율을 유지하며 더 고해상도로) 9-patch가 늘어날 때도 매끈하게 보이도록 한다.
 function generateFallbackBubbleCanvas(bgColor, radiusPx, withTail, tailSide, marginPx) {
-  const w = 122, h = 112, tail = 16;
+  const w = 200, h = 180, tail = 26;
   const margin = Math.max(0, marginPx || 0) * 2;
   const totalW = w + (withTail ? tail : 0) + margin;
   const c = document.createElement('canvas');
@@ -2726,11 +2758,19 @@ function generateFallbackBubbleCanvas(bgColor, radiusPx, withTail, tailSide, mar
   roundRectPath(ctx, rectX, 0, w, h, r);
   ctx.fill();
   if (withTail) {
+    // 직선 삼각형 대신 곡선(quadraticCurveTo)으로 그려서 9-patch가 늘어나도
+    // 자연스러운 물방울 모양 꼬리로 보이게 한다 (구겨/뭉개지는 느낌 방지).
     ctx.beginPath();
     if (tailSide === 'right') {
-      ctx.moveTo(rectX + w - 4, h - 28); ctx.lineTo(rectX + w + tail, h - 12); ctx.lineTo(rectX + w - 4, h - 4);
+      const baseTopY = h - 46, baseBotY = h - 6, tipX = rectX + w + tail, tipY = h - 18;
+      ctx.moveTo(rectX + w - 6, baseTopY);
+      ctx.quadraticCurveTo(rectX + w + tail * 0.55, baseTopY + 4, tipX, tipY);
+      ctx.quadraticCurveTo(rectX + w + tail * 0.45, baseBotY - 4, rectX + w - 6, baseBotY);
     } else {
-      ctx.moveTo(rectX + 4, h - 28); ctx.lineTo(rectX - tail, h - 12); ctx.lineTo(rectX + 4, h - 4);
+      const baseTopY = h - 46, baseBotY = h - 6, tipX = rectX - tail, tipY = h - 18;
+      ctx.moveTo(rectX + 6, baseTopY);
+      ctx.quadraticCurveTo(rectX - tail * 0.55, baseTopY + 4, tipX, tipY);
+      ctx.quadraticCurveTo(rectX - tail * 0.45, baseBotY - 4, rectX + 6, baseBotY);
     }
     ctx.closePath(); ctx.fill();
   }
@@ -2877,7 +2917,7 @@ function composedColorCss(id) {
 const PREVIEW_TAB_ICON_TARGETS = {
   'friends':  { normal: 'ico-friends',  focused: 'ico-friends-f',  fallback: '👤' },
   'chats':    { normal: 'ico-chats',    focused: 'ico-chats-f',    fallback: '💬' },
-  'openchat': { normal: 'ico-openchat', focused: 'ico-openchat-f', fallback: '#️⃣' },
+  'openchat': { normal: 'ico-now', focused: 'ico-now-f', fallback: '🌐' },
   'shopping': { normal: 'ico-shopping', focused: 'ico-shopping-f', fallback: '🛒' },
   'more':     { normal: 'ico-more',     focused: 'ico-more-f',     fallback: '⋯' },
 };
@@ -3218,7 +3258,8 @@ function renderPreview() {
   applyTabbar('tabbar-shopping', tabbarBg, tabbarBorder, uploads['tabbar-bg']);
   applyTabItems(['tab-sh-1','tab-sh-2','tab-sh-3','tab-sh-4','tab-sh-5'], 3, tabActiveColor, tabInactive);
   // 상품 카드 배경 = 발견/더보기 셀 배경색(body-secondary-cell-color)
-  ['shop-item-1','shop-item-2','shop-item-3','shop-item-4'].forEach(id => {
+  ['shop-item-1','shop-item-2','shop-item-3','shop-item-4',
+   'oc-discover-1','oc-discover-2','more-discover-1','more-discover-2'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.style.background = bodySecondaryCellColor || listBg;
@@ -3370,6 +3411,12 @@ function renderPreview() {
   setStyle('feature-browse-tab-2', {color: featureBrowseTabColor});
   setStyle('feature-browse-tab-3', {color: featureBrowseTabFocusedColor});
   setStyle('notice-body-cell', {background: bodyCellColor, borderColor: bodyCellBorderColor, color: mainText});
+  // 리스트 셀 배경(body-cell-color): 친구·채팅·오픈채팅 목록의 각 항목(.friend-item) 평상시 배경.
+  // 누름(pressed) 상태는 setItemPressed()에서 따로 처리하므로, 여기서는 "안 누른 기본 상태"만 적용한다.
+  document.querySelectorAll('#friends-body .friend-item, #chat-list-body .friend-item, #openchat-list-body .friend-item').forEach(el => {
+    el.style.background = bodyCellColor;
+    if (bodyCellBorderColor) el.style.borderBottom = `1px solid ${bodyCellBorderColor}`;
+  });
   setStyle('notice-body-cell-secondary', {background: bodySecondaryCellColor, color: mainText});
 
   // 메인탭 배지(badge) 색상은 friends 탭 채팅 아이콘 옆에 점만 살짝 표시해 점검 (선택적 시각 신호)
@@ -3377,6 +3424,10 @@ function renderPreview() {
     const el = document.getElementById(id);
     if (el) el.style.setProperty('--badge-color', badgeBgColor);
   });
+  // 채팅 목록 미리보기의 안읽음 배지(빨간 동그라미)에도 실제 배지 색을 적용해서
+  // "탭 배너 배지 배경" / "탭 배지(밝은 배경용)" 색상을 바로 비교할 수 있게 함.
+  setStyle('cl-badge1', {background: tabLightBadgeColor});
+  setStyle('cl-badge2', {background: badgeBgColor});
 }
 
 function setStyle(id, styles) {
@@ -3483,7 +3534,7 @@ function togglePress() {
   pressMode = !pressMode;
   const btn = document.getElementById('press-toggle');
   btn.classList.toggle('active', pressMode);
-  showToast(pressMode ? '👆 프레스 모드 활성화' : '프레스 모드 해제');
+  showToast(pressMode ? '👆 누르는 동안 효과 모드 활성화' : '누르는 동안 효과 모드 해제');
 }
 
 // ── TOGGLES ──
@@ -3592,9 +3643,7 @@ const KAKAO_IMAGE_MAP = {
   'ico-chats':'theme_maintab_ico_chats_image.png','ico-chats-f':'theme_maintab_ico_chats_focused_image.png',
   'ico-shopping':'theme_maintab_ico_shopping_image.png','ico-shopping-f':'theme_maintab_ico_shopping_focused_image.png',
   'ico-more':'theme_maintab_ico_more_image.png','ico-more-f':'theme_maintab_ico_more_focused_image.png',
-  'ico-call':'theme_maintab_ico_call_image.png','ico-call-f':'theme_maintab_ico_call_focused_image.png',
   'ico-now':'theme_maintab_ico_now_image.png','ico-now-f':'theme_maintab_ico_now_focused_image.png',
-  'ico-piccoma':'theme_maintab_ico_piccoma_image.png','ico-piccoma-f':'theme_maintab_ico_piccoma_focused_image.png',
   // 친구추가 버튼
   'find-friend-btn':'theme_find_add_friend_button_image.png',
   'find-friend-btn-p':'theme_find_add_friend_button_pressed_image.png',
@@ -3607,11 +3656,8 @@ const KAKAO_IMAGE_MAP = {
   'pc-03':'theme_passcode_03_image.png','pc-03-c':'theme_passcode_03_checked_image.png',
   'pc-04':'theme_passcode_04_image.png','pc-04-c':'theme_passcode_04_checked_image.png',
 };
-// 오픈채팅 아이콘은 카카오톡 버전에 따라 openchat/browse 두 이름 모두로 저장 (가이드라인 '오픈채팅 탭 별칭' 참고)
-const KAKAO_OPENCHAT_ALIASES = {
-  'ico-openchat': ['theme_maintab_ico_openchat_image.png','theme_maintab_ico_browse_image.png'],
-  'ico-openchat-f': ['theme_maintab_ico_openchat_focused_image.png','theme_maintab_ico_browse_focused_image.png'],
-};
+// 과거 '오픈채팅' 단독 탭 아이콘 별칭 매핑 (현재는 NOW 탭으로 통합되어 사용 안 함)
+const KAKAO_OPENCHAT_ALIASES = {};
 // apeach 프로젝트(src/main/theme/values/colors.xml) 원본 기본값.
 // 사용자가 색을 고르지 않은 항목은 검은색이 아니라 이 기본값을 그대로 유지한다.
 const DEFAULT_COLOR_VALUES = {
@@ -3953,9 +3999,17 @@ async function buildThemeFiles(themeName, author, pkgIdOverride) {
     // 버그수정: 인셋(콘텐츠 패딩)이 라운딩 반경보다 작으면 텍스트가 둥근 모서리 바깥으로 삐져나갈 수 있음.
     // generateFallbackBubbleCanvas의 실제 코너 반경(r = min(radiusPx*2, w/2-1, h/2-1))을 넘는 값으로
     // 인셋 최소치를 보장해서, 라운딩값을 크게 잡아도 콘텐츠 영역이 항상 둥근 모서리 안쪽에 머물도록 한다.
-    const actualCornerR = Math.max(0, Math.min(radiusPx * 2, 122/2 - 1, 112/2 - 1));
+    // (캔버스 크기를 200x180으로 키운 것에 맞춰 기준값도 함께 수정)
+    const actualCornerR = Math.max(0, Math.min(radiusPx * 2, 200/2 - 1, 180/2 - 1));
     const insetPt = Math.max(12, Math.round(actualCornerR * 0.7) + 6);
-    const ninePatch = encodeNinePatch(bubbleCanvas, capPt, capPt, capPt, capPt, insetPt, insetPt, insetPt, insetPt, [], []);
+    // 버그수정: 캡(늘어나지 않는 영역)을 좌우 똑같이 capPt로 잡으면, 꼬리(tail=26px+margin)가
+    // 통째로 "늘어나는 영역" 안에 포함돼서 말풍선이 가로로 늘어날 때 꼬리까지 같이 찌그러진다.
+    // 꼬리가 있는 쪽은 캡을 "꼬리 폭 + 여유"만큼 넉넉히 잡아서 꼬리 영역 전체를 고정시키고,
+    // 텍스트로 인한 늘어남은 본문(사각형 몸통) 쪽에서만 일어나게 한다.
+    const tailGuardPt = 26 + Math.max(0, marginPx || 0) * 2 + 6; // generateFallbackBubbleCanvas의 tail=26, margin*2와 동일 기준 + 여유 6px
+    const leftCap  = (spec.withTail && spec.side === 'left')  ? tailGuardPt : capPt;
+    const rightCap = (spec.withTail && spec.side === 'right') ? tailGuardPt : capPt;
+    const ninePatch = encodeNinePatch(bubbleCanvas, leftCap, capPt, rightCap, capPt, insetPt, insetPt, insetPt, insetPt, [], []);
     drawableFolder.file(KAKAO_IMAGE_MAP[spec.key], canvasToBase64(ninePatch), { base64: true });
     imgCount++;
     addedFilenames.add(KAKAO_IMAGE_MAP[spec.key]);
@@ -4093,8 +4147,7 @@ async function buildThemeFiles(themeName, author, pkgIdOverride) {
   const TAB_ICON_KEYS = [
     'ico-friends','ico-friends-f','ico-chats','ico-chats-f',
     'ico-shopping','ico-shopping-f','ico-more','ico-more-f',
-    'ico-call','ico-call-f','ico-now','ico-now-f',
-    'ico-piccoma','ico-piccoma-f','ico-openchat','ico-openchat-f',
+    'ico-now','ico-now-f',
   ];
 
   for (const key of TAB_ICON_KEYS) {
@@ -4185,6 +4238,72 @@ async function buildThemeFiles(themeName, author, pkgIdOverride) {
       imgCount++;
     }
   }
+
+  // ── theme-adv/ 폴더: selector XML 추가 ──
+  // 공식 apeach 소스에 있는 theme-adv/color/ 와 theme-adv/drawable/ 폴더.
+  // 이 파일들이 없으면 pressed/focused 상태 색상이 전혀 적용되지 않음.
+  const themeAdvColor  = zip.folder('src/main/theme-adv/color');
+  const themeAdvDrawable = zip.folder('src/main/theme-adv/drawable');
+
+  themeAdvColor.file('theme_title_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:color="@color/theme_title_pressed_color" />\n    <item android:color="@color/theme_title_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_paragraph_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:color="@color/theme_paragraph_pressed_color" android:state_pressed="true" />\n    <item android:color="@color/theme_paragraph_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_description_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:color="@color/theme_description_pressed_color" />\n    <item android:color="@color/theme_description_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_feature_primary_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:color="@color/theme_feature_primary_pressed_color" />\n    <item android:color="@color/theme_feature_primary_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_feature_music_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:color="@color/theme_feature_primary_pressed_color" />\n    <item android:color="@color/theme_feature_primary_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_feature_gift_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:color="@color/theme_feature_primary_pressed_color" />\n    <item android:color="@color/theme_feature_primary_color" />\n</selector>`);
+
+  themeAdvColor.file('theme_passcode_keypad_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:color="@color/theme_passcode_keypad_pressed_color" android:state_selected="true" />\n    <item android:color="@color/theme_passcode_keypad_pressed_color" android:state_pressed="true" />\n    <item android:color="@color/theme_passcode_keypad_color" />\n</selector>`);
+
+  themeAdvDrawable.file('theme_background_image.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<shape xmlns:android="http://schemas.android.com/apk/res/android">\n    <solid android:color="@color/theme_background_color" />\n</shape>`);
+
+  themeAdvDrawable.file('theme_body_cell_color_selector.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@color/theme_body_cell_pressed_color" android:state_selected="true" />\n    <item android:drawable="@color/theme_body_cell_pressed_color" android:state_focused="true" />\n    <item>\n        <ripple android:color="@color/theme_body_cell_pressed_color">\n            <item android:id="@android:id/mask" android:drawable="@android:color/white" />\n            <item android:drawable="@color/theme_body_cell_color" />\n        </ripple>\n    </item>\n</selector>`);
+
+  themeAdvDrawable.file('theme_notification_background.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_pressed="true" android:drawable="@color/theme_notification_background_pressed_color"/>\n    <item android:drawable="@color/theme_notification_background_color" />\n</selector>`);
+
+  themeAdvDrawable.file('theme_passcode_keypad_background_color_land.xml',
+    `<?xml version="1.0" encoding="UTF-8"?>\n<shape xmlns:android="http://schemas.android.com/apk/res/android">\n    <solid android:color="@color/theme_passcode_keypad_background_color" />\n    <corners android:radius="4dp" />\n</shape>`);
+
+  themeAdvDrawable.file('theme_passcode_keypad_pressed_background_color_selector.xml',
+    `<?xml version="1.0" encoding="UTF-8"?>\n<ripple xmlns:android="http://schemas.android.com/apk/res/android"\n    android:color="@color/theme_passcode_keypad_pressed_background_color">\n    <item android:id="@android:id/mask" android:gravity="center">\n        <shape android:shape="oval">\n            <solid android:color="@color/theme_passcode_keypad_pressed_background_color" />\n            <size android:width="58dp" android:height="58dp" />\n        </shape>\n    </item>\n    <item android:drawable="@android:color/transparent" />\n</ripple>`);
+
+  themeAdvDrawable.file('theme_find_add_friend_button_image_selector.xml',
+    `<?xml version="1.0" encoding="UTF-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_focused="true" android:state_pressed="false" android:drawable="@drawable/theme_find_add_friend_button_pressed_image" />\n    <item android:state_focused="true" android:state_pressed="true" android:drawable="@drawable/theme_find_add_friend_button_pressed_image" />\n    <item android:state_focused="false" android:state_pressed="true" android:drawable="@drawable/theme_find_add_friend_button_pressed_image" />\n    <item android:drawable="@drawable/theme_find_add_friend_button_image" />\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_friend_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_friends_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_friends_image"/>\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_chats_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_chats_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_chats_image"/>\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_shopping_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@drawable/theme_maintab_ico_shopping_focused_image" android:state_selected="true" />\n    <item android:drawable="@drawable/theme_maintab_ico_shopping_image" />\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_more_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_more_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_more_image"/>\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_call_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:state_selected="true" android:drawable="@drawable/theme_maintab_ico_call_focused_image"/>\n    <item android:drawable="@drawable/theme_maintab_ico_call_image"/>\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_now_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@drawable/theme_maintab_ico_now_focused_image" android:state_selected="true" />\n    <item android:drawable="@drawable/theme_maintab_ico_now_image" />\n</selector>`);
+
+  themeAdvDrawable.file('theme_tab_piccoma_icon.xml',
+    `<?xml version="1.0" encoding="utf-8"?>\n<selector xmlns:android="http://schemas.android.com/apk/res/android">\n    <item android:drawable="@drawable/theme_maintab_ico_piccoma_focused_image" android:state_selected="true" />\n    <item android:drawable="@drawable/theme_maintab_ico_piccoma_image" />\n</selector>`);
 
   zip.file('BUILD_GUIDE.txt', buildGuide(pkgName, themeName, author));
 
@@ -4434,9 +4553,6 @@ async function pollWorkflowAndShowResult(since, safeApkName) {
 
 // ── STUBS ──
 function newProject() { showToast('새 프로젝트를 시작합니다'); }
-function openProject() { showToast('프로젝트 열기'); }
-function exportBgVariation() { showToast('배경 바리에이션 내보내기'); }
-function exportPromo() { showToast('홍보 이미지 내보내기'); }
 // ── 템플릿 저장 / 불러오기 (실제 파일로 내보내기·불러오기) ──
 // 템플릿 파일(JSON)에는 다음이 모두 들어감:
 //  - colors: 모든 <input type=color>의 값
@@ -4558,7 +4674,132 @@ function applyTemplateData(data) {
   const imgCount = Object.keys(savedUploads).length;
   showToast(`템플릿을 불러왔습니다 ✓ (이미지 ${imgCount}개 포함)`, 'success');
 }
-function bulkUpload() { showToast('폴더 일괄 교체 기능'); }
+// 파일명 → 업로드 슬롯 키 매칭용 키워드 표.
+// 같은 슬롯에 여러 키워드를 등록할 수 있고, 매칭 시에는 모든 키워드를 통틀어
+// "가장 긴(구체적인) 키워드가 매칭되는 슬롯"을 우선시한다
+// (예: "나영님채팅배경.png"는 "채팅"과 "채팅배경" 둘 다 들어있지만, 더 구체적인 "채팅배경"을 우선 채택).
+// "배경" 단독 키워드는 모호해서 의도적으로 제외 — 항상 "메인배경"/"채팅배경"/"잠금배경"처럼 구체적으로만 매칭한다.
+const BULK_UPLOAD_KEYWORDS = {
+  'main-bg':     ['메인배경', '메인'],
+  'chat-bg':     ['채팅방배경', '채팅배경', '채팅방', '채팅'],
+  'passcode-bg': ['잠금배경', '잠금화면', '잠금', '패스코드', '비밀번호'],
+  'splash':      ['스플래시', '로딩', 'splash'],
+  'profile':     ['기본프로필1', '프로필1', '기본프로필', '프로필'],
+  'profile-2':   ['기본프로필2', '프로필2'],
+  'profile-3':   ['기본프로필3', '프로필3'],
+  'bubble-me1':  ['내말풍선', '보낸말풍선', '말풍선me', '말풍선1'],
+  'bubble-you1': ['받은말풍선', '상대말풍선', '말풍선you', '말풍선2'],
+  'tabbar-bg':   ['하단탭', '탭바', '메인탭'],
+  'find-friend-btn': ['친구추가', '친구초대'],
+  'ico-friends': ['친구아이콘', '친구탭'],
+  'ico-chats':   ['채팅아이콘', '채팅탭'],
+  'ico-shopping':['쇼핑아이콘', '쇼핑탭'],
+  'ico-more':    ['더보기아이콘', '더보기탭'],
+};
+// 키워드를 "길이 내림차순"으로 정렬해서, 항상 더 구체적인 키워드부터 검사하게 만든다.
+const BULK_UPLOAD_KEYWORD_LIST = Object.entries(BULK_UPLOAD_KEYWORDS)
+  .flatMap(([slotKey, words]) => words.map(w => ({ slotKey, word: w })))
+  .sort((a, b) => b.word.length - a.word.length);
+
+// 파일명에서 매칭할 슬롯 키를 찾는다. 공백·특수문자를 제거하고 소문자로 맞춘 뒤,
+// 가장 긴 키워드부터 차례로 "포함되는지"를 검사해서 가장 구체적인 슬롯을 반환한다.
+function matchSlotByFilename(filename) {
+  const base = filename.replace(/\.[^/.]+$/, ''); // 확장자 제거
+  const normalized = base.replace(/[\s_\-.()]/g, '').toLowerCase();
+  for (const { slotKey, word } of BULK_UPLOAD_KEYWORD_LIST) {
+    const normalizedWord = word.replace(/[\s_\-.()]/g, '').toLowerCase();
+    if (normalized.includes(normalizedWord)) return slotKey;
+  }
+  return null;
+}
+
+// 📁 이미지 일괄 교체: 폴더를 통째로 선택하면(폴더 안 이미지가 자동으로 다 포함됨)
+// 파일명의 키워드를 보고 각 슬롯에 자동으로 채워넣는다.
+// (예: "나영님메인배경.png" → 메인 배경 슬롯, "나영님채팅배경.png" → 채팅방 배경 슬롯)
+function bulkUpload() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  // webkitdirectory를 지원하지 않는 환경(특히 일부 모바일 브라우저)에서는
+  // 폴더 선택 자체가 안 먹거나 클릭이 막힐 수 있어서, 지원 여부를 먼저 확인하고
+  // 지원하지 않으면 "여러 이미지 파일 선택" 모드로 자동 폴백한다.
+  const supportsDirectory = 'webkitdirectory' in HTMLInputElement.prototype;
+  if (supportsDirectory) {
+    // 폴더 통째로 선택하게 해서, 폴더 안의 모든 파일이 한 번에 들어오게 한다.
+    input.webkitdirectory = true;
+    input.directory = true; // 일부 구형 브라우저 호환용 (Firefox 등)
+  } else {
+    input.accept = 'image/png,image/jpeg,image/webp';
+    showToast('이 브라우저는 폴더 선택을 지원하지 않아요 — 이미지 파일들을 여러 개 선택해 주세요 (Ctrl/Shift로 다중 선택 가능)', '');
+  }
+  input.multiple = true;
+  input.onchange = async () => {
+    const allFiles = Array.from(input.files || []);
+    if (!allFiles.length) return;
+
+    // 폴더 선택은 accept 필터가 적용되지 않아 폴더 안의 모든 파일(이미지가 아닌 것 포함)이 들어온다.
+    // 확장자로 이미지 파일만 골라낸다. webkitRelativePath에 하위 폴더 경로가 섞여 들어올 수 있으므로
+    // 매칭에는 파일명(마지막 / 뒤)만 사용한다.
+    const IMAGE_EXT = /\.(png|jpe?g|webp)$/i;
+    const files = allFiles
+      .filter(f => IMAGE_EXT.test(f.name))
+      .map(f => {
+        const relPath = f.webkitRelativePath || f.name;
+        const baseName = relPath.split('/').pop();
+        return { file: f, name: baseName };
+      });
+
+    if (!files.length) {
+      showToast('선택한 폴더 안에 이미지 파일(png/jpg/webp)이 없어요.', 'error');
+      return;
+    }
+
+    const matched = [];   // {file, slotKey}
+    const unmatched = []; // filename
+
+    files.forEach(({ file, name }) => {
+      const slotKey = matchSlotByFilename(name);
+      if (slotKey) matched.push({ file, slotKey });
+      else unmatched.push(name);
+    });
+
+    if (!matched.length) {
+      showToast('선택한 폴더 안 파일명에서 일치하는 슬롯을 찾지 못했어요. 파일명에 "메인배경", "채팅배경", "프로필1" 같은 키워드를 포함해 주세요.', 'error');
+      return;
+    }
+
+    // 같은 슬롯에 파일이 두 개 이상 매칭되면(예: "메인배경1.png"와 "메인배경2.png" 둘 다 업로드),
+    // 마지막 파일이 조용히 앞 파일을 덮어쓰게 된다. 결과 요약에서 이 사실을 알 수 있도록 슬롯별 매칭 개수를 센다.
+    const slotCounts = {};
+    matched.forEach(({ slotKey }) => { slotCounts[slotKey] = (slotCounts[slotKey] || 0) + 1; });
+    const overwritten = Object.entries(slotCounts).filter(([, n]) => n > 1);
+
+    // 모든 파일을 dataURL로 읽은 뒤, 한 번에 슬롯에 적용한다 (탭 전환 없이 조용히 채움).
+    let failedCount = 0;
+    for (const { file, slotKey } of matched) {
+      try {
+        const dataUrl = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = e => resolve(e.target.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+        await applyImageToSlot(slotKey, dataUrl, { showOwnToast: false, switchTabOnUpload: false });
+      } catch (err) {
+        failedCount++;
+        unmatched.push(file.name + ' (읽기 실패)');
+      }
+    }
+
+    const appliedCount = matched.length - failedCount;
+    let msg = `${appliedCount}개 매칭 완료 ✓`;
+    if (overwritten.length) {
+      msg += ` (같은 슬롯에 여러 파일이 매칭돼 마지막 파일만 적용됨: ${overwritten.map(([k]) => k).join(', ')})`;
+    }
+    if (unmatched.length) msg += ` · ${unmatched.length}개 실패: ${unmatched.join(', ')}`;
+    showToast(msg, unmatched.length ? 'error' : 'success');
+  };
+  input.click();
+}
 function showTemplates() { showToast('템플릿 목록'); }
 function showThemeInfo() { showToast('테마 정보'); }
 function updateFont() {
@@ -5858,9 +6099,24 @@ function npSimulate() {
       canvas.style.height = bubbleH + 'px';
 
       // 컨테이너 너비에 맞게 CSS scale 적용 (잘림 방지)
+      // 주의: wrap(np-sim-scale-wrap-*)이나 그 부모가 flex/grid item인 경우, 기본 min-width:auto
+      // 때문에 안의 캔버스(큰 이미지)가 콘텐츠 최소 크기로 부모 박스 자체를 늘려버릴 수 있다.
+      // 그래서 wrap 기준으로만 너비를 재면 큰 이미지를 올렸을 때 maxW가 항상 bubbleW와 같아져
+      // 축소 배율(sc)이 1로 계산되고, 결과적으로 시뮬레이터가 잘려 보이는 버그가 있었다.
+      // 패널 바깥의 안전한 기준점(view-ninepatch, max-width:700px로 고정됨)까지 같이 비교해서
+      // 둘 중 더 작은(더 신뢰할 수 있는) 값을 쓴다.
       const wrap = document.getElementById('np-sim-scale-wrap-' + side);
+      const measureEl = document.getElementById('np-sim-canvas-wrap');
+      const panelEl = document.getElementById('view-ninepatch');
+      function safeMaxW() {
+        const candidates = [];
+        if (measureEl) candidates.push(measureEl.getBoundingClientRect().width);
+        if (panelEl) candidates.push(panelEl.getBoundingClientRect().width);
+        const valid = candidates.filter(w => w > 0);
+        return valid.length ? Math.min(...valid) : 300;
+      }
       if (wrap) {
-        const maxW = wrap.getBoundingClientRect().width || 300;
+        const maxW = safeMaxW();
         const sc = bubbleW > maxW ? maxW / bubbleW : 1;
         canvas.style.transform = `scale(${sc})`;
         wrap.style.height = Math.round(bubbleH * sc) + 'px';
@@ -5870,8 +6126,7 @@ function npSimulate() {
       if (side === 'me') {
         const sizeInfo = document.getElementById('np-sim-size-info');
         if (sizeInfo) {
-          const wrap2 = document.getElementById('np-sim-scale-wrap-me');
-          const maxW2 = wrap2 ? (wrap2.getBoundingClientRect().width || 300) : 300;
+          const maxW2 = safeMaxW();
           const sc2 = bubbleW > maxW2 ? maxW2 / bubbleW : 1;
           const pct = Math.round(sc2 * 100);
           sizeInfo.textContent = `실제 크기: ${bubbleW} × ${bubbleH}px${sc2 < 1 ? ' (표시: ' + pct + '%로 축소)' : ''}`;
