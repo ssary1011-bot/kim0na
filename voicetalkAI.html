@@ -472,6 +472,16 @@
   .tag-chip.unknown-tag:hover { background: #7a5400; color: #fff; }
   .tag-chip .tag-x { font-size:10px; opacity:0.85; margin-left:2px; }
   .seg-text { color: var(--text); }
+  .seg-text-part { color: var(--text); }
+  .mid-slot {
+    display: inline-block; min-width: 12px; text-align: center;
+    color: var(--text-faint); opacity: 0.4; cursor: pointer; font-size: 13px;
+    padding: 0 2px; transition: opacity 0.15s, color 0.15s; user-select: none;
+  }
+  .mid-slot:hover, .mid-slot:active { opacity: 1; color: var(--accent); font-weight: 800; }
+  .word-part { cursor: pointer; border-radius: 3px; padding: 0 1px; transition: background 0.12s, color 0.12s; }
+  .word-part:hover { background: var(--accent-soft); color: var(--accent); }
+  .word-part.emphasized-word { font-weight: 800; color: var(--accent-2); background: var(--accent-soft); text-decoration: underline; text-decoration-style: wavy; text-decoration-color: var(--accent); text-underline-offset: 2px; }
   .free-edit-textarea {
     width: 100%; background: var(--bg-2); border: 1.5px solid var(--border-strong); border-radius: var(--radius);
     color: var(--text); padding: 12px; font-size: 14px; font-family: inherit; min-height: 90px; line-height: 1.8;
@@ -516,8 +526,8 @@
   .turn-block { margin-bottom: 14px; }
   .turn-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
   .turn-speaker { font-size: 12px; font-weight: 800; color: var(--accent-2); }
-  .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-  .action-btn { background: var(--bg-2); border: 2px solid var(--border-strong); color: var(--text); padding: 11px; border-radius: var(--radius); font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.1s; font-family: inherit; }
+  .action-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .action-btn { background: var(--bg-2); border: 2px solid var(--border-strong); color: var(--text); padding: 11px 6px; border-radius: var(--radius); font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.1s; font-family: inherit; }
   .action-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border-strong); }
   .action-btn.primary { background: var(--accent); color: #fff; }
   .loading-box { text-align: center; padding: 50px 20px; }
@@ -1041,7 +1051,7 @@
           <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank">elevenlabs.io</a>에서 무료 발급 · 무료 플랜 월 10,000자
         </div>
       </div>
-      <div class="model-note" id="model-note-gemini">사용 모델: 음성생성(gemini-2.5-flash-preview-tts) / 분석(gemini-2.5-flash-lite)</div>
+      <div class="model-note" id="model-note-gemini">사용 모델: 음성생성(gemini-2.5-flash-preview-tts) / 분석(gemini-3.5-flash-lite)</div>
       <div class="model-note" id="model-note-eleven" style="display:none;">사용 모델: eleven_v3 (Text to Speech / Text to Dialogue)</div>
     </div>
 
@@ -1058,7 +1068,7 @@
         <button id="tab-text" type="button">텍스트 직접 편집</button>
       </div>
       <div style="margin-bottom:10px;">
-        <div style="font-size:11px;color:var(--text-faint);margin-bottom:6px;">✍️ 텍스트 직접 편집 시 — 문장부호 신호 삽입:</div>
+        <div style="font-size:11px;color:var(--text-faint);margin-bottom:6px;">✍️ 텍스트 직접 편집 시 — <b style="color:var(--accent)">[대괄호]</b> 또는 <b style="color:var(--accent)">(소괄호)</b>로 감싼 내용은 소리내어 읽히지 않고 연출 지문으로 처리돼요. 문장부호 신호 삽입:</div>
         <div id="punct-toolbar" style="display:flex;flex-wrap:wrap;gap:5px;">
           <button class="punct-btn" data-insert="…" title="말 끝 흐림 / 머뭇거림" type="button">… 말끝흐림</button>
           <button class="punct-btn" data-insert="—" title="갑자기 끊김" type="button">— 끊김</button>
@@ -1069,7 +1079,7 @@
         </div>
       </div>
       <div id="preview-turns"></div>
-      <div class="hint" style="margin-top:10px;">태그(<span style="color:var(--accent);font-weight:600;">보라색</span>)를 클릭하면 다른 표현으로 바꿀 수 있어요. 새 태그는 대사 사이 빈 곳을 클릭해 추가하세요.<br><span style="color:var(--text-faint)">텍스트 직접 편집 탭에서 위 버튼으로 문장부호 신호를 삽입해 운율을 세밀하게 조정할 수 있어요.</span></div>
+      <div class="hint" style="margin-top:10px;">태그(<span style="color:var(--accent);font-weight:600;">보라색</span>)를 클릭하면 다른 표현으로 바꿀 수 있어요. 문장 속 <span style="color:var(--text-faint);font-weight:700;">·</span> 점을 클릭하면 띄어쓰기나 마침표 사이 정확한 위치에 태그를 끼워넣을 수 있고, <span style="color:var(--accent-2);font-weight:700;">단어를 직접 클릭</span>하면 그 단어만 강조해서 말하도록 표시돼요(다시 클릭하면 해제).<br><span style="color:var(--text-faint)">태그 목록엔 감정 외에도 🎚 강도(살짝~폭발적으로), 🎼 억양·피치(억양 올리며, 점점 커지며 등)가 추가돼서 감정 태그와 조합하면 훨씬 사람이 연기하는 느낌으로 표현할 수 있어요. [대괄호]나 (소괄호)로 감싼 지문은 모두 연출 지시로 처리돼요 — 소리내어 읽히지 않아요.</span></div>
     </div>
     <button id="preview-confirm-btn" class="submit-btn" type="button">🔊 이 연출로 음성 생성하기</button>
     <button id="preview-back-btn" class="secondary-btn" type="button">← 대본 다시 만들기</button>
@@ -1086,7 +1096,8 @@
     <div id="result-content"></div>
     <div class="action-row">
       <button id="btn-download" class="action-btn primary" type="button">💾 음성 저장</button>
-      <button id="btn-restart" class="action-btn" type="button">🔄 다시 만들기</button>
+      <button id="btn-edit-script" class="action-btn" type="button">✏️ 대본 계속 수정</button>
+      <button id="btn-restart" class="action-btn" type="button">🔄 새로 만들기</button>
     </div>
   </div>
 
@@ -1262,6 +1273,10 @@
     <!-- 현재 설정 저장 -->
     <div class="settings-section-label">현재 설정 저장</div>
     <input class="settings-name-input" id="settings-save-name" type="text" maxlength="30" placeholder="프리셋 이름 (예: 소녀 캐릭터, 전투 장면)">
+    <div style="display:flex; align-items:center; gap:6px; margin-top:8px; font-size:11.5px; color:var(--text-dim);">
+      <input type="checkbox" id="settings-include-script" style="width:auto; margin:0;">
+      <label for="settings-include-script" style="margin:0; font-weight:600; cursor:pointer;">현재 만들어진 대본(태그 편집본)도 함께 저장</label>
+    </div>
     <div class="settings-action-row">
       <button class="settings-action-btn" id="settings-save-btn" type="button">💾 저장하기</button>
       <button class="settings-action-btn secondary" id="settings-export-btn" type="button">📤 파일로 내보내기</button>
@@ -1377,7 +1392,7 @@ const TAG_TABLE = [
   {ko:'급하게',       en:'rushed',        cat:'pacing', eng:'eleven'},
   {ko:'신중하게',     en:'deliberate',    cat:'pacing', eng:'eleven'},
   {ko:'길게 끌며',    en:'drawn out',     cat:'pacing', eng:'eleven'},
-  {ko:'강조하며',     en:'emphasized',    cat:'pacing', eng:'eleven'},
+  {ko:'강조하며',     en:'emphasized',    cat:'pacing', eng:'both'},
   {ko:'조심스럽게 말하며', en:'timidly', cat:'pacing', eng:'eleven'},
   // ── 인지적 비트 · 쉼 ───────────────────────────────────────
   {ko:'잠시 멈춤',    en:'pauses',        cat:'cognitive', eng:'both'},
@@ -1401,6 +1416,22 @@ const TAG_TABLE = [
   {ko:'좁은 방 안에서', en:'in a small enclosed space', cat:'space', eng:'gemini'},
   {ko:'넓은 공간에서 울리듯', en:'echoing in a large space', cat:'space', eng:'gemini'},
   {ko:'야외에서',     en:'outdoors ambient', cat:'space', eng:'gemini'},
+  // ── 강도 (기존 감정/톤 태그와 조합해서 세기를 조절) ─────────
+  {ko:'아주 살짝',    en:'very slightly',        cat:'intensity', eng:'gemini'},
+  {ko:'살짝',         en:'slightly',             cat:'intensity', eng:'gemini'},
+  {ko:'꽤',           en:'quite',                cat:'intensity', eng:'gemini'},
+  {ko:'매우',         en:'very',                 cat:'intensity', eng:'gemini'},
+  {ko:'극도로',       en:'extremely',            cat:'intensity', eng:'gemini'},
+  {ko:'폭발적으로',   en:'explosively',          cat:'intensity', eng:'gemini'},
+  // ── 억양 · 피치 (문장의 높낮이·볼륨 변화 곡선) ──────────────
+  {ko:'억양 올리며',    en:'rising intonation',            cat:'pitch', eng:'gemini'},
+  {ko:'억양 내리며',    en:'falling intonation',           cat:'pitch', eng:'gemini'},
+  {ko:'단조롭게',       en:'monotone, flat delivery',      cat:'pitch', eng:'gemini'},
+  {ko:'극적인 억양으로', en:'dramatic pitch variation',    cat:'pitch', eng:'gemini'},
+  {ko:'점점 커지며',    en:'gradually getting louder',     cat:'pitch', eng:'gemini'},
+  {ko:'점점 작아지며',  en:'gradually getting quieter',    cat:'pitch', eng:'gemini'},
+  {ko:'높은 음으로',    en:'high pitched',                 cat:'pitch', eng:'gemini'},
+  {ko:'낮은 음으로',    en:'low pitched',                  cat:'pitch', eng:'gemini'},
   // ── 억양 ───────────────────────────────────────────────────
   {ko:'영국식 억양',  en:'British accent', cat:'accent', eng:'both'},
   {ko:'미국식 억양',  en:'American accent', cat:'accent', eng:'both'},
@@ -1414,10 +1445,12 @@ const TAG_CATS = [
   {key:'emotion_neu', label:'🎭 중립 · 상황 감정'},
   {key:'reaction',    label:'😮 반응 · 비언어 소리'},
   {key:'pacing',      label:'🎬 속도 · 페이싱'},
+  {key:'intensity',   label:'🎚 강도 (세기 조절)'},
+  {key:'pitch',       label:'🎼 억양 · 피치'},
   {key:'cognitive',   label:'💭 인지적 비트 · 쉼'},
   {key:'body',        label:'🫁 신체 · 생리 상태'},
   {key:'space',       label:'🏠 공간 · 거리감'},
-  {key:'accent',      label:'🌍 억양'},
+  {key:'accent',      label:'🌍 억양(발음)'},
 ];
 
 const VOICES = [
@@ -1446,7 +1479,8 @@ function voiceNamesByGender(gender) {
 }
 
 const TTS_MODEL = 'gemini-2.5-flash-preview-tts';
-const ANALYZE_MODEL = 'gemini-3.5-flash-lite';const EL_MODEL = 'eleven_v3';
+const ANALYZE_MODEL = 'gemini-3.5-flash-lite';
+const EL_MODEL = 'eleven_v3';
 
 const LOADING_MSGS_ANALYZE = ['캐릭터를 분석하는 중…','상황에 맞는 대사를 쓰는 중…','어울리는 연출을 입히는 중…','태그를 다듬는 중…'];
 const LOADING_MSGS_TTS = ['목소리를 빚는 중…','감정을 입히는 중…','잉크가 마르듯 소리가 굳는 중…','마이크 앞에서 호흡을 고르는 중…'];
@@ -1845,11 +1879,14 @@ document.getElementById('eng-eleven').addEventListener('click', () => {
    ============================================================ */
 function parseTaggedText(text) {
   const segs = [];
-  const re = /\[([^\]]+)\]/g;
+  // 대괄호 [ ] 와 소괄호 ( ) 를 모두 연출 지문(태그)으로 인식.
+  // 소괄호를 태그로 취급하지 않으면 "(웃으며)" 같은 지문이 그대로 낭독돼버리므로,
+  // 두 표기 모두 같은 방식으로 파싱해서 실제 연출 지시로 작동하게 함.
+  const re = /\[([^\]]+)\]|\(([^)]+)\)/g;
   let last = 0, m;
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) segs.push({type:'text', value: text.slice(last, m.index)});
-    const raw = m[1].trim();
+    const raw = (m[1] !== undefined ? m[1] : m[2]).trim();
     const isKnownKo = KO2EN.hasOwnProperty(raw);
     const isKnownEn = EN2KO.hasOwnProperty(raw);
     let ko, en, known;
@@ -1896,12 +1933,58 @@ function renderPreviewTurns() {
     });
   });
 }
+function renderTextSegmentHTML(text, turnIdx, segIdx, emphasized) {
+  if (!text) return '';
+  // 공백/마침표(.) 단위로 잘라서 그 사이사이마다 태그를 끼워넣을 수 있는
+  // 작은 클릭 지점(·)을 만듦 — 문장 중간에도 [태그]/(태그)를 넣을 수 있게 하기 위함.
+  // 단어(공백·마침표가 아닌 부분)는 클릭하면 그 단어만 강조 처리(토글)할 수 있음.
+  const parts = text.split(/(\s+|\.+)/).filter(p => p !== '');
+  let offset = 0;
+  let html = '';
+  parts.forEach((part, i) => {
+    const isDelim = /^(\s+|\.+)$/.test(part);
+    const startOff = offset;
+    offset += part.length;
+    const endOff = offset;
+    if (isDelim) {
+      html += `<span class="seg-text-part">${esc(part)}</span>`;
+    } else {
+      const cls = 'seg-text-part word-part' + (emphasized ? ' emphasized-word' : '');
+      html += `<span class="${cls}" data-turn="${turnIdx}" data-seg="${segIdx}" data-start="${startOff}" data-end="${endOff}" title="클릭하면 이 단어를 강조해요">${esc(part)}</span>`;
+    }
+    const isLast = i === parts.length - 1;
+    if (isDelim || isLast) {
+      html += `<span class="mid-slot" data-turn="${turnIdx}" data-seg="${segIdx}" data-split="${offset}" title="여기에 태그 추가">·</span>`;
+    }
+  });
+  return html;
+}
+/* 클릭한 단어 앞에 [강조하며] 태그를 끼워넣어(또는 이미 있으면 제거해) 그 단어만 힘주어 말하게 함 */
+function toggleWordEmphasis(turnIdx, segIdx, startOffset, endOffset) {
+  const segs = previewTurns[turnIdx].segs;
+  const seg = segs[segIdx];
+  if (!seg || seg.type !== 'text') return;
+  const before = seg.value.slice(0, startOffset);
+  const word = seg.value.slice(startOffset, endOffset);
+  const after = seg.value.slice(endOffset);
+  const newSegs = [];
+  if (before) newSegs.push({type:'text', value: before});
+  newSegs.push({type:'tag', ko:'강조하며', en:'emphasized', known:true});
+  newSegs.push({type:'text', value: word});
+  if (after) newSegs.push({type:'text', value: after});
+  segs.splice(segIdx, 1, ...newSegs);
+  renderChipView(turnIdx);
+}
 function renderChipView(turnIdx) {
   const t = previewTurns[turnIdx];
   const box = document.querySelector(`.chip-view[data-turn="${turnIdx}"]`);
   if (!box) return;
   box.innerHTML = t.segs.map((s, segIdx) => {
-    if (s.type === 'text') return `<span class="seg-text">${esc(s.value)}</span><span class="add-slot" data-turn="${turnIdx}" data-seg="${segIdx}" style="display:inline-block;width:4px;"></span>`;
+    if (s.type === 'text') {
+      // 바로 앞이 [강조하며] 태그라면 이 텍스트(보통 단어 하나)는 강조 표시된 상태
+      const emphasized = segIdx > 0 && t.segs[segIdx-1].type === 'tag' && t.segs[segIdx-1].en === 'emphasized';
+      return renderTextSegmentHTML(s.value, turnIdx, segIdx, emphasized);
+    }
     const cls = s.known ? 'tag-chip' : 'tag-chip unknown-tag';
     return `<span class="${cls}" data-turn="${turnIdx}" data-seg="${segIdx}" data-action="open">${esc(s.ko)}<span class="tag-x" data-turn="${turnIdx}" data-seg="${segIdx}" data-action="remove">✕</span></span>`;
   }).join('');
@@ -1919,37 +2002,34 @@ function renderChipView(turnIdx) {
       renderChipView(turnIdx);
     });
   });
-  // add-slot: 텍스트 뒤 빈 공간 클릭 → 그 자리에 태그 추가
-  box.querySelectorAll('.add-slot').forEach(el => {
-    el.style.cursor = 'pointer';
-    el.style.minWidth = '12px';
-    el.style.minHeight = '20px';
-    el.title = '클릭해서 태그 추가';
+  // 문장 중간(공백·마침표 사이)의 삽입 지점 클릭 → 그 정확한 위치에 태그 추가
+  box.querySelectorAll('.mid-slot').forEach(el => {
     el.addEventListener('click', () => {
-      const turnIdx = parseInt(el.dataset.turn, 10);
-      const segIdx = parseInt(el.dataset.seg, 10);
-      openTagPopup(turnIdx, segIdx, 'insert');
+      const turnIdx2 = parseInt(el.dataset.turn, 10);
+      const segIdx2 = parseInt(el.dataset.seg, 10);
+      const splitPos = parseInt(el.dataset.split, 10);
+      openTagPopup(turnIdx2, segIdx2, 'split', splitPos);
+    });
+  });
+  // 단어 클릭 → 그 단어만 강조(토글). 이미 강조된 단어라면 앞의 [강조하며] 태그를 제거.
+  box.querySelectorAll('.word-part').forEach(el => {
+    el.addEventListener('click', () => {
+      const tIdx = parseInt(el.dataset.turn, 10);
+      const sIdx = parseInt(el.dataset.seg, 10);
+      const segsArr = previewTurns[tIdx].segs;
+      const seg = segsArr[sIdx];
+      const isEmphasized = sIdx > 0 && segsArr[sIdx-1].type === 'tag' && segsArr[sIdx-1].en === 'emphasized';
+      if (isEmphasized) {
+        segsArr.splice(sIdx-1, 1);
+        renderChipView(tIdx);
+      } else {
+        const startOff = parseInt(el.dataset.start, 10);
+        const endOff = parseInt(el.dataset.end, 10);
+        toggleWordEmphasis(tIdx, sIdx, startOff, endOff);
+      }
     });
   });
 }
-document.getElementById('preview-turns').addEventListener('click', e => {
-  if (e.target.classList.contains('seg-text')) {
-    // 해당 텍스트 세그먼트의 turn/seg 인덱스 찾기
-    const box = e.target.closest('.chip-view');
-    const turnIdx = parseInt(box.dataset.turn, 10);
-    const segs = previewTurns[turnIdx].segs;
-    const segTextEls = Array.from(box.querySelectorAll('.seg-text'));
-    const clickedOrder = segTextEls.indexOf(e.target);
-    let idx = -1, found = 0;
-    for (let i = 0; i < segs.length; i++) {
-      if (segs[i].type === 'text') {
-        if (found === clickedOrder) { idx = i; break; }
-        found++;
-      }
-    }
-    if (idx >= 0) openTagPopup(turnIdx, idx, 'insert');
-  }
-});
 
 document.getElementById('tab-chip').addEventListener('click', () => {
   // 텍스트탭에서 편집한 내용을 segs에 먼저 동기화
@@ -1972,7 +2052,7 @@ document.getElementById('tab-text').addEventListener('click', () => {
 /* ============================================================
    8. 태그 선택 팝업 (드롭다운형 바텀시트) — 엔진별 필터링 + 카테고리별 표시
    ============================================================ */
-function openTagPopup(turnIdx, segIdx, mode) {
+function openTagPopup(turnIdx, segIdx, mode, splitPos) {
   const overlay = document.createElement('div');
   overlay.className = 'tag-popup-overlay';
   const modeTitle = mode === 'insert' ? '태그 추가하기' : '태그 바꾸기 / 추가하기';
@@ -2038,8 +2118,19 @@ function openTagPopup(turnIdx, segIdx, mode) {
         segs.splice(segIdx, 0, {type:'tag', ko, en, known:true});
       } else if (actionMode === 'insert-after') {
         segs.splice(segIdx+1, 0, {type:'tag', ko, en, known:true});
+      } else if (mode === 'split') {
+        // 문장 중간(공백/마침표 등) 정확한 위치에 태그 삽입 —
+        // 해당 텍스트 세그먼트를 그 위치에서 둘로 쪼개고 사이에 태그를 끼워넣음
+        const seg = segs[segIdx];
+        const before = seg.value.slice(0, splitPos);
+        const after = seg.value.slice(splitPos);
+        const newSegs = [];
+        if (before) newSegs.push({type:'text', value: before});
+        newSegs.push({type:'tag', ko, en, known:true});
+        if (after) newSegs.push({type:'text', value: after});
+        segs.splice(segIdx, 1, ...newSegs);
       } else {
-        // insert 모드 (텍스트 구간 클릭)
+        // insert 모드 (기존 호환용)
         segs.splice(segIdx+1, 0, {type:'tag', ko, en, known:true});
       }
       renderChipView(turnIdx);
@@ -2130,7 +2221,7 @@ ${scenarioBlock}
 연출 지시: ${modeData.direction||'없음'}
 ${voiceLine}
 
-아래는 사용 가능한 연출 태그 목록입니다(한글로 표기). directed_dialogue를 만들 때 이 목록의 태그만 [한글태그] 형식으로 대사 문장 사이사이에 적절히 삽입하세요. 한 문장에 여러 태그를 층층이 써도 됩니다. 말줌임표(…)와 쉼표, 줄표(—)도 호흡과 멈춤을 표현하는 데 적극 활용하세요.
+아래는 사용 가능한 연출 태그 목록입니다(한글로 표기). directed_dialogue를 만들 때 이 목록의 태그만 [한글태그] 형식으로 대사 문장 사이사이에 적절히 삽입하세요. 한 문장에 여러 태그를 층층이 써도 됩니다. 특히 감정 태그 하나만 쓰지 말고, "강도" 태그(예: [살짝], [매우], [폭발적으로])와 "억양·피치" 태그(예: [억양 올리며], [점점 커지며])를 감정 태그와 조합해서 실제 성우가 연기하듯 세밀하게 표현하세요. 문장에서 특히 힘주어 말해야 할 핵심 단어 바로 앞에는 [강조하며] 태그를 붙여 그 단어만 강조되게 하세요. 말줌임표(…)와 쉼표, 줄표(—)도 호흡과 멈춤을 표현하는 데 적극 활용하세요.
 ${tagVocab}
 
 {"voice":"목소리(영문 보이스명)","voice_reason":"선택 이유 한국어 2-3문장","director_notes":{"스타일":"한국어","페이싱":"한국어","톤":"한국어","분위기":"한국어"},"directed_dialogue":"[한글태그] 형식이 삽입된 최종 대사"}`;
@@ -2182,6 +2273,8 @@ ${voiceAlloc}
 - 각 인물의 성격·말버릇·신체 상태·개인 연출 지시를 대사와 태그 선택에 충실히 반영할 것
 - 전체 연출 지시는 장면 전체의 흐름과 분위기에 반영할 것
 - 화자들은 직전 대사의 감정과 톤에 반응하며(맞장구, 끼어들기, 톤 변화 등) 자연스럽게 이어질 것
+- 감정 태그 하나만 쓰지 말고 "강도"(예: [살짝], [매우], [폭발적으로])와 "억양·피치"(예: [억양 올리며], [점점 작아지며]) 태그를 조합해 실제 성우 연기처럼 세밀하게 표현할 것
+- 대사에서 특히 힘주어 말해야 할 핵심 단어 바로 앞에는 [강조하며] 태그를 붙여 그 단어만 강조되게 할 것
 - 말줄임표(…), 줄표(—), 쉼표로 호흡과 멈춤도 세밀하게 표현할 것
 ${tagVocab}
 
@@ -2497,6 +2590,15 @@ document.getElementById('btn-download').addEventListener('click', () => {
     a.click();
   });
 });
+/* 결과 화면에서 태그 편집을 계속 이어갈 수 있도록 미리보기 화면으로 복귀
+   (previewTurns는 메모리에 그대로 남아있으므로 재생성 없이 편집 지속 가능) */
+document.getElementById('btn-edit-script').addEventListener('click', () => {
+  activeEditorTab = 'chip';
+  document.getElementById('tab-chip').classList.add('active');
+  document.getElementById('tab-text').classList.remove('active');
+  renderPreviewTurns();
+  showScreen('preview');
+});
 document.getElementById('btn-restart').addEventListener('click', () => showScreen('input'));
 
 /* ============================================================
@@ -2806,6 +2908,25 @@ function showVaToast(msg) {
 const SETTINGS_KEY = 'voicestudio_presets_v1';
 const MAX_SLOTS = 10;
 
+/* previewTurns를 저장 가능한 순수 데이터 배열로 직렬화 */
+function snapshotPreviewTurns() {
+  if (!previewTurns || !previewTurns.length) return null;
+  return previewTurns.map(t => ({
+    speakerLabel: t.speakerLabel || null,
+    voice: t.voice || null,
+    text: segmentsToDisplayText(t.segs) // "[한글태그] 문장..." 형태로 저장
+  }));
+}
+/* 저장된 스냅샷을 다시 previewTurns 형태로 복원 */
+function restorePreviewTurns(snapshot) {
+  if (!Array.isArray(snapshot) || !snapshot.length) return null;
+  return snapshot.map(t => ({
+    speakerLabel: t.speakerLabel || null,
+    voice: t.voice || null,
+    segs: parseTaggedText(t.text || '')
+  }));
+}
+
 function collectCurrentSettings() {
   const s = {
     version: 1,
@@ -2851,6 +2972,20 @@ function collectCurrentSettings() {
     geminiKey: document.getElementById('user-api-key')?.value || '',
     elevenKey: document.getElementById('el-api-key')?.value || '',
   };
+
+  // "대본도 함께 저장" 체크박스가 켜져 있으면, 현재 편집 중인 태그 대본(previewTurns)과
+  // 분석 메타(previewMeta)도 함께 저장한다.
+  const includeScript = document.getElementById('settings-include-script')?.checked;
+  if (includeScript) {
+    const snap = snapshotPreviewTurns();
+    if (snap) {
+      s.previewTurnsSnapshot = snap;
+      s.previewMetaSnapshot = previewMeta ? {
+        kind: previewMeta.kind,
+        analysis: previewMeta.analysis || null
+      } : null;
+    }
+  }
   return s;
 }
 
@@ -2908,6 +3043,20 @@ function applySettings(s) {
     });
     renderSpeakers();
   }
+
+  // 저장된 태그 편집 대본(previewTurns)이 있으면 복원하고 곧바로 미리보기 화면으로 이동
+  const restoredTurns = restorePreviewTurns(s.previewTurnsSnapshot);
+  if (restoredTurns) {
+    previewTurns = restoredTurns;
+    previewMeta = s.previewMetaSnapshot
+      ? { kind: s.previewMetaSnapshot.kind, analysis: s.previewMetaSnapshot.analysis, character: null, speakers: s.speakers }
+      : { kind: s.mode === 'dialogue' ? 'dialogue' : 'narration', analysis: {}, character: null, speakers: s.speakers };
+    activeEditorTab = 'chip';
+    document.getElementById('tab-chip').classList.add('active');
+    document.getElementById('tab-text').classList.remove('active');
+    renderPreviewTurns();
+    showScreen('preview');
+  }
 }
 
 function loadPresets() {
@@ -2929,10 +3078,11 @@ function renderSettingsSlots() {
     const date = p.savedAt ? new Date(p.savedAt).toLocaleDateString('ko-KR', {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '';
     const modeLabel = p.mode === 'dialogue' ? '대화' : '내레이션';
     const engLabel = p.engine === 'eleven' ? 'ElevenLabs' : 'Gemini';
+    const scriptLabel = p.previewTurnsSnapshot ? ' · 🎭 대본 포함' : '';
     return `<div class="settings-slot">
       <div class="settings-slot-info">
         <div class="settings-slot-name">${esc(p.name || '이름 없음')}</div>
-        <div class="settings-slot-meta">${modeLabel} · ${engLabel}${date ? ' · ' + date : ''}</div>
+        <div class="settings-slot-meta">${modeLabel} · ${engLabel}${scriptLabel}${date ? ' · ' + date : ''}</div>
       </div>
       <div class="settings-slot-actions">
         <button class="settings-slot-btn" data-load="${i}" type="button">불러오기</button>
@@ -2966,6 +3116,9 @@ function renderSettingsSlots() {
 
 function openSettingsPanel() {
   renderSettingsSlots();
+  // 현재 편집 중인 대본이 있으면 "대본 포함 저장" 체크박스를 기본으로 켜준다
+  const cb = document.getElementById('settings-include-script');
+  if (cb) cb.checked = !!(previewTurns && previewTurns.length);
   document.getElementById('settings-panel-overlay').classList.add('open');
 }
 function closeSettingsPanel() {
@@ -2989,7 +3142,7 @@ document.getElementById('settings-save-btn').addEventListener('click', () => {
   savePresets(presets);
   document.getElementById('settings-save-name').value = '';
   renderSettingsSlots();
-  showVaToast(`💾 "${name}" 저장 완료!`);
+  showVaToast(s.previewTurnsSnapshot ? `💾 "${name}" 저장 완료! (대본 포함)` : `💾 "${name}" 저장 완료!`);
 });
 
 document.getElementById('settings-export-btn').addEventListener('click', () => {
