@@ -2483,6 +2483,22 @@ function resolveElevenVoiceId(voices, rawInput) {
     || voices.find(x => x.name.toLowerCase().includes(lower));
   return matched ? matched.voice_id : null;
 }
+/* 이름/ID 매칭이 실패했을 때 아무 목소리(voices[0])로 무조건 대체하지 않고,
+   가능하면 캐릭터/화자의 성별과 맞는 "내 보이스"를 우선으로 고른다. */
+function pickFallbackVoiceId(voices, gender, indexForRoundRobin) {
+  if (!voices || !voices.length) return null;
+  const wantMale = /남/.test(gender || '');
+  const wantFemale = /여/.test(gender || '');
+  if (wantMale || wantFemale) {
+    const genderMatch = voices.find(x => {
+      const g = (x.labels && x.labels.gender || '').toLowerCase();
+      return wantFemale ? g === 'female' : g === 'male';
+    });
+    if (genderMatch) return genderMatch.voice_id;
+  }
+  const idx = Number.isInteger(indexForRoundRobin) ? indexForRoundRobin % voices.length : 0;
+  return voices[idx] && voices[idx].voice_id;
+}
 
 /* 일부 목소리(특히 라이브러리에서 가져온 외국 목소리)는 최신 모델(eleven_v3)을 지원하지 않아
    생성이 실패할 수 있음 → 이 경우 자동으로 구형 다국어 모델로 재시도 (한국어 포함 다국어 지원) */
@@ -2555,9 +2571,13 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
         if (!dialogue) { stopLoading(); showScreen('input'); return showError('대사를 적어주세요'); }
         modeData = { mode:'manual', dialogue, direction: val('direction') };
       }
-      const analysis = await analyzeNarration(analyzeKey, character, modeData, null);
+      // ElevenLabs 엔진에서 "목소리 힌트"에 값이 있으면 그 값을 그대로 강제 사용(voice_id 또는 이름).
+      // Gemini 엔진일 땐 힌트를 참고용 텍스트로만 넘기고 Gemini 프리셋 목록에서 고르게 둔다.
+      const forcedVoice = (currentEngine === 'eleven' && character.voice_hint) ? character.voice_hint.trim() : null;
+      const analysis = await analyzeNarration(analyzeKey, character, modeData, forcedVoice);
       previewMeta = { kind:'narration', character, analysis };
-      previewTurns = [{ speakerLabel: null, voice: analysis.voice, segs: parseTaggedText(analysis.directed_dialogue || '') }];
+      // forcedVoice가 있으면 Gemini가 반환한 voice 필드(변형/오타 가능성)를 쓰지 않고 원본 입력값을 그대로 사용
+      previewTurns = [{ speakerLabel: null, voice: forcedVoice || analysis.voice, segs: parseTaggedText(analysis.directed_dialogue || '') }];
     } else {
       const scenario = val('d-scenario');
       if (!scenario) { stopLoading(); showScreen('input'); return showError('장면/상황을 적어주세요'); }
@@ -2672,7 +2692,7 @@ async function finalizeAndGenerate() {
         const elKey = val('el-api-key');
         // 목소리 힌트 칸에 voice_id를 직접 붙여넣었으면 그대로 사용, 아니면 이름으로 "내 보이스"에서 매칭
         const voices = await loadElevenVoices(elKey);
-        const resolvedId = resolveElevenVoiceId(voices, voice) || (voices[0] && voices[0].voice_id);
+        const resolvedId = resolveElevenVoiceId(voices, voice) || pickFallbackVoiceId(voices, previewMeta.character && previewMeta.character.gender, 0);
         if (!resolvedId) throw new Error('ElevenLabs 계정에 사용 가능한 목소리가 없어요.');
         audioBlob = await generateElevenTTS(elKey, resolvedId, finalText);
         ext = 'mp3';
@@ -2696,8 +2716,9 @@ async function finalizeAndGenerate() {
         const t = previewTurns[i];
         const finalText = segmentsToEnglishText(t.segs);
         if (currentEngine === 'eleven') {
+          const spk = (previewMeta.speakers || []).find(sp => sp.name === t.speakerLabel);
           const resolvedId = resolveElevenVoiceId(elVoices, t.voice)
-            || (elVoices[i % elVoices.length] && elVoices[i % elVoices.length].voice_id);
+            || pickFallbackVoiceId(elVoices, spk && spk.gender, i);
           if (!resolvedId) throw new Error('ElevenLabs 계정에 사용 가능한 목소리가 없어요.');
           const blob = await generateElevenTTS(val('el-api-key'), resolvedId, finalText);
           blobs.push(blob);
