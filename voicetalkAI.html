@@ -2681,9 +2681,15 @@ function openTagPopup(turnIdx, segIdx, mode, splitPos) {
       <button class="action-mode-btn" data-am="insert-after" type="button" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--bg-2);color:var(--text-dim);font-size:12px;cursor:pointer;font-family:inherit;">뒤에 추가</button>
     </div>` : '';
 
-  // 현재 엔진에 맞는 태그만 필터 (both = 둘 다 표시)
+  // 현재 엔진에 맞는 태그만 필터.
+  // ElevenLabs는 브라켓을 실제로 "공식 인식"하는지가 중요해서 both/eleven만 허용.
+  // Gemini는 태그를 브라켓째로 읽는 게 아니라 자연어 스타일 문장으로 변환해서 쓰기
+  // 때문에(segmentsToGeminiPrompt), eng 값과 무관하게 태그 151개 전부 사용 가능하다.
+  // eng:'gemini' 전용 태그가 테이블에 하나도 없어서, 예전 필터(both만 허용)로는
+  // 강도·피치·신체·공간 등 111개 태그 카테고리가 Gemini 모드에서 통째로 사라졌었다.
   function tagsForCat(catKey) {
-    return TAG_TABLE.filter(t => t.cat === catKey && (t.eng === 'both' || t.eng === currentEngine));
+    if (currentEngine === 'eleven') return TAG_TABLE.filter(t => t.cat === catKey && (t.eng === 'both' || t.eng === 'eleven'));
+    return TAG_TABLE.filter(t => t.cat === catKey);
   }
   const engineLabel = currentEngine === 'gemini' ? '🎙️ Gemini' : '🎤 ElevenLabs';
 
