@@ -1511,6 +1511,8 @@ const TAG_TABLE = [
   {ko:'사랑스럽게',   en:'love',          cat:'emotion_pos', eng:'gemini'},
   {ko:'공감하며',     en:'empathy',       cat:'emotion_pos', eng:'gemini'},
   {ko:'격려하며',     en:'encouraging',   cat:'emotion_pos', eng:'gemini'},
+  {ko:'감명받아',     en:'impressed',     cat:'emotion_pos', eng:'eleven'},
+  {ko:'기뻐하며',     en:'delighted',     cat:'emotion_pos', eng:'eleven'},
   // ── 부정 감정 ──────────────────────────────────────────────
   {ko:'슬픔',         en:'sorrowful',     cat:'emotion_neg', eng:'both'},
   {ko:'두려움',       en:'fearful',       cat:'emotion_neg', eng:'both'},
@@ -1531,6 +1533,10 @@ const TAG_TABLE = [
   {ko:'의심하며',     en:'doubt',         cat:'emotion_neg', eng:'gemini'},
   {ko:'혼란스럽게',   en:'confusion',     cat:'emotion_neg', eng:'gemini'},
   {ko:'지루하게',     en:'boredom',       cat:'emotion_neg', eng:'gemini'},
+  {ko:'슬프게',       en:'sad',           cat:'emotion_neg', eng:'eleven'},
+  {ko:'화나서',       en:'angry',         cat:'emotion_neg', eng:'eleven'},
+  {ko:'속상하게',     en:'upset',         cat:'emotion_neg', eng:'eleven'},
+  {ko:'짜증나서',     en:'annoyed',       cat:'emotion_neg', eng:'eleven'},
   // ── 중립·상황 감정 ─────────────────────────────────────────
   {ko:'차분함',       en:'calm',          cat:'emotion_neu', eng:'both'},
   {ko:'진지하게',     en:'serious',       cat:'emotion_neu', eng:'eleven'},
@@ -1546,6 +1552,8 @@ const TAG_TABLE = [
   {ko:'장난기 있게',  en:'mischievously', cat:'emotion_neu', eng:'both'},
   {ko:'침울하게',     en:'resigned tone', cat:'emotion_neu', eng:'eleven'},
   {ko:'후회하며',     en:'regretful',     cat:'emotion_neu', eng:'eleven'},
+  {ko:'광기 어리게',  en:'maniacally',    cat:'emotion_neu', eng:'eleven'},
+  {ko:'무덤덤하게(데드팬)', en:'deadpan', cat:'emotion_neu', eng:'eleven'},
   // ── 반응 / 비언어적 소리 ───────────────────────────────────
   {ko:'한숨',         en:'sighs',         cat:'reaction', eng:'both'},
   {ko:'웃음',         en:'laughs',        cat:'reaction', eng:'both'},
@@ -1563,6 +1571,9 @@ const TAG_TABLE = [
   {ko:'안도의 한숨',  en:'sigh of relief',cat:'reaction', eng:'eleven'},
   {ko:'경악',         en:'amazed',        cat:'reaction', eng:'both'},
   {ko:'호흡',         en:'breathes',      cat:'reaction', eng:'eleven'},
+  {ko:'훌쩍이며(칭얼)', en:'whimpering',  cat:'reaction', eng:'eleven'},
+  {ko:'헛기침',       en:'clears throat', cat:'reaction', eng:'eleven'},
+  {ko:'중얼거리며',   en:'muttering',     cat:'reaction', eng:'eleven'},
   // ── 페이싱 · 속도 ──────────────────────────────────────────
   {ko:'천천히',       en:'slowly',        cat:'pacing', eng:'both'},
   {ko:'빠르게',       en:'quickly',       cat:'pacing', eng:'both'},
@@ -1575,6 +1586,8 @@ const TAG_TABLE = [
   {ko:'길게 끌며',    en:'drawn out',     cat:'pacing', eng:'eleven'},
   {ko:'강조하며',     en:'emphasized',    cat:'pacing', eng:'both'},
   {ko:'조심스럽게 말하며', en:'timidly', cat:'pacing', eng:'eleven'},
+  {ko:'낮고 부드럽게', en:'softly',       cat:'pacing', eng:'eleven'},
+  {ko:'쩌렁쩌렁하게',  en:'booming',      cat:'pacing', eng:'eleven'},
   // ── 인지적 비트 · 쉼 ───────────────────────────────────────
   {ko:'잠시 멈춤',    en:'pauses',        cat:'cognitive', eng:'both'},
   {ko:'짧은 정지',    en:'short pause',   cat:'cognitive', eng:'gemini'},
@@ -1582,6 +1595,7 @@ const TAG_TABLE = [
   {ko:'머뭇거림',     en:'hesitates',     cat:'cognitive', eng:'both'},
   {ko:'말 더듬음',    en:'stammers',      cat:'cognitive', eng:'both'},
   {ko:'생각하며',     en:'thoughtfully',  cat:'cognitive', eng:'both'},
+  {ko:'정지(공식 pause)', en:'pause',     cat:'cognitive', eng:'eleven'},
   // ── 신체 · 생리 상태 ───────────────────────────────────────
   {ko:'목이 메어',    en:'voice cracking with emotion', cat:'body', eng:'gemini'},
   {ko:'숨이 가쁘게',  en:'breathlessly',  cat:'body', eng:'gemini'},
@@ -1590,6 +1604,7 @@ const TAG_TABLE = [
   {ko:'잠긴 목소리로',en:'with a hoarse voice', cat:'body', eng:'gemini'},
   {ko:'심장이 두근거리며', en:'heart pounding', cat:'body', eng:'gemini'},
   {ko:'눈물 참으며',  en:'holding back tears', cat:'body', eng:'gemini'},
+  {ko:'목이 메어 울먹이며', en:'choking up', cat:'body', eng:'eleven'},
   // ── 공간 · 거리감 ──────────────────────────────────────────
   {ko:'가까이서 속삭이듯', en:'intimately close, whispering', cat:'space', eng:'gemini'},
   {ko:'멀리서 외치듯', en:'calling from a distance', cat:'space', eng:'gemini'},
@@ -1617,9 +1632,71 @@ const TAG_TABLE = [
   {ko:'영국식 억양',  en:'British accent', cat:'accent', eng:'both'},
   {ko:'미국식 억양',  en:'American accent', cat:'accent', eng:'both'},
   {ko:'중립적 억양',  en:'neutral accent', cat:'accent', eng:'both'},
+  // ── 억양 강도 (ElevenLabs v3 공식 포맷: [strong X accent] / [slight X accent]) ──
+  {ko:'짙은 영국식 억양', en:'strong British accent', cat:'accent', eng:'eleven'},
+  {ko:'살짝 영국식 억양', en:'slight British accent', cat:'accent', eng:'eleven'},
+  {ko:'짙은 미국식 억양', en:'strong American accent', cat:'accent', eng:'eleven'},
+  {ko:'살짝 미국식 억양', en:'slight American accent', cat:'accent', eng:'eleven'},
+  {ko:'짙은 프랑스 억양', en:'strong French accent',  cat:'accent', eng:'eleven'},
+  {ko:'짙은 독일 억양',   en:'strong German accent',  cat:'accent', eng:'eleven'},
+  // ── 캐릭터 보이스 ────────────────────────────────────────────
+  {ko:'해적 목소리',   en:'pirate voice', cat:'character', eng:'eleven'},
+  // ── 음향효과 SFX (ElevenLabs v3 공식 태그) ────────────────────
+  {ko:'박수',         en:'applause',    cat:'sfx', eng:'eleven'},
+  {ko:'박수 치는 소리', en:'clapping',   cat:'sfx', eng:'eleven'},
+  {ko:'총소리',       en:'gunshot',     cat:'sfx', eng:'eleven'},
+  {ko:'폭발음',       en:'explosion',   cat:'sfx', eng:'eleven'},
+  {ko:'삼키는 소리',  en:'swallows',    cat:'sfx', eng:'eleven'},
+  {ko:'노래하듯',     en:'sings',       cat:'sfx', eng:'eleven'},
+  {ko:'환호(우~)',    en:'woo',         cat:'sfx', eng:'eleven'},
+  // ── 대화 연출 (다중 화자용) ─────────────────────────────────
+  {ko:'끼어들며',     en:'interrupting',      cat:'dialogue', eng:'eleven'},
+  {ko:'겹쳐 말하며',   en:'overlapping',       cat:'dialogue', eng:'eleven'},
+  {ko:'막 말을 시작하며', en:'beginning to speak', cat:'dialogue', eng:'eleven'},
 ];
 const KO2EN = {}; const EN2KO = {};
 TAG_TABLE.forEach(t => { KO2EN[t.ko] = t.en; EN2KO[t.en] = t.ko; });
+const EN2TAGINFO = {};
+TAG_TABLE.forEach(t => { EN2TAGINFO[t.en] = { cat: t.cat, eng: t.eng }; });
+/* ElevenLabs는 못 알아듣는 Gemini 전용 태그를, 가장 비슷한 ElevenLabs 인식 태그로
+   자동 치환하기 위한 대응표. 매핑이 없는(주로 intensity/pitch 계열) 태그는
+   억지로 대체하지 않고 통째로 드랍한다 — ElevenLabs에서 세기·피치 곡선은
+   태그가 아니라 대문자·문장부호로 표현하는 게 정석이기 때문. */
+const GEMINI_TO_ELEVEN_FALLBACK = {
+  // 긍정 감정
+  'joy':'happily', 'enthusiasm':'excited', 'confidence':'deliberate', 'hope':'warmly', 'optimism':'warmly',
+  'satisfaction':'calm', 'gratitude':'warmly', 'anticipation':'excited', 'interest':'curious', 'enjoyment':'playfully',
+  'admiration':'amazed', 'awe':'amazed', 'love':'warmly', 'empathy':'warmly', 'encouraging':'warmly',
+  // 부정 감정
+  'horror':'fearful', 'anxiety':'nervous', 'disappointment':'sorrowful', 'disgust':'angrily', 'contempt':'sarcastically',
+  'annoyance':'frustrated', 'disapproval':'serious', 'pain':'crying', 'embarrassment':'nervous', 'doubt':'thoughtfully',
+  'confusion':'hesitates', 'boredom':'tired',
+  // 중립·상황
+  'neutral':'calm', 'positive':'warmly', 'negative':'serious', 'caution':'timidly', 'sympathy':'warmly',
+  'approval':'calm', 'determination':'deliberate', 'surprise':'gasps',
+  // 신체
+  'voice trembling':'trembling', 'voice cracking with emotion':'crying',
+  // 피치 (일부만 근접 대체 가능)
+  'monotone, flat delivery':'calm',
+};
+/* segs를 ElevenLabs가 실제로 이해할 수 있는 형태로 정리:
+   - eleven/both 태그는 그대로
+   - gemini 전용 태그는 대응표가 있으면 치환, 없으면 드랍
+   - 태그 테이블에 없는 자유 표현(unknown)도 드랍 (검증 안 된 표현이라 그대로 두면 텍스트로 읽혀버림)
+   드랍/치환된 항목은 통계로 반환해서 사용자에게 알려줄 수 있게 함 */
+function segmentsToElevenSafeText(segs) {
+  const substituted = []; const dropped = [];
+  const text = segs.map(s => {
+    if (s.type !== 'tag') return s.value;
+    const info = s.known ? EN2TAGINFO[s.en] : null;
+    if (!info) { dropped.push(s.ko); return ''; }
+    if (info.eng === 'eleven' || info.eng === 'both') return `[${s.en}]`;
+    const fallback = GEMINI_TO_ELEVEN_FALLBACK[s.en];
+    if (fallback) { substituted.push({ ko: s.ko, from: s.en, to: fallback }); return `[${fallback}]`; }
+    dropped.push(s.ko); return '';
+  }).join('');
+  return { text, substituted, dropped };
+}
 const TAG_CATS = [
   {key:'emotion_pos', label:'😊 긍정 감정'},
   {key:'emotion_neg', label:'😢 부정 감정'},
@@ -1632,6 +1709,9 @@ const TAG_CATS = [
   {key:'body',        label:'🫁 신체 · 생리 상태'},
   {key:'space',       label:'🏠 공간 · 거리감'},
   {key:'accent',      label:'🌍 억양(발음)'},
+  {key:'character',   label:'🎭 캐릭터 보이스'},
+  {key:'sfx',         label:'💥 음향효과(SFX)'},
+  {key:'dialogue',    label:'🗣 대화 연출(다중 화자)'},
 ];
 
 const VOICES = [
@@ -2115,7 +2195,7 @@ function buildExportBodyForTurn(turn, engine) {
     const { prompt, text } = segmentsToGeminiPrompt(turn.segs);
     return `prompt: "${prompt}"\ntext: "${text}"`;
   }
-  return segmentsToEnglishText(turn.segs);
+  return segmentsToElevenSafeText(turn.segs).text;
 }
 function buildExportTextForTurn(turn, engine) {
   // 전체 복사용 — 화자 라벨 포함
@@ -2134,6 +2214,33 @@ function openExportModal() {
         <div class="export-turn-text">${esc(buildExportBodyForTurn(t, engine))}</div>
       </div>`).join('');
     overlay.querySelector('.export-body').innerHTML = turnsHtml;
+
+    // ElevenLabs 탭일 때만: 어떤 태그가 치환/드랍됐는지 요약해서 보여줌
+    const statsEl = overlay.querySelector('#export-stats');
+    if (engine === 'eleven') {
+      const allSub = []; const allDrop = [];
+      previewTurns.forEach(t => {
+        const r = segmentsToElevenSafeText(t.segs);
+        allSub.push(...r.substituted); allDrop.push(...r.dropped);
+      });
+      let html = '';
+      if (allSub.length) {
+        const uniqueSub = [...new Map(allSub.map(s => [s.ko, s])).values()];
+        html += `<div style="margin-bottom:4px;">🔄 <b>${uniqueSub.length}개</b> 태그를 ElevenLabs가 알아듣는 단어로 자동 치환했어요: ` +
+          uniqueSub.map(s => `<code>${esc(s.ko)}</code>→<code>[${esc(s.to)}]</code>`).join(', ') + `</div>`;
+      }
+      if (allDrop.length) {
+        const uniqueDrop = [...new Set(allDrop)];
+        html += `<div>🗑 <b>${uniqueDrop.length}개</b> 태그는 대응하는 ElevenLabs 태그가 없어서 뺐어요: ` +
+          uniqueDrop.map(k => `<code>${esc(k)}</code>`).join(', ') +
+          ` — 세기·억양 곡선은 태그 대신 <b>대문자</b>나 <b>말줄임표(…)</b>, <b>느낌표</b> 같은 문장부호로 표현하는 게 ElevenLabs의 정석이에요.</div>`;
+      }
+      if (!allSub.length && !allDrop.length) html = '✅ 모든 태그가 ElevenLabs가 그대로 인식하는 태그예요.';
+      statsEl.innerHTML = html;
+      statsEl.style.display = '';
+    } else {
+      statsEl.style.display = 'none';
+    }
   };
   overlay.innerHTML = `
     <div class="confirm-box export-box">
@@ -2143,6 +2250,7 @@ function openExportModal() {
         <button type="button" data-eng="eleven" class="active">🎤 ElevenLabs v3 (브라켓 태그)</button>
         <button type="button" data-eng="gemini">🎙️ Gemini (자연어 prompt)</button>
       </div>
+      <div class="export-note" id="export-stats" style="margin-bottom:10px;"></div>
       <div class="export-body"></div>
       <button type="button" class="export-copy-all">📋 전체 복사</button>
       <div class="export-note" id="export-note-text"></div>
