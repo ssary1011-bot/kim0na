@@ -518,6 +518,34 @@
   .confirm-cancel { background: var(--bg-2); color: var(--text-dim) !important; }
   .confirm-ok { background: var(--accent); color: #fff; }
 
+  /* ── 프롬프트 내보내기 모달 ── */
+  .export-box { max-width: 620px; }
+  .export-engine-toggle { display:flex; gap:6px; margin-bottom:12px; }
+  .export-engine-toggle button { flex:1; padding:9px; border-radius: var(--radius); border:1.5px solid var(--border-strong); background: var(--bg-2); color: var(--text-dim); font-weight:700; font-size:12.5px; cursor:pointer; font-family:inherit; }
+  .export-engine-toggle button.active { background: var(--accent); color:#fff; border-color: var(--accent); }
+  .export-turn-block { background: var(--bg-2); border:1.5px solid var(--border); border-radius:8px; padding:10px 12px; margin-bottom:8px; }
+  .export-turn-speaker { font-size:11px; font-weight:800; color: var(--accent); margin-bottom:4px; }
+  .export-turn-text { font-size:13px; line-height:1.6; white-space:pre-wrap; font-family:'SF Mono',Menlo,monospace; }
+  .export-copy-all { width:100%; margin-top:10px; padding:11px; border-radius: var(--radius); border:2px solid var(--accent); background: var(--accent); color:#fff; font-weight:800; font-size:13.5px; cursor:pointer; font-family:inherit; }
+  .export-note { font-size:11.5px; color: var(--text-faint); margin-top:8px; line-height:1.6; }
+
+  /* ── Voice Design 프롬프트 도우미 ── */
+  .vd-box { max-width: 640px; }
+  .vd-field { margin-bottom: 12px; }
+  .vd-field label { display:block; font-size:12px; font-weight:700; color: var(--text-dim); margin-bottom:5px; }
+  .vd-field input[type="text"], .vd-field select, .vd-field textarea {
+    width:100%; background: var(--bg-2); border:1.5px solid var(--border-strong); border-radius:8px; color: var(--text); padding:9px 11px; font-size:13.5px; font-family:inherit;
+  }
+  .vd-field textarea { resize: vertical; min-height: 54px; }
+  .vd-row2 { display:flex; gap:8px; }
+  .vd-row2 > .vd-field { flex:1; }
+  .vd-hint { font-size:11px; color: var(--text-faint); margin-top:4px; line-height:1.5; }
+  .vd-result-box { background: var(--bg-2); border:1.5px solid var(--accent); border-radius:8px; padding:12px; margin-top:14px; }
+  .vd-result-title { font-size:11.5px; font-weight:800; color: var(--accent); margin-bottom:6px; }
+  .vd-result-text { font-size:13px; line-height:1.65; white-space:pre-wrap; font-family:'SF Mono',Menlo,monospace; }
+  .vd-copy-btn { margin-top:10px; width:100%; padding:10px; border-radius: var(--radius); border:2px solid var(--accent); background: var(--accent); color:#fff; font-weight:800; font-size:13px; cursor:pointer; font-family:inherit; }
+  .vd-goto-link { display:block; text-align:center; margin-top:8px; font-size:12px; color: var(--accent); text-decoration: underline; }
+
   .result-card { background: var(--surface); border: 2px solid var(--border-strong); border-radius: var(--radius); padding: 22px 20px; box-shadow: var(--card-shadow); }
   .voice-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--accent); color: #fff; padding: 5px 10px; border-radius: 3px; font-size: 11.5px; font-weight: 700; margin-bottom: 8px; margin-right:6px; }
   .voice-reason { color: var(--text-dim); font-size: 12.5px; margin-bottom: 16px; padding: 10px 12px; background: var(--bg); border-radius: var(--radius); border-left: 4px solid var(--accent); }
@@ -648,6 +676,9 @@
   .el-voice-row.playing { border-color: var(--success); }
   .el-voice-info { flex: 1; }
   .el-voice-name { font-size: 13px; font-weight: 800; color: var(--text); }
+  .el-voice-cat-badge { font-size: 9.5px; font-weight: 700; padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: middle; }
+  .el-voice-cat-badge.free { background: var(--success); color: #fff; }
+  .el-voice-cat-badge.paid { background: var(--text-faint); color: #fff; }
   .el-voice-meta { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
   .el-voice-play {
     width: 34px; height: 34px; background: var(--bg-2); border: 1.5px solid var(--border-strong);
@@ -1169,6 +1200,7 @@
     <div id="result-content"></div>
     <div class="action-row">
       <button id="btn-download" class="action-btn primary" type="button">💾 음성 저장</button>
+      <button id="btn-export-prompt" class="action-btn" type="button">📋 프롬프트 내보내기</button>
       <button id="btn-edit-script" class="action-btn" type="button">✏️ 대본 계속 수정</button>
       <button id="btn-restart" class="action-btn" type="button">🔄 새로 만들기</button>
     </div>
@@ -1232,11 +1264,27 @@
           <div id="va-eleven-loading" class="voices-loading" style="display:none;">
             <span class="va-spinner"></span>목소리 목록 불러오는 중…
           </div>
+          <div id="va-eleven-premade-bar" style="display:none;margin-bottom:10px;">
+            <div class="voices-filter-row" style="margin-bottom:6px;">
+              <button class="va-eleven-cat-filter active" data-cat="premade" type="button">🆓 프리메이드만 (무료 플랜 OK)</button>
+              <button class="va-eleven-cat-filter" data-cat="all" type="button">전체 보기</button>
+            </div>
+            <a class="voice-lib-link" href="https://elevenlabs.io/app/voice-lab" target="_blank" rel="noopener">🎧 ElevenLabs에서 프리메이드 목소리 바로 듣기</a>
+            <div class="hint">무료 플랜은 <b>프리메이드(기본 제공) 목소리</b>만 API로 쓸 수 있어요. 라이브러리에서 가져온 목소리는 "내 보이스"에 추가해도 유료 플랜부터 API 사용이 가능해요. 위 링크를 누르면 ElevenLabs 사이트에서 내 계정의 프리메이드 목소리를 바로 들어볼 수 있어요. 단, 2026년 3월 이후 새로 만든 계정은 프리메이드 목소리가 아예 없을 수 있어요 — 그럴 땐 유료 플랜이 필요해요.</div>
+          </div>
           <div id="va-eleven-list" class="el-voice-list" style="display:none;"></div>
         </div>
 
         <!-- 라이브러리 검색 (ElevenLabs 공용 보이스 라이브러리) -->
         <div id="va-eleven-library" style="display:none;">
+          <div class="voice-reason" style="margin-bottom:12px;">
+            💡 <b>"무료로 쓸 수 있는 라이브러리 목소리"를 모아둔 사이트는 없어요</b> — 자물쇠 아이콘 유무와 무관하게, 라이브러리(남이 공유한) 목소리는 통째로 무료 플랜 API에서 막혀 있거든요. 요금제와 상관없이 되는 건 딱 두 가지뿐이에요: ① 계정에 원래 있는 프리메이드 목소리, ② <b>Voice Design</b>으로 직접 텍스트 설명으로 새로 만든 목소리(무료 플랜 포함 기능).
+            <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+              <button id="el-lib-goto-premade" type="button" class="preset-tag" style="cursor:pointer;">🆓 내 프리메이드 목소리 보러가기</button>
+              <a class="voice-lib-link" href="https://elevenlabs.io/app/voice-lab" target="_blank" rel="noopener">🎨 Voice Design으로 새 목소리 만들기</a>
+              <button id="btn-open-voice-design" type="button" class="preset-tag" style="cursor:pointer;">🧬 프롬프트 도우미로 만들기</button>
+            </div>
+          </div>
           <div class="el-lib-filters">
             <div class="el-lib-search-row">
               <input id="el-lib-search" type="text" placeholder="예: 차분한 여자, 어린 소년, 내레이터 …" maxlength="80">
@@ -2043,6 +2091,243 @@ function segmentsToEnglishText(segs) {
   // 실제 TTS 전송용 — known 태그는 영어로, unknown은 한글 그대로(나중에 확인모달에서 치환됨)
   return segs.map(s => s.type==='tag' ? `[${s.en}]` : s.value).join('');
 }
+/* ── 프롬프트 내보내기: ElevenLabs / Gemini 형식 ──────────────
+   ElevenLabs v3: 문장 안에 [bracket] 태그를 그대로 끼워서 사용 (segmentsToEnglishText와 동일)
+   Gemini TTS: 브라켓 태그 대신 "Say the following in a ~ way:" 형태의
+   자연어 style prompt를 앞에 붙이고, 본문 텍스트는 태그를 뺀 순수 대사만 둠 */
+function segmentsToPlainText(segs) {
+  return segs.filter(s => s.type !== 'tag').map(s => s.value).join('').replace(/\s+/g,' ').trim();
+}
+function segmentsToGeminiPrompt(segs) {
+  const seen = new Set();
+  const styleWords = [];
+  segs.forEach(s => {
+    if (s.type === 'tag' && s.en && !seen.has(s.en)) { seen.add(s.en); styleWords.push(s.en); }
+  });
+  const plain = segmentsToPlainText(segs);
+  if (styleWords.length === 0) return { prompt: 'Say the following naturally:', text: plain };
+  return { prompt: `Say the following in a ${styleWords.join(', ')} way:`, text: plain };
+}
+function buildExportBodyForTurn(turn, engine) {
+  // 화자 라벨 없이 순수 프롬프트 본문만 반환 (모달 렌더링용)
+  if (engine === 'gemini') {
+    const { prompt, text } = segmentsToGeminiPrompt(turn.segs);
+    return `prompt: "${prompt}"\ntext: "${text}"`;
+  }
+  return segmentsToEnglishText(turn.segs);
+}
+function buildExportTextForTurn(turn, engine) {
+  // 전체 복사용 — 화자 라벨 포함
+  const speakerPart = turn.speakerLabel ? `${turn.speakerLabel}${turn.voice ? ' ('+turn.voice+')' : ''}\n` : '';
+  return `${speakerPart}${buildExportBodyForTurn(turn, engine)}`;
+}
+function openExportModal() {
+  if (!previewTurns || previewTurns.length === 0) { showVaToast('⚠️ 내보낼 대본이 없어요'); return; }
+  let engine = 'eleven';
+  const overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
+  const render = () => {
+    const turnsHtml = previewTurns.map(t => `
+      <div class="export-turn-block">
+        ${t.speakerLabel ? `<div class="export-turn-speaker">${esc(t.speakerLabel)}${t.voice ? ' · '+esc(t.voice) : ''}</div>` : ''}
+        <div class="export-turn-text">${esc(buildExportBodyForTurn(t, engine))}</div>
+      </div>`).join('');
+    overlay.querySelector('.export-body').innerHTML = turnsHtml;
+  };
+  overlay.innerHTML = `
+    <div class="confirm-box export-box">
+      <div class="confirm-title">📋 프롬프트 내보내기</div>
+      <div class="confirm-sub">지금 만든 대본을 TTS 엔진별 프롬프트 형식으로 뽑아드려요. 원하는 엔진을 선택하세요.</div>
+      <div class="export-engine-toggle">
+        <button type="button" data-eng="eleven" class="active">🎤 ElevenLabs v3 (브라켓 태그)</button>
+        <button type="button" data-eng="gemini">🎙️ Gemini (자연어 prompt)</button>
+      </div>
+      <div class="export-body"></div>
+      <button type="button" class="export-copy-all">📋 전체 복사</button>
+      <div class="export-note" id="export-note-text"></div>
+      <div class="confirm-actions" style="margin-top:14px;">
+        <button class="confirm-cancel" type="button" id="export-close-btn">닫기</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+  const noteEl = overlay.querySelector('#export-note-text');
+  const updateNote = () => {
+    noteEl.textContent = engine === 'eleven'
+      ? 'ElevenLabs 사이트/앱의 Text to Speech(모델: eleven_v3) 입력창에 그대로 붙여넣으면 돼요.'
+      : 'Gemini API 호출 시 prompt 필드와 text 필드를 나눠서 넣거나, "prompt: text" 형태 그대로 이어붙여서 사용하세요. 자동 생성된 스타일 단어는 참고용이라 필요하면 더 자연스러운 문장으로 다듬어 쓰면 더 잘 먹혀요.';
+  };
+  render(); updateNote();
+  overlay.querySelectorAll('.export-engine-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      engine = btn.dataset.eng;
+      overlay.querySelectorAll('.export-engine-toggle button').forEach(b => b.classList.toggle('active', b===btn));
+      render(); updateNote();
+    });
+  });
+  overlay.querySelector('.export-copy-all').addEventListener('click', () => {
+    const fullText = previewTurns.map(t => buildExportTextForTurn(t, engine)).join('\n\n');
+    copyTextToClipboard(fullText);
+    showVaToast('📋 복사했어요!');
+  });
+  overlay.querySelector('#export-close-btn').addEventListener('click', () => overlay.remove());
+}
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  ta.remove();
+}
+
+/* ============================================================
+   Voice Design 프롬프트 도우미
+   ElevenLabs 공식 가이드의 추천 포맷을 그대로 따름:
+   "Native <Language>. <Gender>, <Age range>. <Quality level>.
+    Persona: <2-5 words>. Emotion: <2-3 adjectives>.
+    <1-2 sentences about timbre, pacing, delivery>"
+   ============================================================ */
+const VD_QUALITY_OPTS = ['Ok quality','Good quality','Very good quality','Excellent quality','Studio quality','Broadcast quality'];
+const VD_LOFI_OPTS = [
+  {v:'', label:'없음 (기본 깨끗한 음질)'},
+  {v:'Low-fidelity audio, like a phone call.', label:'📞 전화 통화 느낌'},
+  {v:'Muffled and distant, like on an old tape recorder.', label:'📻 옛날 라디오/테이프 느낌'},
+  {v:'Sounds like a voicemail.', label:'📼 음성메시지 느낌'},
+];
+function buildVoiceDesignPrompt(f) {
+  const lang = f.language.trim() || 'Korean';
+  const accentPhrase = f.accent.trim() ? `, spoken with a ${f.accent.trim()}` : '';
+  const gender = f.gender;
+  const age = f.age.trim() || '30s';
+  const quality = f.quality;
+  const persona = f.persona.trim() || 'friendly narrator';
+  const emotion = f.emotion.trim() || 'calm, warm';
+  const body = f.body.trim() || 'Smooth, natural timbre with a relaxed, conversational pace.';
+  const lofi = f.lofi ? ' ' + f.lofi : '';
+  const prompt = `Native ${lang}${accentPhrase}. ${gender}, ${age}. ${quality}.\nPersona: ${persona}. Emotion: ${emotion}.\n${body}${lofi}`;
+  const preview = f.preview.trim();
+  return { prompt, preview };
+}
+function openVoiceDesignModal() {
+  const overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay';
+  overlay.innerHTML = `
+    <div class="confirm-box vd-box">
+      <div class="confirm-title">🧬 목소리 만들기 — 프롬프트 도우미</div>
+      <div class="confirm-sub">아래 항목을 채우면 ElevenLabs Voice Design 공식 추천 형식에 맞춰 프롬프트를 만들어드려요. 완성되면 복사해서 ElevenLabs Voice Design 페이지의 "Voice description"과 "Text to preview" 칸에 각각 붙여넣으세요.</div>
+
+      <div class="vd-row2">
+        <div class="vd-field">
+          <label>언어</label>
+          <input type="text" id="vd-language" placeholder="예: Korean, English" value="Korean">
+        </div>
+        <div class="vd-field">
+          <label>성별</label>
+          <select id="vd-gender">
+            <option value="Female">여성 (Female)</option>
+            <option value="Male">남성 (Male)</option>
+            <option value="Gender-neutral">중성 (Gender-neutral)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="vd-row2">
+        <div class="vd-field">
+          <label>나이대</label>
+          <input type="text" id="vd-age" placeholder="예: 20s, 35-40, elderly">
+        </div>
+        <div class="vd-field">
+          <label>음질 수준</label>
+          <select id="vd-quality">${VD_QUALITY_OPTS.map(q=>`<option value="${esc(q)}">${esc(q)}</option>`).join('')}</select>
+        </div>
+      </div>
+
+      <div class="vd-field">
+        <label>페르소나 (2~5 단어) <span style="color:var(--text-faint);font-weight:400;">— 어떤 캐릭터/역할인지</span></label>
+        <input type="text" id="vd-persona" placeholder="예: reliable support agent, grumpy old pirate, playful little sister">
+      </div>
+
+      <div class="vd-field">
+        <label>감정 (2~3 형용사, 쉼표로 구분)</label>
+        <input type="text" id="vd-emotion" placeholder="예: reassuring, attentive, confident">
+      </div>
+
+      <div class="vd-field">
+        <label>음색·속도·전달 방식 (1~2문장)</label>
+        <textarea id="vd-body" placeholder="예: Deep, gravelly timbre with a slow, deliberate pace and dry, sarcastic delivery."></textarea>
+        <div class="vd-hint">tone/timbre(예: deep, raspy, breathy, warm)·pacing(예: fast-paced, drawn out)를 자유롭게 문장으로 써주세요.</div>
+      </div>
+
+      <div class="vd-field">
+        <label>억양 (선택)</label>
+        <input type="text" id="vd-accent" placeholder="예: thick Southern American accent, slight British accent">
+        <div class="vd-hint">⚠️ "억양(intonation)"을 말하고 싶을 땐 accent라는 단어 대신 intonation/emphasis 같은 표현을 쓰는 게 더 안전해요 — accent라는 단어는 지역 방언을 유발할 수 있어요.</div>
+      </div>
+
+      <div class="vd-field">
+        <label>음질 연출 (선택)</label>
+        <select id="vd-lofi">${VD_LOFI_OPTS.map(o=>`<option value="${esc(o.v)}">${esc(o.label)}</option>`).join('')}</select>
+      </div>
+
+      <div class="vd-field">
+        <label>미리듣기 텍스트 (Text to preview)</label>
+        <textarea id="vd-preview" placeholder="위에서 설명한 톤과 어울리는 대사를 써주세요. 짧은 한 마디보다 한두 문장이 더 안정적인 결과를 줘요."></textarea>
+        <div class="vd-hint">예: 침착한 목소리를 만들고 싶다면 "요즘 좀 조용했어요… 생각할 시간이 필요했나 봐요." 처럼 설명과 어울리는 대사를 써주세요.</div>
+      </div>
+
+      <div class="vd-result-box">
+        <div class="vd-result-title">✨ 완성된 Voice description 프롬프트</div>
+        <div class="vd-result-text" id="vd-result-prompt"></div>
+        <button type="button" class="vd-copy-btn" id="vd-copy-prompt">📋 이 프롬프트 복사</button>
+      </div>
+      <div class="vd-result-box" id="vd-preview-box" style="display:none;">
+        <div class="vd-result-title">🗣 Text to preview</div>
+        <div class="vd-result-text" id="vd-result-preview"></div>
+        <button type="button" class="vd-copy-btn" id="vd-copy-preview">📋 미리듣기 텍스트 복사</button>
+      </div>
+      <a class="vd-goto-link" href="https://elevenlabs.io/app/voice-lab" target="_blank" rel="noopener">🎨 ElevenLabs Voice Design 페이지 열기 →</a>
+
+      <div class="confirm-actions" style="margin-top:14px;">
+        <button class="confirm-cancel" type="button" id="vd-close-btn">닫기</button>
+      </div>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  const ids = ['vd-language','vd-gender','vd-age','vd-quality','vd-persona','vd-emotion','vd-body','vd-accent','vd-lofi','vd-preview'];
+  const els = {}; ids.forEach(id => els[id] = overlay.querySelector('#'+id));
+  const resultPromptEl = overlay.querySelector('#vd-result-prompt');
+  const resultPreviewEl = overlay.querySelector('#vd-result-preview');
+  const previewBox = overlay.querySelector('#vd-preview-box');
+  const update = () => {
+    const { prompt, preview } = buildVoiceDesignPrompt({
+      language: els['vd-language'].value, gender: els['vd-gender'].value, age: els['vd-age'].value,
+      quality: els['vd-quality'].value, persona: els['vd-persona'].value, emotion: els['vd-emotion'].value,
+      body: els['vd-body'].value, accent: els['vd-accent'].value, lofi: els['vd-lofi'].value, preview: els['vd-preview'].value
+    });
+    resultPromptEl.textContent = prompt;
+    if (preview) { resultPreviewEl.textContent = preview; previewBox.style.display = ''; }
+    else { previewBox.style.display = 'none'; }
+  };
+  ids.forEach(id => els[id].addEventListener('input', update));
+  ids.forEach(id => els[id].addEventListener('change', update));
+  update();
+
+  overlay.querySelector('#vd-copy-prompt').addEventListener('click', () => {
+    copyTextToClipboard(resultPromptEl.textContent);
+    showVaToast('📋 프롬프트 복사했어요!');
+  });
+  overlay.querySelector('#vd-copy-preview').addEventListener('click', () => {
+    copyTextToClipboard(resultPreviewEl.textContent);
+    showVaToast('📋 미리듣기 텍스트 복사했어요!');
+  });
+  overlay.querySelector('#vd-close-btn').addEventListener('click', () => overlay.remove());
+}
 
 /* ============================================================
    7. 미리보기 화면 — 턴 데이터 구조: [{speaker, ko, segs}]
@@ -2783,6 +3068,7 @@ document.getElementById('btn-download').addEventListener('click', () => {
     a.click();
   });
 });
+document.getElementById('btn-export-prompt').addEventListener('click', openExportModal);
 /* 결과 화면에서 태그 편집을 계속 이어갈 수 있도록 미리보기 화면으로 복귀
    (previewTurns는 메모리에 그대로 남아있으므로 재생성 없이 편집 지속 가능) */
 document.getElementById('btn-edit-script').addEventListener('click', () => {
@@ -2911,6 +3197,13 @@ document.getElementById('va-eng-eleven').addEventListener('click', () => {
 /* ElevenLabs 서브탭 전환: 내 보이스 ↔ 라이브러리 검색 */
 document.getElementById('el-subtab-mine').addEventListener('click', () => switchElSubTab('mine'));
 document.getElementById('el-subtab-search').addEventListener('click', () => switchElSubTab('search'));
+document.getElementById('el-lib-goto-premade').addEventListener('click', () => {
+  switchElSubTab('mine');
+  vaElevenCatFilter = 'premade';
+  document.querySelectorAll('.va-eleven-cat-filter').forEach(b => b.classList.toggle('active', b.dataset.cat === 'premade'));
+  renderElevenVoiceList(getFilteredElevenVoices());
+});
+document.getElementById('btn-open-voice-design').addEventListener('click', openVoiceDesignModal);
 
 function switchElSubTab(tab) {
   vaElSubTab = tab;
@@ -3169,19 +3462,25 @@ function renderVaGeminiGrid() {
 }
 
 /* ElevenLabs 보이스 목록 로드 및 렌더 */
+let vaElevenAllVoices = [];
+let vaElevenCatFilter = 'premade'; // 기본: 무료 플랜에서도 바로 쓸 수 있는 프리메이드만 보여주기
+
 async function tryLoadElevenVoiceList() {
   const apiKey = vaElevenKey();
   const noKey = document.getElementById('va-eleven-no-key');
   const loading = document.getElementById('va-eleven-loading');
   const list = document.getElementById('va-eleven-list');
+  const premadeBar = document.getElementById('va-eleven-premade-bar');
 
-  if (!apiKey) { noKey.style.display=''; loading.style.display='none'; list.style.display='none'; return; }
-  noKey.style.display='none'; loading.style.display=''; list.style.display='none';
+  if (!apiKey) { noKey.style.display=''; loading.style.display='none'; list.style.display='none'; premadeBar.style.display='none'; return; }
+  noKey.style.display='none'; loading.style.display=''; list.style.display='none'; premadeBar.style.display='none';
   try {
     const voices = await loadElevenVoices(apiKey);
+    vaElevenAllVoices = voices;
     loading.style.display = 'none';
     list.style.display = '';
-    renderElevenVoiceList(voices);
+    premadeBar.style.display = '';
+    renderElevenVoiceList(getFilteredElevenVoices());
   } catch(e) {
     loading.style.display = 'none';
     noKey.style.display = '';
@@ -3189,15 +3488,38 @@ async function tryLoadElevenVoiceList() {
   }
 }
 
+function getFilteredElevenVoices() {
+  if (vaElevenCatFilter === 'premade') {
+    const premade = vaElevenAllVoices.filter(v => v.category === 'premade');
+    return premade; // 비어있으면 renderElevenVoiceList에서 안내 문구 표시
+  }
+  return vaElevenAllVoices;
+}
+
+document.querySelectorAll('.va-eleven-cat-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    vaElevenCatFilter = btn.dataset.cat;
+    document.querySelectorAll('.va-eleven-cat-filter').forEach(b => b.classList.toggle('active', b === btn));
+    renderElevenVoiceList(getFilteredElevenVoices());
+  });
+});
+
 function renderElevenVoiceList(voices) {
   const list = document.getElementById('va-eleven-list');
+  if (!voices.length) {
+    list.innerHTML = `<div class="voices-no-key">${vaElevenCatFilter === 'premade'
+      ? '이 계정에는 프리메이드(기본 제공) 목소리가 없어요.<br>2026년 3월 이후 새로 만든 계정이라 애초에 프리메이드 목소리가 지급되지 않았을 가능성이 커요.<br><br>👉 이 경우 무료로 목소리를 확보하는 유일한 방법은 <b>Voice Design</b>이에요 — 라이브러리에서 남의 목소리를 가져오는 게 아니라, 텍스트로 원하는 톤을 설명하면 무료 플랜에서도 새 목소리를 만들어주는 기능이에요(무료 플랜에 포함됨). 만든 목소리는 "라이브러리 추가"가 아니라 "내가 만든 것"이라 무료 API 생성에 제한이 없어요.<br><br><a class="voice-lib-link" href="https://elevenlabs.io/app/voice-lab" target="_blank" rel="noopener">🎨 elevenlabs.io에서 Voice Design으로 목소리 만들기</a> (접속 후 "Add a new voice" → "Voice Design" 선택)'
+      : '표시할 목소리가 없어요.'}</div>`;
+    return;
+  }
   list.innerHTML = voices.map(v => {
     const isSelected = vaSelectedVoice && vaSelectedVoice.engine === 'eleven' && vaSelectedVoice.voiceId === v.voice_id;
     const isPlaying = vaCurrentPlayingId === 'el_' + v.voice_id;
     const labels = v.labels ? Object.values(v.labels).join(' · ') : '';
+    const catBadge = v.category === 'premade' ? '<span class="el-voice-cat-badge free">🆓 프리메이드</span>' : '<span class="el-voice-cat-badge paid">💳 라이브러리(유료 플랜 필요)</span>';
     return `<div class="el-voice-row${isSelected?' selected':''}${isPlaying?' playing':''}" data-vid="${esc(v.voice_id)}" data-vname="${esc(v.name)}">
       <div class="el-voice-info">
-        <div class="el-voice-name">${esc(v.name)}</div>
+        <div class="el-voice-name">${esc(v.name)} ${catBadge}</div>
         ${labels ? `<div class="el-voice-meta">${esc(labels)}</div>` : ''}
       </div>
       <button class="el-voice-play" data-play="${esc(v.voice_id)}" type="button" title="들어보기">
