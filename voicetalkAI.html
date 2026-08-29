@@ -543,6 +543,13 @@
   .api-key-hint { font-size: 11px; color: var(--text-faint); margin-top: 6px; line-height: 1.5; }
   .api-key-hint a { color: var(--accent); text-decoration: underline; }
   .model-note { font-size: 11px; color: var(--text-faint); margin-top: 6px; }
+  .voice-lib-link {
+    display: inline-flex; align-items: center; gap: 5px; margin-top: 8px;
+    background: var(--accent-soft); border: 1.5px solid var(--accent); color: var(--accent) !important;
+    padding: 7px 12px; border-radius: var(--radius); font-size: 12px; font-weight: 700;
+    text-decoration: none !important; transition: all 0.15s;
+  }
+  .voice-lib-link:hover { background: var(--accent); color: #fff !important; }
 
   /* ── 하단 탭바 ── */
   .bottom-tabbar {
@@ -651,6 +658,69 @@
   .el-voice-row.playing .el-voice-play { background: var(--success); color: #fff; border-color: var(--success); }
   .el-voice-check { font-size: 14px; color: var(--accent); display: none; }
   .el-voice-row.selected .el-voice-check { display: block; }
+
+  .el-sub-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+  .el-sub-tabs button {
+    flex: 1; background: var(--bg-2); border: 1.5px solid var(--border-strong); color: var(--text-dim);
+    padding: 9px; border-radius: 3px; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.12s;
+  }
+  .el-sub-tabs button.active { background: var(--accent); color: #fff; }
+
+  .el-lib-filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .el-lib-search-row { display: flex; gap: 8px; }
+  .el-lib-search-row input { flex: 1; }
+  .el-lib-search-row button {
+    background: var(--accent); border: 1.5px solid var(--border-strong); color: #fff;
+    padding: 8px 13px; border-radius: 3px; font-size: 12px; font-weight: 700; cursor: pointer;
+    font-family: inherit; white-space: nowrap;
+  }
+  .el-lib-select-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .el-lib-select-row select {
+    flex: 1; min-width: 100px; background: var(--bg-2); border: 1.5px solid var(--border-strong);
+    color: var(--text); padding: 7px 8px; border-radius: 3px; font-size: 12px; font-family: inherit;
+  }
+  .el-lib-quick-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .el-lib-quick-btn {
+    background: var(--accent-soft); border: 1.5px dashed var(--border-strong); color: var(--accent);
+    padding: 6px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    font-family: inherit; transition: all 0.12s;
+  }
+  .el-lib-quick-btn:hover { background: var(--accent); color: #fff; border-style: solid; }
+
+  .el-lib-row {
+    background: var(--surface); border: 1.5px solid var(--border-strong); border-radius: var(--radius);
+    padding: 12px 14px; display: flex; align-items: center; gap: 10px; transition: all 0.15s;
+  }
+  .el-lib-row + .el-lib-row { margin-top: 8px; }
+  .el-lib-row:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--border-strong); }
+  .el-lib-row.playing { border-color: var(--success); }
+  .el-lib-row.added { border-color: var(--accent); background: var(--accent-soft); }
+  .el-lib-info { flex: 1; min-width: 0; }
+  .el-lib-name { font-size: 13px; font-weight: 800; color: var(--text); }
+  .el-lib-tags { font-size: 10.5px; color: var(--text-faint); margin-top: 4px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .el-lib-tag { background: var(--bg-2); border: 1px solid var(--border); padding: 1px 7px; border-radius: 10px; }
+  .el-lib-play {
+    width: 34px; height: 34px; background: var(--bg-2); border: 1.5px solid var(--border-strong);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--accent); cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+  }
+  .el-lib-play:hover { background: var(--accent); color: #fff; }
+  .el-lib-row.playing .el-lib-play { background: var(--success); color: #fff; border-color: var(--success); }
+  .el-lib-add-btn {
+    background: var(--bg-2); border: 1.5px solid var(--border-strong); color: var(--text-dim);
+    padding: 7px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; cursor: pointer;
+    font-family: inherit; white-space: nowrap; flex-shrink: 0;
+  }
+  .el-lib-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .el-lib-add-btn:disabled { opacity: 0.55; cursor: default; }
+  .el-lib-more-btn {
+    width: 100%; margin-top: 10px; background: var(--bg-2); border: 1.5px dashed var(--border-strong);
+    color: var(--text-dim); padding: 10px; border-radius: 3px; font-size: 12px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .el-lib-more-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .el-lib-empty { text-align: center; padding: 30px 20px; color: var(--text-faint); font-size: 12.5px; line-height: 1.7; }
 
   .voices-no-key {
     text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 13px; line-height: 1.8;
@@ -1050,6 +1120,8 @@
         <div class="api-key-hint">
           <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank">elevenlabs.io</a>에서 무료 발급 · 무료 플랜 월 10,000자
         </div>
+        <a class="voice-lib-link" href="https://elevenlabs.io/app/voice-library" target="_blank" rel="noopener">🔎 ElevenLabs Voice Library 바로가기</a>
+        <div class="hint">라이브러리에서 원하는 목소리를 "내 목소리(My Voices)"에 추가하면, 아래 🎧 목소리 시청실과 화자 목소리 선택 목록에 바로 나타나요.</div>
       </div>
       <div class="model-note" id="model-note-gemini">사용 모델: 음성생성(gemini-2.5-flash-preview-tts) / 분석(gemini-3.5-flash-lite)</div>
       <div class="model-note" id="model-note-eleven" style="display:none;">사용 모델: eleven_v3 (Text to Speech / Text to Dialogue)</div>
@@ -1115,6 +1187,8 @@
         <label>ElevenLabs API 키 <span style="color:var(--text-faint)">(목록 로드 및 재생에 필요)</span></label>
         <input id="va-eleven-api-key" type="password" placeholder="sk_..." autocomplete="off" style="font-family:'SF Mono',Menlo,monospace;font-size:12px;">
         <div class="api-key-hint"><a href="https://elevenlabs.io/app/settings/api-keys" target="_blank">elevenlabs.io</a>에서 무료 발급</div>
+        <a class="voice-lib-link" href="https://elevenlabs.io/app/voice-library" target="_blank" rel="noopener">🔎 ElevenLabs Voice Library 바로가기</a>
+        <div class="hint">여자아이 목소리처럼 프리셋에 없는 음색은 라이브러리에서 검색해 "내 목소리"에 추가하면 아래 목록에 바로 떠요.</div>
       </div>
     </div>
 
@@ -1142,14 +1216,71 @@
 
       <!-- ElevenLabs 파트 -->
       <div id="va-eleven-section" style="display:none;">
+        <div class="el-sub-tabs">
+          <button id="el-subtab-mine" class="active" type="button">⭐ 내 보이스</button>
+          <button id="el-subtab-search" type="button">🔎 라이브러리 검색</button>
+        </div>
+
+        <!-- 내 보이스 (계정에 이미 있는 목소리) -->
         <div id="va-eleven-inner">
           <div class="voices-no-key" id="va-eleven-no-key">
             위에 ElevenLabs API 키를 입력하면<br>내 계정 목소리 목록을 불러올 수 있어요.
+            <br><br>
+            원하는 연령대·성별·톤의 목소리는 <b>🔎 라이브러리 검색</b> 탭에서 바로 찾아 들어볼 수 있어요.
           </div>
           <div id="va-eleven-loading" class="voices-loading" style="display:none;">
             <span class="va-spinner"></span>목소리 목록 불러오는 중…
           </div>
           <div id="va-eleven-list" class="el-voice-list" style="display:none;"></div>
+        </div>
+
+        <!-- 라이브러리 검색 (ElevenLabs 공용 보이스 라이브러리) -->
+        <div id="va-eleven-library" style="display:none;">
+          <div class="el-lib-filters">
+            <div class="el-lib-search-row">
+              <input id="el-lib-search" type="text" placeholder="예: 차분한 여자, 어린 소년, 내레이터 …" maxlength="80">
+              <button id="el-lib-search-btn" type="button">검색</button>
+            </div>
+            <div class="el-lib-select-row">
+              <select id="el-lib-gender">
+                <option value="all">성별 전체</option>
+                <option value="female">여성</option>
+                <option value="male">남성</option>
+                <option value="neutral">중성</option>
+              </select>
+              <select id="el-lib-age">
+                <option value="all">연령대 전체</option>
+                <option value="young">young · 젊음</option>
+                <option value="middle_aged">middle_aged · 중년</option>
+                <option value="old">old · 노년</option>
+              </select>
+              <select id="el-lib-accent">
+                <option value="all">억양/톤 전체</option>
+                <option value="american">미국식</option>
+                <option value="british">영국식</option>
+                <option value="australian">호주식</option>
+                <option value="african">아프리카식</option>
+                <option value="indian">인도식</option>
+                <option value="korean">한국어</option>
+                <option value="japanese">일본어</option>
+                <option value="chinese">중국어</option>
+              </select>
+            </div>
+            <div class="el-lib-quick-row">
+              <button class="el-lib-quick-btn" id="el-lib-quick-child" type="button">🧒 어린이 목소리 찾기</button>
+              <button class="el-lib-quick-btn" id="el-lib-quick-teen" type="button">🧑 10대 목소리 찾기</button>
+            </div>
+            <div class="hint" style="margin-top:2px;">ElevenLabs는 연령대를 young(젊음)·middle_aged(중년)·old(노년)로만 구분해서, "어린이"를 딱 고르는 필터는 따로 없어요. 대신 검색어에 <b>child</b>, <b>kid</b> 같은 단어를 넣으면 어린이 톤으로 태그된 목소리들을 찾을 수 있어요 — 위 버튼을 누르면 자동으로 검색해줘요.</div>
+          </div>
+          <div id="el-lib-no-key" class="voices-no-key" style="display:none;">
+            위에 ElevenLabs API 키를 입력하면<br>라이브러리에서 목소리를 검색할 수 있어요.
+          </div>
+          <div id="el-lib-loading" class="voices-loading" style="display:none;">
+            <span class="va-spinner"></span>라이브러리 검색 중…
+          </div>
+          <div id="el-lib-results" class="el-voice-list"></div>
+          <button id="el-lib-more-btn" class="el-lib-more-btn" type="button" style="display:none;">더 불러오기</button>
+          <div class="hint" style="margin-top:10px;">🔎 검색을 누르면 아래에 결과가 뜨는 동시에 ElevenLabs Voice Library 사이트도 검색어를 채운 채로 새 탭에 열려요. ▶ 버튼은 크레딧 소모 없이 바로 들을 수 있는 미리듣기 샘플이에요. 마음에 드는 목소리는 <b>+ 추가</b>를 누르면 내 계정에 담겨서 바로 대본 생성에 쓸 수 있어요.</div>
         </div>
       </div>
     </div>
@@ -2333,12 +2464,34 @@ async function generateGeminiTTS(apiKey, voice, text) {
   throw new Error('오디오 데이터 없음.');
 }
 
-async function generateElevenTTS(apiKey, voiceId, text) {
-  const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+/* 일부 목소리(특히 라이브러리에서 가져온 외국 목소리)는 최신 모델(eleven_v3)을 지원하지 않아
+   생성이 실패할 수 있음 → 이 경우 자동으로 구형 다국어 모델로 재시도 (한국어 포함 다국어 지원) */
+const EL_FALLBACK_MODEL = 'eleven_multilingual_v2';
+
+async function elevenTTSRequest(apiKey, voiceId, text, modelId) {
+  return fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
     method: 'POST', headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, model_id: EL_MODEL, voice_settings: { stability: 0.5, similarity_boost: 0.8, style: 0.3, use_speaker_boost: true } })
+    body: JSON.stringify({ text, model_id: modelId, voice_settings: { stability: 0.5, similarity_boost: 0.8, style: 0.3, use_speaker_boost: true } })
   });
-  if (!resp.ok) { const e = await resp.json().catch(() => ({})); throw new Error('ElevenLabs 음성 생성 오류: ' + (e.detail?.message || e.detail || resp.status)); }
+}
+
+async function generateElevenTTS(apiKey, voiceId, text) {
+  let resp = await elevenTTSRequest(apiKey, voiceId, text, EL_MODEL);
+
+  if (!resp.ok && EL_MODEL !== EL_FALLBACK_MODEL) {
+    const peek = await resp.clone().json().catch(() => ({}));
+    const peekMsg = String(peek.detail?.message || peek.detail || '');
+    // 모델 비호환/목소리 관련 오류로 보이면 구형 다국어 모델로 자동 재시도
+    if (resp.status === 400 || /model|voice/i.test(peekMsg)) {
+      resp = await elevenTTSRequest(apiKey, voiceId, text, EL_FALLBACK_MODEL);
+    }
+  }
+
+  if (!resp.ok) {
+    const e = await resp.json().catch(() => ({}));
+    const raw = e.detail?.message || e.detail || resp.status;
+    throw new Error(`ElevenLabs 음성 생성 오류: ${raw} — 이 목소리가 현재 모델과 맞지 않을 수 있어요. 다른 목소리를 선택하거나, "내 보이스"에 정상적으로 추가됐는지 확인해 보세요.`);
+  }
   const arrayBuf = await resp.arrayBuffer();
   return new Blob([arrayBuf], { type: 'audio/mpeg' });
 }
@@ -2617,6 +2770,12 @@ let vaCurrentPlayingId = null;
 let vaSampleText = '안녕하세요, 저는 AI 목소리예요. 이 목소리가 마음에 드시나요?';
 let vaGenderFilter = 'all';
 let vaEngine = 'gemini';
+// ElevenLabs 서브탭: 'mine'(내 보이스) | 'search'(라이브러리 검색)
+let vaElSubTab = 'mine';
+let elLibResults = [];
+let elLibPage = 0;
+let elLibHasMore = false;
+let elLibLoading = false;
 
 /* 하단 탭바 전환 */
 document.getElementById('tab-btn-studio').addEventListener('click', () => switchMainTab('studio'));
@@ -2643,8 +2802,11 @@ function switchMainTab(tab) {
     document.getElementById('screen-voices').classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     renderVaGeminiGrid();
-    // ElevenLabs 탭이 활성이면 목록 로드 시도
-    if (vaEngine === 'eleven') tryLoadElevenVoiceList();
+    // ElevenLabs 탭이 활성이면 현재 서브탭에 맞춰 로드 시도
+    if (vaEngine === 'eleven') {
+      if (vaElSubTab === 'mine') tryLoadElevenVoiceList();
+      else runElLibSearch(elLibResults.length === 0);
+    }
   }
 }
 
@@ -2661,11 +2823,15 @@ syncPairs.forEach(([vaId, studioId]) => {
 });
 
 /* ElevenLabs 키 입력 후 자동 로드 */
+function refreshActiveElTab() {
+  if (vaElSubTab === 'mine') tryLoadElevenVoiceList();
+  else runElLibSearch(true);
+}
 document.getElementById('va-eleven-api-key').addEventListener('change', () => {
-  if (vaEngine === 'eleven') tryLoadElevenVoiceList();
+  if (vaEngine === 'eleven') refreshActiveElTab();
 });
 document.getElementById('el-api-key').addEventListener('change', () => {
-  if (vaEngine === 'eleven' && currentTab === 'voices') tryLoadElevenVoiceList();
+  if (vaEngine === 'eleven' && currentTab === 'voices') refreshActiveElTab();
 });
 function vaGeminiKey() {
   return document.getElementById('va-gemini-api-key').value.trim()
@@ -2697,9 +2863,195 @@ document.getElementById('va-eng-eleven').addEventListener('click', () => {
   document.getElementById('va-gemini-key-row').style.display = 'none';
   document.getElementById('va-eleven-key-row').style.display = '';
   stopVaAudio();
-  tryLoadElevenVoiceList();
+  if (vaElSubTab === 'mine') tryLoadElevenVoiceList();
+  else runElLibSearch(elLibResults.length === 0);
   updateVaConfirmBtn();
 });
+
+/* ElevenLabs 서브탭 전환: 내 보이스 ↔ 라이브러리 검색 */
+document.getElementById('el-subtab-mine').addEventListener('click', () => switchElSubTab('mine'));
+document.getElementById('el-subtab-search').addEventListener('click', () => switchElSubTab('search'));
+
+function switchElSubTab(tab) {
+  vaElSubTab = tab;
+  document.getElementById('el-subtab-mine').classList.toggle('active', tab === 'mine');
+  document.getElementById('el-subtab-search').classList.toggle('active', tab === 'search');
+  document.getElementById('va-eleven-inner').style.display = tab === 'mine' ? '' : 'none';
+  document.getElementById('va-eleven-library').style.display = tab === 'search' ? '' : 'none';
+  stopVaAudio();
+  if (tab === 'mine') {
+    tryLoadElevenVoiceList();
+  } else if (elLibResults.length === 0) {
+    runElLibSearch(true);
+  }
+}
+
+/* 라이브러리 검색 필터 이벤트 */
+document.getElementById('el-lib-search-btn').addEventListener('click', () => {
+  runElLibSearch(true);
+  openElVoiceLibrarySite();
+});
+document.getElementById('el-lib-search').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { runElLibSearch(true); openElVoiceLibrarySite(); }
+});
+document.getElementById('el-lib-gender').addEventListener('change', () => runElLibSearch(true));
+document.getElementById('el-lib-age').addEventListener('change', () => runElLibSearch(true));
+document.getElementById('el-lib-accent').addEventListener('change', () => runElLibSearch(true));
+document.getElementById('el-lib-more-btn').addEventListener('click', () => runElLibSearch(false));
+
+/* 검색어를 채운 채로 ElevenLabs Voice Library 사이트를 새 탭으로 열기
+   (성별/연령대/억양 URL 파라미터는 공식 문서화가 안 돼있어 검색어만 전달) */
+function openElVoiceLibrarySite() {
+  const q = document.getElementById('el-lib-search').value.trim();
+  const url = q
+    ? `https://elevenlabs.io/app/voice-library?search=${encodeURIComponent(q)}`
+    : 'https://elevenlabs.io/app/voice-library';
+  window.open(url, '_blank', 'noopener');
+}
+
+/* 어린이/10대 목소리 원클릭 검색 — 구조화된 age 필터엔 없어서 키워드 검색으로 대체 */
+document.getElementById('el-lib-quick-child').addEventListener('click', () => {
+  document.getElementById('el-lib-search').value = 'child';
+  document.getElementById('el-lib-age').value = 'all';
+  runElLibSearch(true);
+  openElVoiceLibrarySite();
+});
+document.getElementById('el-lib-quick-teen').addEventListener('click', () => {
+  document.getElementById('el-lib-search').value = 'teen';
+  document.getElementById('el-lib-age').value = 'all';
+  runElLibSearch(true);
+  openElVoiceLibrarySite();
+});
+
+/* ElevenLabs 공용 보이스 라이브러리 검색 (연령대·성별·톤 필터 + 즉시 미리듣기) */
+async function runElLibSearch(reset) {
+  const apiKey = vaElevenKey();
+  const noKey = document.getElementById('el-lib-no-key');
+  const loading = document.getElementById('el-lib-loading');
+  const moreBtn = document.getElementById('el-lib-more-btn');
+  const resultsEl = document.getElementById('el-lib-results');
+
+  if (!apiKey) {
+    noKey.style.display = ''; loading.style.display = 'none'; moreBtn.style.display = 'none';
+    resultsEl.innerHTML = '';
+    return;
+  }
+  if (elLibLoading) return;
+  noKey.style.display = 'none';
+  elLibLoading = true;
+  if (reset) { elLibPage = 0; elLibResults = []; resultsEl.innerHTML = ''; }
+  loading.style.display = '';
+  moreBtn.style.display = 'none';
+
+  try {
+    const params = new URLSearchParams();
+    params.set('page_size', '20');
+    params.set('page', String(elLibPage));
+    const search = document.getElementById('el-lib-search').value.trim();
+    const gender = document.getElementById('el-lib-gender').value;
+    const age = document.getElementById('el-lib-age').value;
+    const accent = document.getElementById('el-lib-accent').value;
+    if (search) params.set('search', search);
+    if (gender !== 'all') params.set('gender', gender);
+    if (age !== 'all') params.set('age', age);
+    if (accent !== 'all') params.set('accent', accent);
+
+    const resp = await fetch(`https://api.elevenlabs.io/v1/shared-voices?${params.toString()}`, {
+      headers: { 'xi-api-key': apiKey }
+    });
+    if (!resp.ok) {
+      const e = await resp.json().catch(() => ({}));
+      throw new Error(e.detail?.message || e.detail || ('오류 ' + resp.status));
+    }
+    const data = await resp.json();
+    const list = data.voices || [];
+    elLibResults = elLibResults.concat(list);
+    elLibHasMore = !!data.has_more;
+    elLibPage += 1;
+    renderElLibResults();
+  } catch (err) {
+    resultsEl.innerHTML = `<div class="el-lib-empty">검색 실패: ${esc(err.message)}</div>`;
+  } finally {
+    elLibLoading = false;
+    loading.style.display = 'none';
+    moreBtn.style.display = elLibHasMore ? '' : 'none';
+  }
+}
+
+function elAgeLabel(a) { return { young: '젊음', middle_aged: '중년', old: '노년' }[a] || a || ''; }
+function elGenderLabel(g) { return { male: '남성', female: '여성', neutral: '중성' }[g] || g || ''; }
+
+function renderElLibResults() {
+  const wrap = document.getElementById('el-lib-results');
+  if (!elLibResults.length) {
+    wrap.innerHTML = '<div class="el-lib-empty">조건에 맞는 목소리를 찾지 못했어요. 검색어나 필터를 바꿔보세요.</div>';
+    return;
+  }
+  wrap.innerHTML = elLibResults.map(v => {
+    const id = 'lib_' + v.voice_id;
+    const isPlaying = vaCurrentPlayingId === id;
+    const tags = [elGenderLabel(v.gender), elAgeLabel(v.age), v.accent, v.descriptive, v.language].filter(Boolean);
+    return `<div class="el-lib-row${isPlaying ? ' playing' : ''}" data-vid="${esc(v.voice_id)}" data-owner="${esc(v.public_owner_id || '')}" data-vname="${esc(v.name)}">
+      <button class="el-lib-play" data-play="${esc(v.voice_id)}" data-url="${esc(v.preview_url || '')}" type="button" title="들어보기">${isPlaying ? '■' : '▶'}</button>
+      <div class="el-lib-info">
+        <div class="el-lib-name">${esc(v.name)}</div>
+        <div class="el-lib-tags">${tags.map(t => `<span class="el-lib-tag">${esc(t)}</span>`).join('')}</div>
+      </div>
+      <button class="el-lib-add-btn" data-add="${esc(v.voice_id)}" type="button">+ 추가</button>
+    </div>`;
+  }).join('');
+
+  // 미리듣기 재생 (크레딧 소모 없이 preview_url 바로 재생)
+  wrap.querySelectorAll('.el-lib-play').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const vid = btn.dataset.play;
+      const id = 'lib_' + vid;
+      if (vaCurrentPlayingId === id) { stopVaAudio(); renderElLibResults(); return; }
+      stopVaAudio();
+      const url = btn.dataset.url;
+      if (!url) { alert('이 목소리는 미리듣기 샘플이 없어요.'); return; }
+      vaCurrentPlayingId = id;
+      renderElLibResults();
+      vaCurrentAudio = new Audio(url);
+      vaCurrentAudio.onended = () => { vaCurrentPlayingId = null; renderElLibResults(); };
+      vaCurrentAudio.onerror = () => { vaCurrentPlayingId = null; renderElLibResults(); alert('샘플 재생에 실패했어요.'); };
+      vaCurrentAudio.play();
+    });
+  });
+
+  // 내 계정에 추가 → 이후 대본 생성에 바로 쓸 수 있음
+  wrap.querySelectorAll('.el-lib-add-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const row = btn.closest('.el-lib-row');
+      const vid = row.dataset.vid, owner = row.dataset.owner, vname = row.dataset.vname;
+      const apiKey = vaElevenKey();
+      if (!apiKey) { alert('ElevenLabs API 키를 먼저 입력해주세요'); return; }
+      if (!owner) { alert('이 목소리는 추가할 수 없어요 (소유자 정보 없음)'); return; }
+      btn.disabled = true; btn.textContent = '추가 중…';
+      try {
+        const resp = await fetch(`https://api.elevenlabs.io/v1/voices/add/${owner}/${vid}`, {
+          method: 'POST',
+          headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ new_name: vname })
+        });
+        if (!resp.ok) {
+          const e = await resp.json().catch(() => ({}));
+          throw new Error(e.detail?.message || e.detail || ('오류 ' + resp.status));
+        }
+        const data = await resp.json();
+        elVoiceCache = null; // "내 보이스" 목록 캐시 무효화 → 다음 조회 시 새로 불러옴
+        btn.textContent = '✓ 추가됨';
+        row.classList.add('added');
+        vaSelectedVoice = { engine: 'eleven', name: vname, voiceId: data.voice_id || vid };
+        updateVaConfirmBtn();
+        showVaToast(`✅ "${vname}" 내 목소리에 추가했어요`);
+      } catch (err) {
+        btn.disabled = false; btn.textContent = '+ 추가';
+        alert('추가 실패: ' + err.message);
+      }
+    });
+  });
+}
 
 /* 샘플 문장 적용 버튼 */
 document.getElementById('va-apply-sample').addEventListener('click', () => {
