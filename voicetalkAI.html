@@ -1186,6 +1186,7 @@
       <div class="hint" style="margin-top:10px;">태그(<span style="color:var(--accent);font-weight:600;">보라색</span>)를 클릭하면 다른 표현으로 바꿀 수 있어요. 문장 속 <span style="color:var(--text-faint);font-weight:700;">·</span> 점을 클릭하면 띄어쓰기나 마침표 사이 정확한 위치에 태그를 끼워넣을 수 있고, <span style="color:var(--accent-2);font-weight:700;">단어를 직접 클릭</span>하면 그 단어만 강조해서 말하도록 표시돼요(다시 클릭하면 해제).<br><span style="color:var(--text-faint)">태그 목록엔 감정 외에도 🎚 강도(살짝~폭발적으로), 🎼 억양·피치(억양 올리며, 점점 커지며 등)가 추가돼서 감정 태그와 조합하면 훨씬 사람이 연기하는 느낌으로 표현할 수 있어요. [대괄호]나 (소괄호)로 감싼 지문은 모두 연출 지시로 처리돼요 — 소리내어 읽히지 않아요.</span></div>
     </div>
     <button id="preview-confirm-btn" class="submit-btn" type="button">🔊 이 연출로 음성 생성하기</button>
+    <button id="preview-export-prompt-btn" class="secondary-btn" type="button" style="margin-top:8px;">📋 프롬프트 내보내기</button>
     <button id="preview-back-btn" class="secondary-btn" type="button">← 대본 다시 만들기</button>
   </div>
 
@@ -2887,6 +2888,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
 });
 
 document.getElementById('preview-back-btn').addEventListener('click', () => showScreen('input'));
+document.getElementById('preview-export-prompt-btn').addEventListener('click', openExportModal);
 
 /* ============================================================
    12. 미리보기 → 확인(자유표현 매핑) → 최종 음성 생성
