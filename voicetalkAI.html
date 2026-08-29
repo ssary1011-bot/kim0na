@@ -1576,6 +1576,12 @@ const TAG_TABLE = [
   {ko:'훌쩍이며(칭얼)', en:'whimpering',  cat:'reaction', eng:'eleven'},
   {ko:'헛기침',       en:'clears throat', cat:'reaction', eng:'eleven'},
   {ko:'중얼거리며',   en:'muttering',     cat:'reaction', eng:'eleven'},
+  {ko:'숨넘어가게 웃음', en:'wheezing',    cat:'reaction', eng:'eleven'},
+  {ko:'더 크게 웃으며', en:'laughs harder',cat:'reaction', eng:'eleven'},
+  {ko:'웃음이 터지며', en:'starts laughing',cat:'reaction', eng:'eleven'},
+  {ko:'숨을 내쉬며',  en:'exhales',       cat:'reaction', eng:'eleven'},
+  {ko:'거칠게 내쉬며', en:'exhales sharply',cat:'reaction', eng:'eleven'},
+  {ko:'깊게 들이쉬며', en:'inhales deeply',cat:'reaction', eng:'eleven'},
   // ── 페이싱 · 속도 ──────────────────────────────────────────
   {ko:'천천히',       en:'slowly',        cat:'pacing', eng:'both'},
   {ko:'빠르게',       en:'quickly',       cat:'pacing', eng:'both'},
@@ -1653,6 +1659,7 @@ const TAG_TABLE = [
   {ko:'삼키는 소리',  en:'swallows',    cat:'sfx', eng:'eleven'},
   {ko:'노래하듯',     en:'sings',       cat:'sfx', eng:'eleven'},
   {ko:'환호(우~)',    en:'woo',         cat:'sfx', eng:'eleven'},
+  {ko:'방귀소리',     en:'fart',        cat:'sfx', eng:'eleven'},
   // ── 대화 연출 (다중 화자용) ─────────────────────────────────
   {ko:'끼어들며',     en:'interrupting',      cat:'dialogue', eng:'eleven'},
   {ko:'겹쳐 말하며',   en:'overlapping',       cat:'dialogue', eng:'eleven'},
@@ -1688,18 +1695,31 @@ const GEMINI_TO_ELEVEN_FALLBACK = {
    - gemini 전용 태그는 대응표가 있으면 치환, 없으면 드랍
    - 태그 테이블에 없는 자유 표현(unknown)도 드랍 (검증 안 된 표현이라 그대로 두면 텍스트로 읽혀버림)
    드랍/치환된 항목은 통계로 반환해서 사용자에게 알려줄 수 있게 함 */
+/* 자유 표현이 "한글 없이 영문자로만 쓰인 태그"인지 판별.
+   ElevenLabs는 닫힌 태그 목록(enum)이 아니라 브라켓 안 영어 문구를
+   스스로 해석 시도하는 구조라("There are likely many more effective
+   tags beyond this list" — 공식 문서), TAG_TABLE에 없어도 사용자가
+   영어로 직접 쓴 태그는 굳이 드랍할 필요 없이 그대로 보내는 게 맞다.
+   반대로 한글 자유 표현은 ElevenLabs가 그대로 이해하지 못할 가능성이
+   높아서(번역이 필요한 상태) 지금처럼 안전하게 대사 텍스트로 남긴다. */
+function isLikelyEnglishTag(raw) {
+  return !/[가-힣]/.test(raw) && /[a-zA-Z]/.test(raw);
+}
 function segmentsToElevenSafeText(segs) {
-  const substituted = []; const dropped = [];
+  const substituted = []; const dropped = []; const passthrough = [];
   const text = segs.map(s => {
     if (s.type !== 'tag') return s.value;
     const info = s.known ? EN2TAGINFO[s.en] : null;
-    if (!info) { dropped.push(s.ko); return s.ko; } // 안전장치: 못 알아듣는 표현이라도 삭제하지 않고 대사로 읽음
+    if (!info) {
+      if (isLikelyEnglishTag(s.en)) { passthrough.push(s.en); return `[${s.en}]`; } // 표에 없어도 영어 태그는 그대로 통과 — ElevenLabs가 자체 해석 시도
+      dropped.push(s.ko); return s.ko; // 안전장치: 못 알아듣는 한글 표현이라도 삭제하지 않고 대사로 읽음
+    }
     if (info.eng === 'eleven' || info.eng === 'both') return `[${s.en}]`;
     const fallback = GEMINI_TO_ELEVEN_FALLBACK[s.en];
     if (fallback) { substituted.push({ ko: s.ko, from: s.en, to: fallback }); return `[${fallback}]`; }
     dropped.push(s.ko); return s.ko; // 안전장치: 대응 태그가 없으면 삭제 대신 대사로 읽음
   }).join('');
-  return { text, substituted, dropped };
+  return { text, substituted, dropped, passthrough };
 }
 const TAG_CATS = [
   {key:'emotion_pos', label:'😊 긍정 감정'},
@@ -2305,12 +2325,17 @@ function openExportModal() {
     // ElevenLabs 탭일 때만: 어떤 태그가 치환/드랍됐는지 요약해서 보여줌
     const statsEl = overlay.querySelector('#export-stats');
     if (engine === 'eleven') {
-      const allSub = []; const allDrop = [];
+      const allSub = []; const allDrop = []; const allPass = [];
       previewTurns.forEach(t => {
         const r = segmentsToElevenSafeText(t.segs);
-        allSub.push(...r.substituted); allDrop.push(...r.dropped);
+        allSub.push(...r.substituted); allDrop.push(...r.dropped); allPass.push(...r.passthrough);
       });
       let html = '';
+      if (allPass.length) {
+        const uniquePass = [...new Set(allPass)];
+        html += `<div style="margin-bottom:4px;">🆕 <b>${uniquePass.length}개</b> 커스텀 영어 태그를 목록에 없어도 그대로 보냈어요(ElevenLabs가 자체 해석 시도): ` +
+          uniquePass.map(k => `<code>[${esc(k)}]</code>`).join(', ') + ` — 목소리에 따라 효과가 다를 수 있으니 결과를 확인해보세요.</div>`;
+      }
       if (allSub.length) {
         const uniqueSub = [...new Map(allSub.map(s => [s.ko, s])).values()];
         html += `<div style="margin-bottom:4px;">🔄 <b>${uniqueSub.length}개</b> 태그를 ElevenLabs가 알아듣는 단어로 자동 치환했어요: ` +
@@ -2322,7 +2347,7 @@ function openExportModal() {
           uniqueDrop.map(k => `<code>${esc(k)}</code>`).join(', ') +
           ` — 만약 이게 태그가 아니라 원래부터 대사였다면 그대로 두면 되고, 세기·억양 곡선을 표현하려던 의도였다면 <b>대문자</b>나 <b>말줄임표(…)</b>, <b>느낌표</b> 같은 문장부호로 바꿔보세요.</div>`;
       }
-      if (!allSub.length && !allDrop.length) html = '✅ 모든 태그가 ElevenLabs가 그대로 인식하는 태그예요.';
+      if (!allSub.length && !allDrop.length && !allPass.length) html = '✅ 모든 태그가 ElevenLabs가 그대로 인식하는 태그예요.';
       statsEl.innerHTML = html;
       statsEl.style.display = '';
     } else {
