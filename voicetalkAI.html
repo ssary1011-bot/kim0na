@@ -936,7 +936,8 @@
         <label>성격 / 분위기</label>
         <textarea id="c-personality" maxlength="1000"></textarea>
         <label>목소리 힌트 <span style="color:var(--text-faint)">(선택)</span></label>
-        <input id="c-voice-hint" type="text" maxlength="500">
+        <input id="c-voice-hint" type="text" maxlength="500" placeholder="목소리 이름 또는 ElevenLabs voice_id 붙여넣기">
+        <div class="hint" id="c-voice-hint-note" style="display:none;">💡 ElevenLabs voice_id를 그대로 붙여넣으면 그 목소리로 바로 생성돼요. 이름을 넣으면 "내 보이스" 목록에서 매칭해요.</div>
         <label>말투 / 말버릇 <span style="color:var(--text-faint)">(선택)</span></label>
         <input id="c-speech-habits" type="text" maxlength="500" placeholder="예) 문장 끝에 '~죠' 자주 씀, 감탄사 많이 씀">
         <details style="margin-top:8px;border-top:1px solid var(--border);padding-top:10px;">
@@ -1940,7 +1941,7 @@ function renderSpeakers() {
           <button data-vmode="manual" data-id="${s.id}" class="${s.voiceMode==='manual'?'active':''}" type="button">직접 선택</button>
         </div>
         ${s.voiceMode==='manual' ? (currentEngine === 'eleven'
-          ? `<span class="hint" style="margin:0;color:var(--warn);">ElevenLabs 엔진은 계정 목소리를 자동 매칭해요</span>`
+          ? `<input type="text" data-field="voiceName" data-id="${s.id}" value="${esc(s.voiceName||'')}" placeholder="ElevenLabs 목소리 이름 또는 voice_id 붙여넣기" style="font-size:12px;">`
           : `<select data-field="voiceName" data-id="${s.id}">
           <option value="">선택안함</option>
           ${VOICE_NAMES.map(n => `<option value="${n}" ${s.voiceName===n?'selected':''}>${n}</option>`).join('')}
@@ -1991,6 +1992,8 @@ document.getElementById('eng-gemini').addEventListener('click', () => {
   document.getElementById('eleven-key-area').style.display = 'none';
   document.getElementById('model-note-gemini').style.display = 'block';
   document.getElementById('model-note-eleven').style.display = 'none';
+  const noteEl1 = document.getElementById('c-voice-hint-note');
+  if (noteEl1) noteEl1.style.display = 'none';
   renderSpeakers();
 });
 document.getElementById('eng-eleven').addEventListener('click', () => {
@@ -2001,6 +2004,8 @@ document.getElementById('eng-eleven').addEventListener('click', () => {
   document.getElementById('eleven-key-area').style.display = 'block';
   document.getElementById('model-note-gemini').style.display = 'none';
   document.getElementById('model-note-eleven').style.display = 'block';
+  const noteEl2 = document.getElementById('c-voice-hint-note');
+  if (noteEl2) noteEl2.style.display = 'block';
   renderSpeakers();
 });
 
@@ -2464,6 +2469,21 @@ async function generateGeminiTTS(apiKey, voice, text) {
   throw new Error('오디오 데이터 없음.');
 }
 
+/* ElevenLabs 목소리 지정 문자열 해석 — voice_id를 그대로 붙여넣었으면 그걸 바로 쓰고,
+   아니면 이름으로 "내 보이스" 목록에서 매칭 */
+function looksLikeElevenVoiceId(s) {
+  return /^[A-Za-z0-9]{15,40}$/.test(String(s || '').trim());
+}
+function resolveElevenVoiceId(voices, rawInput) {
+  const v = String(rawInput || '').trim();
+  if (!v) return null;
+  if (looksLikeElevenVoiceId(v)) return v; // voice_id를 직접 붙여넣은 경우
+  const lower = v.toLowerCase();
+  const matched = voices.find(x => x.name.toLowerCase() === lower)
+    || voices.find(x => x.name.toLowerCase().includes(lower));
+  return matched ? matched.voice_id : null;
+}
+
 /* 일부 목소리(특히 라이브러리에서 가져온 외국 목소리)는 최신 모델(eleven_v3)을 지원하지 않아
    생성이 실패할 수 있음 → 이 경우 자동으로 구형 다국어 모델로 재시도 (한국어 포함 다국어 지원) */
 const EL_FALLBACK_MODEL = 'eleven_multilingual_v2';
@@ -2650,11 +2670,11 @@ async function finalizeAndGenerate() {
       let audioBlob, ext;
       if (currentEngine === 'eleven') {
         const elKey = val('el-api-key');
-        // 직접선택 보이스가 없으면 보이스 라이브러리에서 이름 매칭 시도, 없으면 첫 voice 사용
+        // 목소리 힌트 칸에 voice_id를 직접 붙여넣었으면 그대로 사용, 아니면 이름으로 "내 보이스"에서 매칭
         const voices = await loadElevenVoices(elKey);
-        const matched = voices.find(v => v.name.toLowerCase() === String(voice).toLowerCase()) || voices[0];
-        if (!matched) throw new Error('ElevenLabs 계정에 사용 가능한 목소리가 없어요.');
-        audioBlob = await generateElevenTTS(elKey, matched.voice_id, finalText);
+        const resolvedId = resolveElevenVoiceId(voices, voice) || (voices[0] && voices[0].voice_id);
+        if (!resolvedId) throw new Error('ElevenLabs 계정에 사용 가능한 목소리가 없어요.');
+        audioBlob = await generateElevenTTS(elKey, resolvedId, finalText);
         ext = 'mp3';
       } else {
         const apiKey = val('user-api-key');
@@ -2676,11 +2696,10 @@ async function finalizeAndGenerate() {
         const t = previewTurns[i];
         const finalText = segmentsToEnglishText(t.segs);
         if (currentEngine === 'eleven') {
-          const voiceNameLower = String(t.voice).toLowerCase();
-          const matched = elVoices.find(v => v.name.toLowerCase() === voiceNameLower)
-            || elVoices.find(v => v.name.toLowerCase().includes(voiceNameLower))
-            || elVoices[i % elVoices.length];
-          const blob = await generateElevenTTS(val('el-api-key'), matched.voice_id, finalText);
+          const resolvedId = resolveElevenVoiceId(elVoices, t.voice)
+            || (elVoices[i % elVoices.length] && elVoices[i % elVoices.length].voice_id);
+          if (!resolvedId) throw new Error('ElevenLabs 계정에 사용 가능한 목소리가 없어요.');
+          const blob = await generateElevenTTS(val('el-api-key'), resolvedId, finalText);
           blobs.push(blob);
         } else {
           const ttsResult = await generateGeminiTTS(val('user-api-key'), t.voice, finalText);
