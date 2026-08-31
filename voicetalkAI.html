@@ -1576,12 +1576,6 @@ const TAG_TABLE = [
   {ko:'훌쩍이며(칭얼)', en:'whimpering',  cat:'reaction', eng:'eleven'},
   {ko:'헛기침',       en:'clears throat', cat:'reaction', eng:'eleven'},
   {ko:'중얼거리며',   en:'muttering',     cat:'reaction', eng:'eleven'},
-  {ko:'숨넘어가게 웃음', en:'wheezing',    cat:'reaction', eng:'eleven'},
-  {ko:'더 크게 웃으며', en:'laughs harder',cat:'reaction', eng:'eleven'},
-  {ko:'웃음이 터지며', en:'starts laughing',cat:'reaction', eng:'eleven'},
-  {ko:'숨을 내쉬며',  en:'exhales',       cat:'reaction', eng:'eleven'},
-  {ko:'거칠게 내쉬며', en:'exhales sharply',cat:'reaction', eng:'eleven'},
-  {ko:'깊게 들이쉬며', en:'inhales deeply',cat:'reaction', eng:'eleven'},
   // ── 페이싱 · 속도 ──────────────────────────────────────────
   {ko:'천천히',       en:'slowly',        cat:'pacing', eng:'both'},
   {ko:'빠르게',       en:'quickly',       cat:'pacing', eng:'both'},
@@ -1659,7 +1653,6 @@ const TAG_TABLE = [
   {ko:'삼키는 소리',  en:'swallows',    cat:'sfx', eng:'eleven'},
   {ko:'노래하듯',     en:'sings',       cat:'sfx', eng:'eleven'},
   {ko:'환호(우~)',    en:'woo',         cat:'sfx', eng:'eleven'},
-  {ko:'방귀소리',     en:'fart',        cat:'sfx', eng:'eleven'},
   // ── 대화 연출 (다중 화자용) ─────────────────────────────────
   {ko:'끼어들며',     en:'interrupting',      cat:'dialogue', eng:'eleven'},
   {ko:'겹쳐 말하며',   en:'overlapping',       cat:'dialogue', eng:'eleven'},
@@ -1695,31 +1688,18 @@ const GEMINI_TO_ELEVEN_FALLBACK = {
    - gemini 전용 태그는 대응표가 있으면 치환, 없으면 드랍
    - 태그 테이블에 없는 자유 표현(unknown)도 드랍 (검증 안 된 표현이라 그대로 두면 텍스트로 읽혀버림)
    드랍/치환된 항목은 통계로 반환해서 사용자에게 알려줄 수 있게 함 */
-/* 자유 표현이 "한글 없이 영문자로만 쓰인 태그"인지 판별.
-   ElevenLabs는 닫힌 태그 목록(enum)이 아니라 브라켓 안 영어 문구를
-   스스로 해석 시도하는 구조라("There are likely many more effective
-   tags beyond this list" — 공식 문서), TAG_TABLE에 없어도 사용자가
-   영어로 직접 쓴 태그는 굳이 드랍할 필요 없이 그대로 보내는 게 맞다.
-   반대로 한글 자유 표현은 ElevenLabs가 그대로 이해하지 못할 가능성이
-   높아서(번역이 필요한 상태) 지금처럼 안전하게 대사 텍스트로 남긴다. */
-function isLikelyEnglishTag(raw) {
-  return !/[가-힣]/.test(raw) && /[a-zA-Z]/.test(raw);
-}
 function segmentsToElevenSafeText(segs) {
-  const substituted = []; const dropped = []; const passthrough = [];
+  const substituted = []; const dropped = [];
   const text = segs.map(s => {
     if (s.type !== 'tag') return s.value;
     const info = s.known ? EN2TAGINFO[s.en] : null;
-    if (!info) {
-      if (isLikelyEnglishTag(s.en)) { passthrough.push(s.en); return `[${s.en}]`; } // 표에 없어도 영어 태그는 그대로 통과 — ElevenLabs가 자체 해석 시도
-      dropped.push(s.ko); return s.ko; // 안전장치: 못 알아듣는 한글 표현이라도 삭제하지 않고 대사로 읽음
-    }
+    if (!info) { dropped.push(s.ko); return s.ko; } // 안전장치: 못 알아듣는 표현이라도 삭제하지 않고 대사로 읽음
     if (info.eng === 'eleven' || info.eng === 'both') return `[${s.en}]`;
     const fallback = GEMINI_TO_ELEVEN_FALLBACK[s.en];
     if (fallback) { substituted.push({ ko: s.ko, from: s.en, to: fallback }); return `[${fallback}]`; }
     dropped.push(s.ko); return s.ko; // 안전장치: 대응 태그가 없으면 삭제 대신 대사로 읽음
   }).join('');
-  return { text, substituted, dropped, passthrough };
+  return { text, substituted, dropped };
 }
 const TAG_CATS = [
   {key:'emotion_pos', label:'😊 긍정 감정'},
@@ -2216,37 +2196,50 @@ document.getElementById('eng-eleven').addEventListener('click', () => {
    6. 태그 파싱 — "[속삭임] 문장... [한숨] 문장" 형태의 텍스트를
    { segments: [{type:'tag', ko, en, known}, {type:'text', value}] } 로 변환
    ============================================================ */
-/* ── AI 생성 결과 "누출 태그" 자동 복구 ─────────────────────────
-   Gemini가 대괄호 규칙을 지키라는 지시를 받고도, "매우"/"높은 음으로"/
-   "심장이 두근거리며"처럼 자연스러운 한국어 부사·수식어처럼 생긴 태그는
-   종종 대괄호 없이 그냥 문장 속에 흘려 쓴다(누출). parseTaggedText는
-   [ ]/( )로 감싸진 것만 태그로 인식하므로, 이런 누출은 번역되지 않고
-   그대로 대사에 섞여 낭독돼버린다.
-   여기서는 "공백을 포함하거나 4글자 이상"인, 실제 대사로 쓰일 가능성이
-   거의 없는 태그(주로 pitch/body/space 계열의 구(句) 형태 태그)만 골라
-   대괄호 없이 등장해도 자동으로 [ ]를 씌워 복구한다.
-   "매우"/"살짝"/"꽤"처럼 진짜 대사에도 자연스럽게 등장할 수 있는 짧은
-   단독 태그는 일부러 건드리지 않는다 — 오탐으로 실제 대사를 태그로
-   착각해 통째로 지워버리는 사고가, 태그 하나 덜 고치는 것보다 훨씬
-   위험하기 때문. */
-const AUTO_WRAP_SAFE_TAGS = TAG_TABLE
-  .map(t => t.ko)
-  .filter(ko => ko.length >= 4 || ko.includes(' '))
-  .sort((a, b) => b.length - a.length); // 긴 태그부터 매칭해 부분일치(예: "살짝"이 "아주 살짝" 안을 잘라먹는 것) 방지
-function repairLeakedTags(text) {
+function autoWrapKnownTags(text) {
+  // AI가 태그 단어를 대괄호 없이 그냥 흘려쓴 경우(예: "폭발적으로점점 커지며")를 보정.
+  // 기존 [ ]/( ) 블록은 절대 건드리지 않고, 그 바깥의 "알려진 태그 라벨"이
+  //  1) 이미 있는 대괄호/소괄호 바로 옆에 공백 없이 붙어있거나
+  //  2) 다른 알려진 태그 라벨과 공백 없이 연달아 붙어있을 때만
+  // 대사로 오인하지 않도록 안전하게 자동으로 [ ]를 씌워줌. 그 외(문장 중간 단독 등장)는 실제 대사일 가능성이 있으므로 건드리지 않음.
   if (!text) return text;
-  let result = '', i = 0;
-  outer: while (i < text.length) {
-    if (text[i] === '[' || text[i] === '(') {
-      const close = text[i] === '[' ? ']' : ')';
-      const end = text.indexOf(close, i);
-      if (end !== -1) { result += text.slice(i, end + 1); i = end + 1; continue; }
-    }
-    for (const tag of AUTO_WRAP_SAFE_TAGS) {
-      if (text.startsWith(tag, i)) { result += `[${tag}]`; i += tag.length; continue outer; }
-    }
-    result += text[i]; i++;
+  const protectedRanges = [];
+  const bracketRe = /\[[^\]]+\]|\([^)]+\)/g;
+  let bm;
+  while ((bm = bracketRe.exec(text)) !== null) protectedRanges.push([bm.index, bm.index + bm[0].length]);
+  const rangeAt = (pos) => protectedRanges.find(([s,e]) => pos >= s && pos < e);
+
+  const knownTags = TAG_TABLE.map(t => t.ko).sort((a,b) => b.length - a.length);
+  const matches = [];
+  let i = 0;
+  while (i < text.length) {
+    const pr = rangeAt(i);
+    if (pr) { i = pr[1]; continue; }
+    let hit = null;
+    for (const ko of knownTags) { if (text.startsWith(ko, i)) { hit = ko; break; } }
+    if (hit) { matches.push({ start:i, end:i+hit.length, ko:hit }); i += hit.length; }
+    else i += 1;
   }
+  if (!matches.length) return text;
+
+  const eligible = [];
+  let ci = 0;
+  while (ci < matches.length) {
+    let cj = ci;
+    while (cj + 1 < matches.length && matches[cj+1].start === matches[cj].end) cj++;
+    const chain = matches.slice(ci, cj+1);
+    const chainStart = chain[0].start, chainEnd = chain[chain.length-1].end;
+    const touchesBefore = chainStart > 0 && (text[chainStart-1] === ']' || text[chainStart-1] === ')');
+    const touchesAfter = chainEnd < text.length && (text[chainEnd] === '[' || text[chainEnd] === '(');
+    if (chain.length >= 2 || touchesBefore || touchesAfter) eligible.push(...chain);
+    ci = cj + 1;
+  }
+  if (!eligible.length) return text;
+
+  let result = text;
+  eligible.sort((a,b) => b.start - a.start).forEach(m => {
+    result = result.slice(0, m.start) + `[${m.ko}]` + result.slice(m.end);
+  });
   return result;
 }
 function parseTaggedText(text) {
@@ -2325,17 +2318,12 @@ function openExportModal() {
     // ElevenLabs 탭일 때만: 어떤 태그가 치환/드랍됐는지 요약해서 보여줌
     const statsEl = overlay.querySelector('#export-stats');
     if (engine === 'eleven') {
-      const allSub = []; const allDrop = []; const allPass = [];
+      const allSub = []; const allDrop = [];
       previewTurns.forEach(t => {
         const r = segmentsToElevenSafeText(t.segs);
-        allSub.push(...r.substituted); allDrop.push(...r.dropped); allPass.push(...r.passthrough);
+        allSub.push(...r.substituted); allDrop.push(...r.dropped);
       });
       let html = '';
-      if (allPass.length) {
-        const uniquePass = [...new Set(allPass)];
-        html += `<div style="margin-bottom:4px;">🆕 <b>${uniquePass.length}개</b> 커스텀 영어 태그를 목록에 없어도 그대로 보냈어요(ElevenLabs가 자체 해석 시도): ` +
-          uniquePass.map(k => `<code>[${esc(k)}]</code>`).join(', ') + ` — 목소리에 따라 효과가 다를 수 있으니 결과를 확인해보세요.</div>`;
-      }
       if (allSub.length) {
         const uniqueSub = [...new Map(allSub.map(s => [s.ko, s])).values()];
         html += `<div style="margin-bottom:4px;">🔄 <b>${uniqueSub.length}개</b> 태그를 ElevenLabs가 알아듣는 단어로 자동 치환했어요: ` +
@@ -2347,7 +2335,7 @@ function openExportModal() {
           uniqueDrop.map(k => `<code>${esc(k)}</code>`).join(', ') +
           ` — 만약 이게 태그가 아니라 원래부터 대사였다면 그대로 두면 되고, 세기·억양 곡선을 표현하려던 의도였다면 <b>대문자</b>나 <b>말줄임표(…)</b>, <b>느낌표</b> 같은 문장부호로 바꿔보세요.</div>`;
       }
-      if (!allSub.length && !allDrop.length && !allPass.length) html = '✅ 모든 태그가 ElevenLabs가 그대로 인식하는 태그예요.';
+      if (!allSub.length && !allDrop.length) html = '✅ 모든 태그가 ElevenLabs가 그대로 인식하는 태그예요.';
       statsEl.innerHTML = html;
       statsEl.style.display = '';
     } else {
@@ -2706,15 +2694,9 @@ function openTagPopup(turnIdx, segIdx, mode, splitPos) {
       <button class="action-mode-btn" data-am="insert-after" type="button" style="flex:1;padding:7px;border-radius:8px;border:1px solid var(--border);background:var(--bg-2);color:var(--text-dim);font-size:12px;cursor:pointer;font-family:inherit;">뒤에 추가</button>
     </div>` : '';
 
-  // 현재 엔진에 맞는 태그만 필터.
-  // ElevenLabs는 브라켓을 실제로 "공식 인식"하는지가 중요해서 both/eleven만 허용.
-  // Gemini는 태그를 브라켓째로 읽는 게 아니라 자연어 스타일 문장으로 변환해서 쓰기
-  // 때문에(segmentsToGeminiPrompt), eng 값과 무관하게 태그 151개 전부 사용 가능하다.
-  // eng:'gemini' 전용 태그가 테이블에 하나도 없어서, 예전 필터(both만 허용)로는
-  // 강도·피치·신체·공간 등 111개 태그 카테고리가 Gemini 모드에서 통째로 사라졌었다.
+  // 현재 엔진에 맞는 태그만 필터 (both = 둘 다 표시)
   function tagsForCat(catKey) {
-    if (currentEngine === 'eleven') return TAG_TABLE.filter(t => t.cat === catKey && (t.eng === 'both' || t.eng === 'eleven'));
-    return TAG_TABLE.filter(t => t.cat === catKey);
+    return TAG_TABLE.filter(t => t.cat === catKey && (t.eng === 'both' || t.eng === currentEngine));
   }
   const engineLabel = currentEngine === 'gemini' ? '🎙️ Gemini' : '🎤 ElevenLabs';
 
@@ -2871,9 +2853,7 @@ ${voiceLine}
 
 아래는 사용 가능한 연출 태그 목록입니다(한글로 표기). directed_dialogue를 만들 때 이 목록의 태그만 [한글태그] 형식으로 대사 문장 사이사이에 적절히 삽입하세요. 한 문장에 여러 태그를 층층이 써도 됩니다. 특히 감정 태그 하나만 쓰지 말고, "강도" 태그(예: [살짝], [매우], [폭발적으로])와 "억양·피치" 태그(예: [억양 올리며], [점점 커지며])를 감정 태그와 조합해서 실제 성우가 연기하듯 세밀하게 표현하세요. 문장에서 특히 힘주어 말해야 할 핵심 단어 바로 앞에는 [강조하며] 태그를 붙여 그 단어만 강조되게 하세요. 말줌임표(…)와 쉼표, 줄표(—)도 호흡과 멈춤을 표현하는 데 적극 활용하세요.
 ⚠️ 매우 중요: 대괄호[ ]와 소괄호( )는 오직 위 태그 목록에 있는 "연출 지시어"에만 사용하세요. 캐릭터가 실제로 입으로 말하는 대사 문장(감탄사, 되묻는 말, 짧은 반문 등 — 예: "엥......?", "뭐라고......?", "네가 누구라고?????", "뭐?!" 같은 것들도 전부 포함)은 절대로 대괄호나 소괄호로 감싸면 안 됩니다. 그런 대사는 태그 없이 순수한 텍스트로만 작성하세요. 이 규칙을 어기면 그 대사가 음성에서 통째로 누락됩니다.
-⚠️ 특히 조심할 것: "매우", "살짝", "높은 음으로", "점점 커지며", "심장이 두근거리며", "코맹맹이 소리로", "극적인 억양으로" 같은 "강도"·"억양·피치"·"신체" 계열 태그는 자연스러운 한국어 부사/수식어처럼 생겨서, 대괄호 씌우는 걸 깜빡하고 그냥 문장 속에 흘려 쓰는 실수가 아주 잦습니다. 이런 태그도 예외 없이 반드시 [ ]로 감싸세요.
-  ✗ 잘못된 예: "높은 음으로살짝 어.....? [tired]낮은 음으로 오.............."
-  ✓ 올바른 예: "[높은 음으로][살짝] 어.....? [tired][낮은 음으로] 오.............."
+⚠️ 태그를 쓸 때는 반드시 하나하나 각각 대괄호로 감싸세요. 여러 태그를 이어붙일 때도 절대 대괄호 없이 텍스트로 흘려쓰지 마세요. 잘못된 예: "폭발적으로점점 커지며 소리질러" (X) / 올바른 예: "[폭발적으로][점점 커지며] 소리질러" (O). 태그 단어 하나라도 대괄호 없이 그냥 텍스트로 쓰면 그 단어가 대사로 낭독되어버립니다.
 ${tagVocab}
 
 {"voice":"목소리(영문 보이스명)","voice_reason":"선택 이유 한국어 2-3문장","director_notes":{"스타일":"한국어","페이싱":"한국어","톤":"한국어","분위기":"한국어"},"directed_dialogue":"[한글태그] 형식이 삽입된 최종 대사"}`;
@@ -2929,9 +2909,7 @@ ${voiceAlloc}
 - 대사에서 특히 힘주어 말해야 할 핵심 단어 바로 앞에는 [강조하며] 태그를 붙여 그 단어만 강조되게 할 것
 - 말줄임표(…), 줄표(—), 쉼표로 호흡과 멈춤도 세밀하게 표현할 것
 ⚠️ 매우 중요: 대괄호[ ]와 소괄호( )는 오직 연출 태그 목록에 있는 "연출 지시어"에만 사용하세요. 인물이 실제로 입으로 말하는 대사(감탄사, 되묻는 말, 짧은 반문 포함 — 예: "엥......?", "뭐라고......?", "네가 누구라고?????", "뭐?!" 같은 것도 전부 포함)는 절대로 대괄호나 소괄호로 감싸지 마세요. 태그가 아닌 대사는 순수 텍스트로만 작성하세요. 이 규칙을 어기면 그 대사가 음성에서 통째로 누락됩니다.
-⚠️ 특히 조심할 것: "매우", "살짝", "높은 음으로", "점점 커지며", "심장이 두근거리며", "코맹맹이 소리로", "극적인 억양으로" 같은 "강도"·"억양·피치"·"신체" 계열 태그는 자연스러운 한국어 부사/수식어처럼 생겨서, 대괄호 씌우는 걸 깜빡하고 그냥 문장 속에 흘려 쓰는 실수가 아주 잦습니다. 이런 태그도 예외 없이 반드시 [ ]로 감싸세요.
-  ✗ 잘못된 예: "높은 음으로살짝 어.....? [tired]낮은 음으로 오.............."
-  ✓ 올바른 예: "[높은 음으로][살짝] 어.....? [tired][낮은 음으로] 오.............."
+⚠️ 태그를 쓸 때는 반드시 하나하나 각각 대괄호로 감싸세요. 여러 태그를 이어붙일 때도 절대 대괄호 없이 텍스트로 흘려쓰지 마세요. 잘못된 예: "폭발적으로점점 커지며 소리질러" (X) / 올바른 예: "[폭발적으로][점점 커지며] 소리질러" (O).
 ${tagVocab}
 
 다음 JSON 형식으로만 출력하세요:
@@ -3097,7 +3075,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       const analysis = await analyzeNarration(analyzeKey, character, modeData, forcedVoice);
       previewMeta = { kind:'narration', character, analysis };
       // forcedVoice가 있으면 Gemini가 반환한 voice 필드(변형/오타 가능성)를 쓰지 않고 원본 입력값을 그대로 사용
-      previewTurns = [{ speakerLabel: null, voice: forcedVoice || analysis.voice, segs: parseTaggedText(repairLeakedTags(analysis.directed_dialogue || '')) }];
+      previewTurns = [{ speakerLabel: null, voice: forcedVoice || analysis.voice, segs: parseTaggedText(autoWrapKnownTags(analysis.directed_dialogue || '')) }];
     } else {
       const scenario = val('d-scenario');
       if (!scenario) { stopLoading(); showScreen('input'); return showError('장면/상황을 적어주세요'); }
@@ -3106,7 +3084,7 @@ document.getElementById('submit-btn').addEventListener('click', async () => {
       const direction = val('d-direction');
       const analysis = await analyzeDialogue(analyzeKey, validSpeakers, scenario, direction);
       previewMeta = { kind:'dialogue', speakers: validSpeakers, analysis };
-      previewTurns = (analysis.turns || []).map(t => ({ speakerLabel: t.speaker, voice: t.voice, segs: parseTaggedText(repairLeakedTags(t.text || '')) }));
+      previewTurns = (analysis.turns || []).map(t => ({ speakerLabel: t.speaker, voice: t.voice, segs: parseTaggedText(autoWrapKnownTags(t.text || '')) }));
     }
 
     stopLoading();
